@@ -1,82 +1,40 @@
-What is this?
-=============
+## Running the website locally
 
-This is a simple HTML prototype written in HAML or ERB that is designed to be
-viewed with Serve.
+    Given I have cloned the repo
+      git clone git@github.com:geekcamp-ph/rubyonrails.geekcampbaguio.com.git
 
-What is Serve? Serve is an open-source rapid prototyping framework for Web
-applications. It makes it easy to prototype functionality without writing a
-single line of backend code.
+    And I am in the directory of the clone repo
+      cd rubyonrails.geekcampbaguio.com
 
+    And I have installed the ruby bundle
+      bundle install
 
-How do I install and run Serve?
--------------------------------
+    When I run `serve`
 
-Serve is distributed as a Ruby gem to make it easy to get up and running. You
-must have Ruby installed in order to download and use Serve. The Ruby download
-page provides instructions for getting Ruby setup on different platforms:
+    And I go to http://localhost:4000
 
-<http://www.ruby-lang.org/en/downloads/>
+    Then I should see the Ruby on Rails guide for Geekcamp Baguio
 
-After you have Ruby installed, open up the command prompt and type:
+## Deploying to the project's gh-pages branch
 
-    gem install serve
+    Given I am in the project directory
 
-(OSX and Unix users may need to prefix the command with `sudo`.)
+    And I have cloned the repo to an html subdirectory under the project directory
+      git clone git@github.com:geekcamp-ph/rubyonrails.geekcampbaguio.com.git html
 
-After Serve is installed, you can start it up in a given directory like this:
+    And I checked out the gh-pages branch of the html subdirectory
+      cd html
+      git co gh-pages
+      cd ..
 
-    serve
+    When i run `serve export`
 
-This will start Serve on port 4000. You can now view the prototype in your
-Web browser at this URL:
+    And I commit the changes in the html subdirectory
+      cd html
+      git add -A
+      git commit -m "Update gh-pages"
+      git push
 
-<http://localhost:4000>
+    And I go to http://geekcamp-ph.github.io/rubyonrails.geekcampbaguio.com/
 
-
-Compass and Sass
-----------------
-
-This prototype uses Compass and Sass to generate CSS. Both are distributed as
-Ruby gems and can be easily installed from the command prompt. Since the
-Compass gem depends on Sass, you can install them both with one command:
-
-    gem install compass
-
-Learn more about Sass:
-
-<http://sass-lang.org>
-
-Learn more about Compass:
-
-<http://compass-style.org>
-
-
-Rack and Passenger
-------------------
-
-Astute users may notice that this project is also a simple Rack application.
-This means that it is easy to deploy it on Passenger or in any other
-Rack-friendly environment. Rack it up with the `rackup` command. For more
-information about using Serve and Passenger see:
-
-<http://bit.ly/serve-and-passenger>
-
-
-Exporting
----------
-
-To export your project, use the new "export" command:
-
-    serve export project output
-
-Where "project" is the path to the project and "output" is the path to the
-directory where you would like your HTML and CSS generated.
-
-
-Learning More
--------------
-
-You can learn more about Serve on the GitHub project page:
-
-<http://github.com/jlong/serve>
+    Then I should see that the website has bee deployed
