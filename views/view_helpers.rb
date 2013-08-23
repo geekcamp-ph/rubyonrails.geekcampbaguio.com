@@ -10,6 +10,10 @@ module ViewHelpers
       new(:delete_itinerary, 'lesson', 'Delete Itinerary Page', '70-delete'),
       new(:validate_itinerary, 'lesson', 'Validate Itinerary', '80-validate'),
     ]
+
+    def self.find(id)
+      DATA.detect{|p| p.id == id}
+    end
   end
 
   class Presentation < Struct.new(:id, :category, :title, :basename)
