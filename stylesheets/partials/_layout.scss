@@ -11,9 +11,9 @@ header[role=banner] {
   );
   padding: 20px $body-margin-x;
   position: relative;
-  
+
   a { @include basic-link(mix($banner-color, white, 20%), $hover: white, $decoration: "plain"); }
-  
+
   .action-link {
     position: absolute;
     right: $body-margin-x;
