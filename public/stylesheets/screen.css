@@ -206,21 +206,21 @@ body {
 }
 
 header[role=banner] {
-  background: #973b12;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(80%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.15))), -webkit-gradient(radial, 30% 50px, 0, 30% 50px, 400, color-stop(0%, #973b12), color-stop(100%, #65270c));
-  background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.15) 100%), -webkit-radial-gradient(30% 50px, #973b12, #65270c 400px);
-  background-image: -moz-linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.15) 100%), -moz-radial-gradient(30% 50px, #973b12, #65270c 400px);
-  background-image: -o-linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.15) 100%), -o-radial-gradient(30% 50px, #973b12, #65270c 400px);
-  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.15) 100%), radial-gradient(30% 50px, #973b12, #65270c 400px);
+  background: #303e4d;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(80%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.15))), -webkit-gradient(radial, 30% 50px, 0, 30% 50px, 400, color-stop(0%, #303e4d), color-stop(100%, #1a222a));
+  background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.15) 100%), -webkit-radial-gradient(30% 50px, #303e4d, #1a222a 400px);
+  background-image: -moz-linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.15) 100%), -moz-radial-gradient(30% 50px, #303e4d, #1a222a 400px);
+  background-image: -o-linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.15) 100%), -o-radial-gradient(30% 50px, #303e4d, #1a222a 400px);
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.15) 100%), radial-gradient(30% 50px, #303e4d, #1a222a 400px);
   padding: 20px 15%;
   position: relative;
 }
 header[role=banner] a:link {
-  color: #ead7cf;
+  color: #d5d8db;
   text-decoration: none;
 }
 header[role=banner] a:visited {
-  color: #ead7cf;
+  color: #d5d8db;
 }
 header[role=banner] a:hover {
   color: white;
@@ -240,7 +240,7 @@ header[role=banner] .action-link a {
   border-radius: 8px;
   display: block;
   padding: 0.5em 1em;
-  text-shadow: #4b1d09 0 1px 0;
+  text-shadow: #181f26 0 1px 0;
 }
 header[role=banner] .action-link a:after {
   content: " ⇢";

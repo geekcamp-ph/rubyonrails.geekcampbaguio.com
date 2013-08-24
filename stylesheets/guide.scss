@@ -1,3 +1,5 @@
+@import "partials/main";
+
 .main {
   article {
     width: 100%;
@@ -11,7 +13,7 @@
   }
 
   h2, h3 {
-    color: #f16529;
+    color: #1B4774;
   }
 
   p {
@@ -23,18 +25,20 @@
   }
 
   pre {
-    border: thin solid #f16529;
+    border: thin solid #CC0000;
     padding: 1em;
+    background: #FFF;
   }
 
   pre.goal {
-    border: thick solid #f16529;
+    border: thick solid #ccc;
   }
 
   section.step, section.result {
     border: thick solid gray;
     margin-bottom: 2em;
     padding: 1em;
+    background: #FFF;
   }
 
   section.exercise {

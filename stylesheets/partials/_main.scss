@@ -7,7 +7,7 @@ textarea {
 }
 
 html, body {
-  background: url("/images/background.png");
+  background: url('/images/background.png');
 }
 
 body {
@@ -55,6 +55,7 @@ textarea {
   padding: 0.2em 0;
 }
 
+
 body {
   font: 16px/26px Helvetica, Helvetica Neue, Arial;
 }
@@ -63,6 +64,7 @@ body {
   width: 90%;
   margin: 0 5%;
 }
+
 
 .header-container {
   border-bottom: 20px solid #333;
@@ -83,6 +85,8 @@ body {
   color: white;
 }
 
+// MOBILE: Menu
+
 nav ul {
   margin: 0;
   padding: 0;
@@ -92,9 +96,11 @@ nav a {
   display: block;
   margin-bottom: 10px;
   padding: 15px 0;
+
   text-align: center;
   text-decoration: none;
   font-weight: bold;
+
   color: white;
   background: #e44d26;
 }
@@ -111,6 +117,7 @@ nav a:hover {
 /* ==============
 MOBILE: Main
 ============== */
+
 .main {
   padding: 30px 0;
 }
@@ -129,11 +136,17 @@ MOBILE: Main
   padding: 20px 0;
 }
 
+// ALL: IE Fixes
+
 .ie7 .title {
   padding-top: 20px;
 }
 
+
+// Media Queries
+
 @media only screen and (min-width: 480px) {
+
   nav a {
     float: left;
     width: 27%;
@@ -150,6 +163,8 @@ MOBILE: Main
     margin-right: 0;
   }
 
+  // INTERMEDIATE: IE Fixes
+
   nav ul li {
     display: inline;
   }
@@ -158,13 +173,19 @@ MOBILE: Main
     margin: 0 0.7%;
   }
 }
+
 @media only screen and (min-width: 768px) {
+
+  //  WIDE: CSS3 Effects
+
   .header-container,
   .main aside {
     -webkit-box-shadow: 0 5px 10px #aaa;
     -moz-box-shadow: 0 5px 10px #aaa;
     box-shadow: 0 5px 10px #aaa;
   }
+
+  // WIDE: Menu
 
   .title {
     float: left;
@@ -178,23 +199,28 @@ MOBILE: Main
   /* ============
   WIDE: Main
   ============ */
-  .main article {
-    float: left;
-    width: 57%;
-  }
 
-  .main aside {
-    float: right;
-    width: 28%;
-  }
+.main article {
+  float: left;
+  width: 57%;
 }
+
+.main aside {
+  float: right;
+  width: 28%;
+}
+}
+
 @media only screen and (min-width: 1140px) {
+
   .wrapper {
-    width: 1026px;
-    /* 1140px - 10% for margins */
+    width: 1026px; /* 1140px - 10% for margins */
     margin: 0 auto;
   }
 }
+
+//Helper classes
+
 .ir {
   background-color: transparent;
   border: 0;
@@ -253,11 +279,12 @@ MOBILE: Main
   *zoom: 1;
 }
 
+// Print styles
+
 @media print {
   * {
     background: transparent !important;
-    color: #000 !important;
-    /* Black prints faster: h5bp.com/s */
+    color: #000 !important; /* Black prints faster: h5bp.com/s */
     box-shadow: none !important;
     text-shadow: none !important;
   }
@@ -275,6 +302,8 @@ MOBILE: Main
     content: " (" attr(title) ")";
   }
 
+  // Don't show links for images, or javascript/internal links
+
   .ir a:after,
   a[href^="javascript:"]:after,
   a[href^="#"]:after {
@@ -288,8 +317,7 @@ MOBILE: Main
   }
 
   thead {
-    display: table-header-group;
-    /* h5bp.com/t */
+    display: table-header-group; /* h5bp.com/t */
   }
 
   tr,
@@ -303,7 +331,7 @@ MOBILE: Main
 
   @page {
     margin: 0.5cm;
-}
+  }
 
   p,
   h2,
@@ -317,40 +345,4 @@ MOBILE: Main
     page-break-after: avoid;
   }
 }
-.main article {
-  width: 100%;
-}
-.main h1 {
-  background-color: gray;
-  color: white;
-  padding: 0.5em;
-  text-align: center;
-}
-.main h2, .main h3 {
-  color: #1B4774;
-}
-.main p code {
-  background-color: gray;
-  color: white;
-  padding: 0.12em 0.5em;
-}
-.main pre {
-  border: thin solid #CC0000;
-  padding: 1em;
-  background: #FFF;
-}
-.main pre.goal {
-  border: thick solid #ccc;
-}
-.main section.step, .main section.result {
-  border: thick solid gray;
-  margin-bottom: 2em;
-  padding: 1em;
-  background: #FFF;
-}
-.main section.exercise {
-  margin-bottom: 2em;
-}
-.main section h1, .main section h2, .main section h3, .main section h4, .main section h5, .main section h6 {
-  margin-top: 0;
-}
+
