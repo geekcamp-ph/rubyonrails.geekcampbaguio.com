@@ -15,16 +15,19 @@
 
     Then I should see the Ruby on Rails guide for Geekcamp Baguio
 
-## Deploying to the project's gh-pages branch
+## Deploying to the project's site
 
     Given I am in the project directory
 
     And I have cloned the repo to an html subdirectory under the project directory
       git clone git@github.com:geekcamp-ph/rubyonrails.geekcampbaguio.com.git html
 
+    And I have added heroku remote
+      git remote add heroku (url you can see if you log in)
+
     And I checked out the gh-pages branch of the html subdirectory
       cd html
-      git co gh-pages
+      git co master
       cd ..
 
     When i run `serve export`
@@ -32,9 +35,9 @@
     And I commit the changes in the html subdirectory
       cd html
       git add -A
-      git commit -m "Update gh-pages"
-      git push
+      git commit -m "My specific update"
+      git push heroku master
 
-    And I go to http://geekcamp-ph.github.io/rubyonrails.geekcampbaguio.com/
+    And I go to http://www.rubyonrails.geekcampbaguio.com/
 
     Then I should see that the website has bee deployed
