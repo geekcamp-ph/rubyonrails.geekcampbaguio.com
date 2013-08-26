@@ -20,10 +20,10 @@ rdoc
 pkg
 
 ## PROJECT::SPECIFIC
+*.geany
 *.gem
 .rvmrc
 .bundle
-
 
 /gsmendoza/*
 /html
