@@ -8,9 +8,10 @@
       ## Exercise 1: List itineraries
 
     %pre.goal
-      Given I am in the rails console
-      When I enter Itinerary.all
-      Then I should see all the itineraries of the application
+      :preserve
+        Given I am in the rails console
+        When I enter Itinerary.all
+        Then I should see all the itineraries of the application
 
     %section.step
       :markdown
@@ -165,7 +166,7 @@
 
         Then I should see something like
 
-          => #<Itinerary id: 1, location: "Baguio", travel_on: "2013-12-25">
+          => #< Itinerary id: 1, location: "Baguio", travel_on: "2013-12-25" >
 
 
   %section.exercise
