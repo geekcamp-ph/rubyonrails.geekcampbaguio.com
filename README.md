@@ -28,7 +28,7 @@ And I have added the heroku repo as a remote repo
 
 When I push master to heroku
 
-    git push heroku master
+    git push heroku
 
 And I go to http://www.rubyonrails.geekcampbaguio.com/
 
