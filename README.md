@@ -1,43 +1,35 @@
 ## Running the website locally
 
-    Given I have cloned the repo
-      git clone git@github.com:geekcamp-ph/rubyonrails.geekcampbaguio.com.git
+Given I have cloned the repo
 
-    And I am in the directory of the clone repo
-      cd rubyonrails.geekcampbaguio.com
+    git clone git@github.com:geekcamp-ph/rubyonrails.geekcampbaguio.com.git
 
-    And I have installed the ruby bundle
-      bundle install
+And I am in the directory of the clone repo
 
-    When I run `serve`
+    cd rubyonrails.geekcampbaguio.com
 
-    And I go to http://localhost:4000
+And I have installed the ruby bundle
 
-    Then I should see the Ruby on Rails guide for Geekcamp Baguio
+    bundle install
+
+When I run `serve`
+
+And I go to http://localhost:4000
+
+Then I should see the Ruby on Rails guide for Geekcamp Baguio
 
 ## Deploying to the project's site
 
-    Given I am in the project directory
+Given I am in the project directory
 
-    And I have cloned the repo to an html subdirectory under the project directory
-      git clone git@github.com:geekcamp-ph/rubyonrails.geekcampbaguio.com.git html
+And I have added the heroku repo as a remote repo
 
-    And I have added heroku remote
-      git remote add heroku (url you can see if you log in)
+    git remote add heroku git@heroku.com:ruby-geekcampbaguio.git
 
-    And I checked out the gh-pages branch of the html subdirectory
-      cd html
-      git co master
-      cd ..
+When I push master to heroku
 
-    When i run `serve export`
+    git push heroku master
 
-    And I commit the changes in the html subdirectory
-      cd html
-      git add -A
-      git commit -m "My specific update"
-      git push heroku master
+And I go to http://www.rubyonrails.geekcampbaguio.com/
 
-    And I go to http://www.rubyonrails.geekcampbaguio.com/
-
-    Then I should see that the website has bee deployed
+Then I should see that the website has been deployed
