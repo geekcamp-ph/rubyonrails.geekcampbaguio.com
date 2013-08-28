@@ -40,9 +40,7 @@
             But instead I see the following error:
               NameError: uninitialized constant Itinerary
 
-        #### Solution
-
-        Create an Itinerary Class
+        #### Solution: Create an Itinerary Class
 
             # app/models/itinerary.rb
             class Itinerary
@@ -58,9 +56,7 @@
             But instead I see the following error:
               NoMethodError: undefined method `all' for Itinerary:Class
 
-        #### Solution
-
-        Make Itinerary an ActiveRecord
+        #### Solution: Make Itinerary an ActiveRecord
 
             # app/models/itinerary.rb
             class Itinerary < ActiveRecord::Base
@@ -77,9 +73,9 @@
             But instead I STILL see the following error:
               NoMethodError: undefined method `all' for Itinerary:Class
 
-        #### Solution
+        #### Solution: Reload the console.
 
-        Reload the console. In the rails console, run
+        In the rails console, run
 
             reload!
 
@@ -98,9 +94,7 @@
                 SELECT "itineraries".* FROM "itineraries"
 
 
-        #### Solution
-
-        Create a database table itineraries.
+        #### Solution: Create a database table itineraries.
 
         1. In the Rails app directory, run
 
