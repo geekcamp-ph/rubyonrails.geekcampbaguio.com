@@ -3,138 +3,169 @@
     :markdown
       # #{Lesson.find(:show_itinerary).title}
 
-  %section
+  %section.exercise
     :markdown
-      ## Step 0: Have at least one itinerary
+      ## Exercise 1: Show Itinerary Page
 
-      * Create another itinerary in rails console.
-      * In the following slides, we assume that there's an itinerary with id 2.
+    %pre.goal
+      :preserve
+        Given I have an itinerary (Itinerary 2 in this exercise)
+        When I go to http://localhost:3000/itineraries/2
+        Then I should see the itinerary
 
-  %section
-    :markdown
-      ## Goal
-
-          browser > http://localhost:3000/itineraries/2
-
-      ### Result
-
-          browser => No route matches [GET] "/itineraries/2"
-
-
-  %section
-    :markdown
-      ## Step 1: Add the itineraries route
-
-          # config/routes
-          TripsApp::Application.routes.draw do
-            resources :itineraries
-          end
-
-      ### Result
-
-          browser => uninitialized constant ItinerariesController
-
-    %aside.notes
+    %section.step
       :markdown
-        You can delete all the ruby comments.
+        ### Issue 1: No route
 
-  %section
-    :markdown
-      ## Step 2: Add itineraries controller
+            Given I have an itinerary (Itinerary 2 in this exercise)
+            When I go to http://localhost:3000/itineraries/2
+            Then I should see the itinerary
+            But instead I see the following error:
+              No route matches [GET] "/itineraries/2"
 
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-          end
+        #### Solution: Add the itineraries route
 
-      ### Result
-
-          browser =>
-            Unknown action: The action 'show' could not be found for ItinerariesController
-
-
-  %section
-    :markdown
-      ## Step 3: Add show action to ItinerariesController
-
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def show
+            # config/routes
+            TripsApp::Application.routes.draw do
+              resources :itineraries
             end
-          end
 
-      ### Result
+    %section.step
+      :markdown
+        ### Issue 2: uninitialized constant ItinerariesController
 
-          browser =>
-            Template is missing: Missing template itineraries/show, application/show with
-            { :locale=>[:en],
-              :formats=>[:html],
-              :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
-            Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
+            Given I have an itinerary (Itinerary 2 in this exercise)
+            When I go to http://localhost:3000/itineraries/2
+            Then I should see the itinerary
+            But instead I see the following error:
+              uninitialized constant ItinerariesController
 
-  %section
-    :markdown
-      ## Step 4: Add itineraries/show template
+        #### Solution: Add itineraries controller
 
-          # app/views/itineraries/show.html.erb
-          <%= debug Itinery.find(params[:id]) %>
-
-      ### Result
-
-          browser =>
-            --- !ruby/object:Itinerary
-            attributes:
-              id: 2
-              location: Baguio
-              travel_on: 2013-08-12
-
-  %section
-    :markdown
-      ## Step 5: Prettify Show Itinerary page
-
-          # app/views/itineraries/show.html.erb
-          <% itinerary = Itinerary.find(params[:id]) %>
-
-          <h1>Itinerary <%= itinerary.id %></h1>
-
-          <ul>
-            <li>Location: <%= itinerary.location %></li>
-            <li>Travel Date: <%= itinerary.travel_on %></li>
-          </ul>
-
-  %section
-    :markdown
-      ## Step 6.1: Clean up: do not interact with database directly in views
-
-          # app/views/itineraries/show.html.erb
-          <h1>Itinerary <%= @itinerary.id %></h1>
-
-          <ul>
-            <li>Location: <%= @itinerary.location %></li>
-            <li>Travel Date: <%= @itinerary.travel_on %></li>
-          </ul>
-
-      ## Result
-
-          browser =>
-            Showing C:/Users/George Mendoza/trips-app/app/views/itineraries/show.html.erb
-            where line #1 raised:
-            undefined method `id' for nil:NilClass
-            Line 1: <h1>Itinerary <%= @itinerary.id %></h1>
-
-  %section
-    :markdown
-      ## Step 6.2: Clean up: make controller set up @itinerary
-
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def show
-              @itinerary = Itinerary.find(params[:id])
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
             end
-          end
 
-  %section
+    %section.step
+      :markdown
+        ### Issue 3: Unknown 'show' action
+
+            Given I have an itinerary (Itinerary 2 in this exercise)
+            When I go to http://localhost:3000/itineraries/2
+            Then I should see the itinerary
+            But instead I see the following error:
+              Unknown action: The action 'show' could not be found for ItinerariesController
+
+        #### Solution: Add show action to ItinerariesController
+
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def show
+              end
+            end
+
+    %section.step
+      :markdown
+        ### Issue 4: Missing 'show' template
+
+            Given I have an itinerary (Itinerary 2 in this exercise)
+            When I go to http://localhost:3000/itineraries/2
+            Then I should see the itinerary
+            But instead I see the following error:
+              Template is missing: Missing template itineraries/show, application/show with
+              { :locale=>[:en],
+                :formats=>[:html],
+                :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
+              Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
+
+        #### Solution: Add itineraries/show template
+
+            # app/views/itineraries/show.html.erb
+            <%= debug Itinery.find(params[:id]) %>
+
+    %section.step
+      :markdown
+        ### Issue 5: Debug output is ugly
+
+            Given I have an itinerary (Itinerary 2 in this exercise)
+            When I go to http://localhost:3000/itineraries/2
+            Then I should see a beautiful page displaying the itinerary
+            But instead I see this:
+              --- !ruby/object:Itinerary
+              attributes:
+                id: 2
+                location: Baguio
+                travel_on: 2013-08-12
+
+        #### Solution: Prettify Show Itinerary page
+
+            # app/views/itineraries/show.html.erb
+            <% itinerary = Itinerary.find(params[:id]) %>
+
+            <h1>Itinerary <%= itinerary.id %></h1>
+
+            <ul>
+              <li>Location: <%= itinerary.location %></li>
+              <li>Travel Date: <%= itinerary.travel_on %></li>
+            </ul>
+
+  %section.exercise
     :markdown
-      ## Step 7: Test another itinerary
+      ## Exercise 2: Clean up: do not interact with database directly in views
 
-      * Create another itinerary in rails console.
-      * View the itinerary from the website.
+    %pre.goal
+      :preserve
+        As a developer
+        I want to set up the itinerary in the show action instead of the show view
+        Primarily because writing Ruby code in views is a pain
+
+
+    %section.step
+      :markdown
+        ### Attempt: Initialize itinerary in show action
+
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def show
+                itinerary = Itinerary.find(params[:id])
+              end
+            end
+
+            # app/views/itineraries/show.html.erb
+            <h1>Itinerary <%= itinerary.id %></h1>
+
+            <ul>
+              <li>Location: <%= itinerary.location %></li>
+              <li>Travel Date: <%= itinerary.travel_on %></li>
+            </ul>
+
+    %section.step
+      :markdown
+        ### Issue: itinerary is nil in view
+
+            Given I have an itinerary (Itinerary 2 in this exercise)
+            When I go to http://localhost:3000/itineraries/2
+            Then I should see the itinerary
+
+            browser =>
+              Showing C:/Users/George Mendoza/trips-app/app/views/itineraries/show.html.erb
+              where line #1 raised:
+              undefined method `id' for nil:NilClass
+              Line 1: <h1>Itinerary <%= @itinerary.id %></h1>
+
+        #### Solution: use instance variable instead of local variable
+
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def show
+                @itinerary = Itinerary.find(params[:id])
+              end
+            end
+
+            # app/views/itineraries/show.html.erb
+            <h1>Itinerary <%= @itinerary.id %></h1>
+
+            <ul>
+              <li>Location: <%= @itinerary.location %></li>
+              <li>Travel Date: <%= @itinerary.travel_on %></li>
+            </ul>
