@@ -5,7 +5,7 @@
   %ol
     - Lesson.published.each do |lesson|
       %li
-        = link_to lesson.title, "#lesson-#{lesson.lesson_number}"
+        = link_to lesson.title, "#lesson-#{lesson.id}"
         %a{href: lesson.basename, target: "_blank"}
           %img{src: 'vendor/i.stack.imgur.com/3H2PQ.png'}
 

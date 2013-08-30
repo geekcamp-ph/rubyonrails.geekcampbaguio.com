@@ -1,5 +1,5 @@
 - lesson ||= Lesson.find(3)
-%article{id: "lesson-#{lesson.lesson_number}" }
+%article{id: "lesson-#{lesson.id}" }
   = render 'lesson_header', locals: { lesson: lesson }
 
   %section.exercise
