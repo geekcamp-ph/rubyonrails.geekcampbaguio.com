@@ -1,96 +1,146 @@
-%article
-  %section
+- lesson = Lesson.find(4)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
+
+  %section.exercise
     :markdown
-      # #{Lesson.find(:list_itineraries).title}
+      ## Exercise 1: List Itineraries Page
 
-  %section
-    :markdown
-      ## Step 0: Have at least one itinerary
+    %pre.goal
+      :preserve
+        Given I have an itinerary
+        When I go to http://localhost:3000/itineraries
+        Then I should see the itinerary
 
-      * Create several itineraries in rails console.
-
-  %section
-    :markdown
-      ## Goal
-
-          browser > http://localhost:3000/itineraries
-
-      ### Result
-
-          browser =>
-            Unknown action
-            The action 'index' could not be found for ItinerariesController
-
-
-  %section
-    :markdown
-      ## Step 1: Add index action to ItinerariesController
-
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def index
-            end
-          end
-
-      ### Result
-
-          browser =>
-            Template is missing: Missing template itineraries/index, application/index with
-            { :locale=>[:en],
-              :formats=>[:html],
-              :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
-            Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
-
-  %section
-    :markdown
-      ## Step 2: Add itineraries/index template
-
-          # app/views/itineraries/index.html.erb
-          <%= debug Itinerary.all %>
-
-      ### Result
-
-          browser =>
-            ---
-            - !ruby/object:Itinerary
-              attributes:
-                id: 1
-                location: Baguio
-                travel_on: 2013-08-12
-            - !ruby/object:Itinerary
-              attributes:
-                id: 2
-                location: Manila
-                travel_on: 2013-08-13
-
-  %section
-    :markdown
-      ## Step 3: Prettify List Itineraries page
-
-          # app/views/itineraries/index.html.erb
-          <% itineraries = Itinerary.all %>
-
-          <h1>Itineraries</h1>
-
-          <table>
-            <tr>
-              <th>Location</th>
-              <th>Travel Date</th>
-            </tr>
-          <% itineraries.each do |itinerary| %>
-            <tr>
-              <td><%= itinerary.location %></td>
-              <td><%= itinerary.travel_on %></td>
-            <tr>
-          <% end %>
-          </table>
-
-  %section
-    :markdown
-      ## Step 4.1: Clean up: do not interact with database directly in views
-
-    .smaller
+    %section.step
       :markdown
+        ### Issue 1: No index action
+
+            Given I have an itinerary
+            When I go to http://localhost:3000/itineraries
+            Then I should see the itinerary
+            But instead I see the following error:
+              Unknown action
+              The action 'index' could not be found for ItinerariesController
+
+        #### Solution: Add index action to ItinerariesController
+
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def index
+              end
+            end
+
+    %section.step
+      :markdown
+        ### Issue 2: Missing index template
+
+            Given I have an itinerary
+            When I go to http://localhost:3000/itineraries
+            Then I should see the itinerary
+            But instead I see the following error:
+              Template is missing: Missing template itineraries/index, application/index with
+              { :locale=>[:en],
+                :formats=>[:html],
+                :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
+              Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
+
+        #### Solution: Add itineraries/index template
+
+            # app/views/itineraries/index.html.erb
+            <%= debug Itinerary.all %>
+
+    %section.step
+      :markdown
+        ### Issue 3: Ugly debug output
+            Given I have an itinerary
+            When I go to http://localhost:3000/itineraries
+            Then I should see the itinerary
+            But instead I see this ugly debug output
+              ---
+              - !ruby/object:Itinerary
+                attributes:
+                  id: 1
+                  location: Baguio
+                  travel_on: 2013-08-12
+              - !ruby/object:Itinerary
+                attributes:
+                  id: 2
+                  location: Manila
+                  travel_on: 2013-08-13
+
+        #### Solution: Prettify List Itineraries page
+
+            # app/views/itineraries/index.html.erb
+            <% itineraries = Itinerary.all %>
+
+            <h1>Itineraries</h1>
+
+            <table>
+              <tr>
+                <th>Location</th>
+                <th>Travel Date</th>
+              </tr>
+            <% itineraries.each do |itinerary| %>
+              <tr>
+                <td><%= itinerary.location %></td>
+                <td><%= itinerary.travel_on %></td>
+              <tr>
+            <% end %>
+            </table>
+
+  %section.exercise
+    :markdown
+      ## Exercise 2: Clean up: do not interact with database directly in views
+
+    %pre.goal
+      :preserve
+        As a developer
+        I want to set up the itinerary in the index action instead of the index view
+        Primarily because writing Ruby code in views is a pain
+
+    %section.step
+      :markdown
+        ### Attempt: Initialize itinerary in index action
+
+            # app/views/itineraries/index.html.erb
+            <h1>Itineraries</h1>
+
+            <table>
+              <tr>
+                <th>Location</th>
+                <th>Travel Date</th>
+              </tr>
+            <% itineraries.each do |itinerary| %>
+              <tr>
+                <td><%= itinerary.location %></td>
+                <td><%= itinerary.travel_on %></td>
+              <tr>
+            <% end %>
+            </table>
+
+    %section.step
+      :markdown
+        ### Issue: itineraries variable is nil in view
+
+            Given I have an itinerary
+            When I go to http://localhost:3000/itineraries
+            Then I should see the itinerary
+            But instead I see the following error:
+              Showing C:/Users/George Mendoza/trips-app/app/views/itineraries/index.html.erb
+                where line #8 raised:
+              undefined method `each' for nil:NilClass
+              Line 8: <% itineraries.each do |itinerary| %>
+
+        #### Solution: itineries/index to set up @itineraries
+
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def index
+                @itineraries = Itinerary.all
+              end
+            end
+
             # app/views/itineraries/index.html.erb
             <h1>Itineraries</h1>
 
@@ -101,35 +151,25 @@
               </tr>
             <% @itineraries.each do |itinerary| %>
               <tr>
-                <td><%= @itinerary.location %></td>
-                <td><%= @itinerary.travel_on %></td>
+                <td><%= itinerary.location %></td>
+                <td><%= itinerary.travel_on %></td>
               <tr>
             <% end %>
             </table>
 
+  %section.exercise
     :markdown
-      ## Result
+      ## Exercise 3: Link itineraries to their Show pages
 
-          browser =>
-            Showing C:/Users/George Mendoza/trips-app/app/views/itineraries/index.html.erb
-              where line #8 raised:
-            undefined method `each' for nil:NilClass
-            Line 8: <% @itineraries.each do |itinerary| %>
+    %pre.goal
+      :preserve
+        Given I have an itinerary
+        When I go to http://localhost:3000/itineraries
+        Then I should see the itinerary
+        And I should see a link to the itinerary's page
 
-  %section
     :markdown
-      ## Step 4.2: Clean up: itineries/index to set up @itineraries
-
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def index
-              @itineraries = Itinerary.all
-            end
-          end
-
-  %section
-    :markdown
-      ## Step 5: Link itineraries to their Show pages
+      ### Solution
 
           # app/views/itineraries/index.html.erb
           <h1>Itineraries</h1>
@@ -148,10 +188,18 @@
           <% end %>
           </table>
 
-  %section
+  %section.exercise
     :markdown
-      ## Step 6: Link itinerary back to Itineraries Index page
+      ## Exercise 4: Link itinerary back to Itineraries Index page
+
+    %pre.goal
+      :preserve
+        Given I am viewing the page of an itinerary
+        When I click the Back link
+        Then I should see the list of itineraries
+
+    :markdown
+      ### Solution
 
           # app/views/itineraries/show.html.erb
-
           <p><%= link_to 'Back', action: 'index' %></p>
