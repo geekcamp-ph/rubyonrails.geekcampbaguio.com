@@ -1,7 +1,5 @@
-%article
-  %h1
-    Lesson 1:
-    = Lesson.find(:installation).title
+%article{id: "lesson-#{lesson.lesson_number}" }
+  = render 'lesson_header', locals: { lesson: lesson }
 
   %section.exercise
     :markdown

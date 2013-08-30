@@ -1,7 +1,5 @@
-%article
-  %h1
-    Lesson 3:
-    = Lesson.find(:show_itinerary).title
+%article{id: "lesson-#{lesson.lesson_number}" }
+  = render 'lesson_header', locals: { lesson: lesson }
 
   %section.exercise
     :markdown

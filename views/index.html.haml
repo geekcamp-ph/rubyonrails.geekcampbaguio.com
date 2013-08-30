@@ -1,3 +1,12 @@
 %article
+  %h2
+    Table of Contents
+
+  %ol
+    - Lesson::DATA[0 .. 2].each do |lesson|
+      %li
+        = link_to lesson.title, "#lesson-#{lesson.lesson_number}"
+
+%article
   - Lesson::DATA[0 .. 2].each do |lesson|
-    = render_template lesson.basename
+    = render_template lesson.basename, locals: { lesson: lesson }
