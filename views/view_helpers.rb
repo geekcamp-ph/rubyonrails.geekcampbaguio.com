@@ -1,14 +1,14 @@
 module ViewHelpers
   class Lesson < Struct.new(:id, :category, :title, :basename)
     DATA = [
-      new(1, 'lesson', 'Installing and Running Rails', '10-installing-and-running-rails'),
-      new(2, 'lesson', 'Database CRUD', '20-database-crud'),
-      new(3, 'lesson', 'Show Itinerary Page', '30-show'),
-      new(4, 'lesson', 'List Itineraries Page', '40-index-page'),
-      new(5, 'lesson', 'Create Itinerary Page', '50-create'),
-      new(6, 'lesson', 'Update Itinerary Page', '60-update'),
-      new(7, 'lesson', 'Delete Itinerary Page', '70-delete'),
-      new(8, 'lesson', 'Validate Itinerary', '80-validate'),
+      new(1, 'lesson', 'Installing and Running Rails', '1-installing-and-running-rails'),
+      new(2, 'lesson', 'Database CRUD', '2-database-crud'),
+      new(3, 'lesson', 'Show Itinerary Page', '3-show-itinerary-page'),
+      new(4, 'lesson', 'List Itineraries Page', '4-list-itineraries-page'),
+      new(5, 'lesson', 'Create Itinerary Page', '5-create-itinerary-page'),
+      new(6, 'lesson', 'Update Itinerary Page', '6-update-itinerary-page'),
+      new(7, 'lesson', 'Delete Itinerary Page', '7-delete-itinerary-page'),
+      new(8, 'lesson', 'Validate Itinerary', '8-validate-itinerary'),
     ]
 
     def self.find(id)
