@@ -1,4 +1,4 @@
-- lesson ||= Lesson.find(2)
+- lesson = Lesson.find(2)
 %article{id: lesson.basename }
   = render 'lesson_header', locals: { lesson: lesson }
 
