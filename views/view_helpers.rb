@@ -14,6 +14,10 @@ module ViewHelpers
     def self.find(id)
       DATA.detect{|p| p.id == id}
     end
+
+    def self.published
+      DATA[0 .. 2]
+    end
   end
 
   # Calculate the years for a copyright
