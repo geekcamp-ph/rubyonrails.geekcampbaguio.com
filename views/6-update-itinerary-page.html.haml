@@ -1,213 +1,242 @@
-%article
-  %section
-    :markdown
-      # #{Lesson.find(:update_itinerary).title}
+- lesson = Lesson.find(6)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
 
-  %section
+  %section.exercise
     :markdown
       ## Exercise 1: Edit an Itinerary
 
-          Given I have an itinerary
-          When I go to the list of itineraries
-          Then I should see a link to edit the itinerary
-          When I click the link to edit the itinerary
-          Then I should see a form for editing the itinerary
-          When I edit the itinerary in the form and submit it
-          Then I should see that the itinerary has been updated
+    %pre.goal
+      :preserve
+        Given I have an itinerary
+        When I go to the list of itineraries
+        Then I should see a link to edit the itinerary
+        When I click the link to edit the itinerary
+        Then I should see a form for editing the itinerary
+        When I edit the itinerary in the form and submit it
+        Then I should see that the itinerary has been updated
 
-  %section
-    :markdown
-      ## Step 1: I should see a link to edit the itinerary
+    %section.step
+      :markdown
+        ### Issue 1: Missing Edit Itinerary link
+            Given I have an itinerary
+            When I go to the list of itineraries
+            Then I should see a link to edit the itinerary
 
-          # app/views/itineraries/index.html.erb
-          <td>
-            <%= link_to 'Show', action: 'show', id: itinerary.id %>
-            <%= link_to 'Edit', action: 'edit', id: itinerary.id %>
-          </td>
+        #### Solution: I should see a link to edit the itinerary
 
+            # app/views/itineraries/index.html.erb
+            <td>
+              <%= link_to 'Show', action: 'show', id: itinerary.id %>
+              <%= link_to 'Edit', action: 'edit', id: itinerary.id %>
+            </td>
 
-      ### Result
-          When I click the link to edit the itinerary
-          Then I should see a form for editing the itinerary
-          But instead I see
-            Unknown action
-            The action 'edit' could not be found for ItinerariesController
+    %section.step
+      :markdown
+        ### Issue 2: Missing edit action
 
-  %section
-    :markdown
-      ## Step 2: Add edit action to ItinerariesController
+            When I click the link to edit the itinerary
+            Then I should see a form for editing the itinerary
+            But instead I see
+              Unknown action
+              The action 'edit' could not be found for ItinerariesController
 
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def edit
+        #### Solution: Add edit action to ItinerariesController
+
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def edit
+              end
             end
-          end
 
-      ### Result
+    %section.step
+      :markdown
+        ### Issue 3: Missing edit template
 
-          browser =>
-            Template is missing: Missing template itineraries/edit, application/edit with
-            { :locale=>[:en],
-              :formats=>[:html],
-              :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
-            Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
+            When I click the link to edit the itinerary
+            Then I should see a form for editing the itinerary
+            But instead I see
+              Template is missing: Missing template itineraries/edit, application/edit with
+              { :locale=>[:en],
+                :formats=>[:html],
+                :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
+              Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
 
-  %section
-    :markdown
-      ## Step 3: Add itineraries/edit template
+        #### Solution: Add itineraries/edit template
 
-          # app/views/itineraries/edit.html.erb
-          <h1>Edit Itinerary</h1>
-          <%= form_for(Itinerary.find(params[:id])) do |f| %>
-            <p>
-              <%= f.label :location %>
-              <%= f.text_field :location %>
-            </p>
+            # app/views/itineraries/edit.html.erb
+            <h1>Edit Itinerary</h1>
+            <%= form_for(Itinerary.find(params[:id])) do |f| %>
+              <p>
+                <%= f.label :location %>
+                <%= f.text_field :location %>
+              </p>
 
-            <p>
-              <%= f.label :travel_on %>
-              <%= f.date_select :travel_on %>
-            </p>
+              <p>
+                <%= f.label :travel_on %>
+                <%= f.date_select :travel_on %>
+              </p>
 
-            <p>
-              <%= f.submit %>
-            </p>
-          <% end %>
+              <p>
+                <%= f.submit %>
+              </p>
+            <% end %>
 
+    %section.step
+      :markdown
+        ### Issue 4: Missing update action
 
-      ### Result
+            When I edit the itinerary in the form and submit it
+            Then I should see that the itinerary has been updated
+            But instead I see
+              Unknown action: The action 'update' could not be found for
+              ItinerariesController
 
-          When I edit the itinerary in the form and submit it
-          Then I should see that the itinerary has been updated
-          But instead I see
-            Unknown action: The action 'update' could not be found for
-            ItinerariesController
+        #### Solution: Add Update action
 
-  %section
-    :markdown
-      ## Step 4: Add Update action
-
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def update
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def update
+              end
             end
-          end
 
-      ### Result
+    %section.step
+      :markdown
+        ### Issue 5: Missing update template
 
-          browser =>
-            Template is missing: Missing template itineraries/update, application/update with
-            { :locale=>[:en],
-              :formats=>[:html],
-              :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
-            Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
+            When I edit the itinerary in the form and submit it
+            Then I should see that the itinerary has been updated
+            But instead I see
+              Template is missing: Missing template itineraries/update, application/update with
+              { :locale=>[:en],
+                :formats=>[:html],
+                :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
+              Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
 
-  %section
-    :markdown
-      ## Step 5: Update the itinerary, save it, then show it
+        #### Solution: Update the itinerary, save it, then show it
 
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def update
-              @itinerary = Itinerary.find(params[:id])
-              @itinerary.attributes = params[:itinerary].permit(:location, :travel_on)
-              @itinerary.save
-              redirect_to action: 'show', id: @itinerary.id
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def update
+                @itinerary = Itinerary.find(params[:id])
+                @itinerary.attributes = params[:itinerary].permit(:location, :travel_on)
+                @itinerary.save
+                redirect_to action: 'show', id: @itinerary.id
+              end
             end
-          end
 
-  %section
+  %section.exercise
     :markdown
       ## Exercise 2: Refactor form
 
-  %section
-    :markdown
+    %section.step
+      :markdown
+        ### Issue 6: find Itinerary in edit action instead of view
 
-      ## Step 1: Change Itinerary.find(params[:id]) to a @itinerary
+            As a developer
+            I want the create and edit views to use the same form
+            So that if I update the form, I only have to update it in one place
 
-          # app/views/itineraries/edit.html.erb
-          <%= form_for(@itinerary) do |f| %>
+        #### Solution: Change Itinerary.find(params[:id]) to a @itinerary
 
-      ### Result
+            # app/views/itineraries/edit.html.erb
+            <%= form_for(@itinerary) do |f| %>
 
-          When I click the link to edit the itinerary
-          Then I should see a form for editing the itinerary
-          But instead I see
-            Showing C:/Users/George Mendoza/trips-app/app/views/itineraries/edit.html.erb
-            where line #2 raised:
-            First argument in form cannot contain nil or be empty
-            Line 2: <%= form_for(@itinerary) do |f| %>
+    %section.step
+      :markdown
+        ### Issue 7: @itinerary is nil
 
-  %section
-    :markdown
+            When I click the link to edit the itinerary
+            Then I should see a form for editing the itinerary
+            But instead I see
+              Showing C:/Users/George Mendoza/trips-app/app/views/itineraries/edit.html.erb
+              where line #2 raised:
+              First argument in form cannot contain nil or be empty
+              Line 2: <%= form_for(@itinerary) do |f| %>
 
-      ## Step 2: Set @itinerary to Itinerary.find(params[:id])
+        #### Solution: Set @itinerary to Itinerary.find(params[:id])
 
-          # app/controllers/itineraries_controller.rb
-          def edit
-            @itinerary = Itinerary.find(params[:id])
-          end
+            # app/controllers/itineraries_controller.rb
+            def edit
+              @itinerary = Itinerary.find(params[:id])
+            end
 
-  %section
-    :markdown
+    %section.step
+      :markdown
+        ### Issue 8: New page does not use @itinerary variable
 
-      ## Step 3: Move Itinerary.new to itineraries/new
+            As a developer
+            I want the New page to use the @itinerary variable
+            So that the New and Edit page will be nearly the same
 
-          # app/views/itineraries/new.html.erb
-          <%= form_for(@itinerary) do |f| %>
+        #### Solution: Move Itinerary.new to itineraries/new
 
-          # app/controllers/itineraries_controller.rb
-          def new
-            @itinerary = Itinerary.new
-          end
+            # app/views/itineraries/new.html.erb
+            <%= form_for(@itinerary) do |f| %>
 
-  %section
-    :markdown
+            # app/controllers/itineraries_controller.rb
+            def new
+              @itinerary = Itinerary.new
+            end
 
-      ## Step 4: Update edit page: replace form with partial
+    %section.step
+      :markdown
+        ### Issue 9: New and Edit page are near duplicates
 
-          # app/views/itineraries/edit.html.erb
-          <h1>Edit Itinerary</h1>
-          <%= render 'form' %>
+            As a developer
+            I want the New and Edit page to use the same form partial
+            So that if I update the form, I only have to update it once
 
-      ### Result
+        #### Solution: Update edit page: replace form with partial
 
-            Missing partial itineraries/form, application/form with {
-              :locale=>[:en],
-              :formats=>[:html],
-              :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
-            Searched in:
-              "C:/Users/George Mendoza/trips-app/app/views"
-            Extracted source (around line #2):
-              <%= render 'form' %>
+            # app/views/itineraries/edit.html.erb
+            <h1>Edit Itinerary</h1>
+            <%= render 'form' %>
 
-  %section
-    :markdown
+    %section.step
+      :markdown
+        ### Issue 10: Missing form partial
 
-      ## Step 5: Add form partial
+            When I click the link to edit the itinerary
+            Then I should see a form for editing the itinerary
+            But instead I see
+              Missing partial itineraries/form, application/form with {
+                :locale=>[:en],
+                :formats=>[:html],
+                :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
+              Searched in:
+                "C:/Users/George Mendoza/trips-app/app/views"
+              Extracted source (around line #2):
+                <%= render 'form' %>
 
-          # app/views/itineraries/_form.html.erb
-          <%= form_for(@itinerary) do |f| %>
-            <p>
-              <%= f.label :location %>
-              <%= f.text_field :location %>
-            </p>
+        #### Solution: Add form partial
 
-            <p>
-              <%= f.label :travel_on %>
-              <%= f.date_select :travel_on %>
-            </p>
+            # app/views/itineraries/_form.html.erb
+            <%= form_for(@itinerary) do |f| %>
+              <p>
+                <%= f.label :location %>
+                <%= f.text_field :location %>
+              </p>
 
-            <p>
-              <%= f.submit %>
-            </p>
-          <% end %>
+              <p>
+                <%= f.label :travel_on %>
+                <%= f.date_select :travel_on %>
+              </p>
 
-  %section
-    :markdown
+              <p>
+                <%= f.submit %>
+              </p>
+            <% end %>
 
-      ## Step 6: Render form partial in New page
+    %section.step
+      :markdown
+        ### Issue 11: New page is not using the form partial
 
-          # app/views/itineraries/new.html.erb
-          <h1>New Itinerary</h1>
-          <%= render 'form' %>
+            As a developer
+            I want the New page to use the same form partial the Edit page uses
+
+        #### Solution: Render form partial in New page
+
+            # app/views/itineraries/new.html.erb
+            <h1>New Itinerary</h1>
+            <%= render 'form' %>
