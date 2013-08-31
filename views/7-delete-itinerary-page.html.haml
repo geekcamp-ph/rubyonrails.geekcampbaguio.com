@@ -1,112 +1,128 @@
-%article
-  %section
-    :markdown
-      # #{Lesson.find(:delete_itinerary).title}
+- lesson = Lesson.find(7)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
 
-  %section
+  %section.exercise
     :markdown
       ## Exercise 1: Delete an Itinerary
 
-          When I view an itinerary
-          Then I should see a button to delete the itinerary
-          When I click the delete button
-          Then I should see that the itinerary has been deleted
+    %pre.goal
+      :preserve
+        When I view an itinerary
+        Then I should see a button to delete the itinerary
+        When I click the delete button
+        Then I should see that the itinerary has been deleted
 
-  %section
-    :markdown
-      ## Step 1: I should see a button to delete the itinerary
+    %section.step
+      :markdown
+        ### Issue 1: No delete button
 
-          # app/views/itineraries/show.html.erb
-          <%= form_for(@itinerary, method: :delete) do |f| %>
-            <p>
-              <%= f.submit, value: 'Delete Itinerary' %>
-            </p>
-          <% end %>
+            When I view an itinerary
+            Then I should see a button to delete the itinerary
+            But I see none
 
+        #### Solution: Add form to delete the itinerary
 
-      ### Result
-          When I click the delete button
-          Then I should be informed that the itinerary has been deleted
-          But instead I see
-            Unknown action
-            The action 'destroy' could not be found for ItinerariesController
+            # app/views/itineraries/show.html.erb
+            <%= form_for(@itinerary, method: :delete) do |f| %>
+              <p>
+                <%= f.submit, value: 'Delete Itinerary' %>
+              </p>
+            <% end %>
 
-  %section
-    :markdown
-      ## Step 2: Add destroy action to ItinerariesController
+    %section.step
+      :markdown
+        ### Issue 2: Unknown destroy action
 
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def destroy
+            When I click the delete button
+            Then I should be informed that the itinerary has been deleted
+            But instead I see
+              Unknown action
+              The action 'destroy' could not be found for ItinerariesController
+
+        #### Solution: Add destroy action to ItinerariesController
+
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def destroy
+              end
             end
-          end
 
-      ### Result
+    %section.step
+      :markdown
+        ### Issue 3: Missing destroy template
 
-          browser =>
-            Template is missing: Missing template itineraries/destroy, application/destroy with
-            { :locale=>[:en],
-              :formats=>[:html],
-              :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
-            Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
+            When I click the delete button
+            Then I should be informed that the itinerary has been deleted
+            But instead I see
+              Template is missing: Missing template itineraries/destroy, application/destroy with
+              { :locale=>[:en],
+                :formats=>[:html],
+                :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
+              Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
 
-  %section
-    :markdown
-      ## Step 3: Destroy the itinerary, then show the list of itineraries
+        #### Solution: Destroy the itinerary, then show the list of itineraries
 
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def destroy
-              @itinerary = Itinerary.find(params[:id])
-              @itinerary.destroy
-              redirect_to action: 'index'
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def destroy
+                @itinerary = Itinerary.find(params[:id])
+                @itinerary.destroy
+                redirect_to action: 'index'
+              end
             end
-          end
 
-  %section
+  %section.exercise
     :markdown
       ## Exercise 2: Notify me when the itinerary is deleted
 
+    %pre.goal
+      :preserve
           When I view an itinerary
           Then I should see a button to delete the itinerary
           When I click the delete button
           Then I should see that the itinerary has been deleted
           And I should be informed that it has been deleted
 
-  %section
-    :markdown
+    %section.step
+      :markdown
+        ## Issue 4: I'm not informed if the itinerary is delete
 
-      ## Step 1: Try adding a notice to the index page
+            When I click the delete button
+            Then I should see that the itinerary has been deleted
+            And I should be informed that it has been deleted
+            But I am not
 
-          # app/views/itineraries/index.html.erb
-          <strong>Notice: <%= @notice %></strong>
+        #### Solution: Try adding a notice to the index page
 
-          # app/controllers/itineraries_controller.rb
-          def destroy
-            @itinerary = Itinerary.find(params[:id])
-            @itinerary.destroy
-            @notice = "You have successfully deleted a itinerary"
-            redirect_to action: 'index'
-          end
+            # app/views/itineraries/index.html.erb
+            <strong>Notice: <%= @notice %></strong>
 
-      ### Result
+            # app/controllers/itineraries_controller.rb
+            def destroy
+              @itinerary = Itinerary.find(params[:id])
+              @itinerary.destroy
+              @notice = "You have successfully deleted a itinerary"
+              redirect_to action: 'index'
+            end
 
-          When I click the delete button
-          And I should be informed that it has been deleted
-          But instead I am not informed that it has been deleted
+    %section.step
+      :markdown
+        ### Issue: Nope, still not informed
 
-  %section
-    :markdown
+            When I click the delete button
+            And I should be informed that it has been deleted
+            But instead I am STILL not informed that it has been deleted
 
-      ## Step 2: Change the notice to a flash message
+        #### Solution: Change the notice to a flash message
 
-          # app/views/itineraries/index.html.erb
-          <strong>Notice: <%= flash[:notice] %></strong>
+            # app/views/itineraries/index.html.erb
+            <strong>Notice: <%= flash[:notice] %></strong>
 
-          # app/controllers/itineraries_controller.rb
-          def destroy
-            @itinerary = Itinerary.find(params[:id])
-            @itinerary.destroy
-            flash[:notice] = "You have successfully deleted a itinerary"
-            redirect_to action: 'index'
-          end
+            # app/controllers/itineraries_controller.rb
+            def destroy
+              @itinerary = Itinerary.find(params[:id])
+              @itinerary.destroy
+              flash[:notice] = "You have successfully deleted a itinerary"
+              redirect_to action: 'index'
+            end
