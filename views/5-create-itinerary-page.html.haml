@@ -1,12 +1,13 @@
-%article
-  %section
-    :markdown
-      # #{Lesson.find(:create_itinerary).title}
+- lesson = Lesson.find(5)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
 
   %section
     :markdown
       ## Exercise 1: Create an Itinerary
 
+    %pre.goal
+      :preserve
           When I go to the list of itineraries
           Then I should see a link to create a new itinerary
           When I click the link to create a new itinerary
@@ -14,215 +15,234 @@
           When I enter the itinerary in the form and submit it
           Then I should see the itinerary I created
 
-  %section
-    :markdown
-      ## Step 1: Create a link to create a new itinerary
+    %section.step
+      :markdown
+        ### Issue 1: No new itinerary link
 
-          # app/views/itineraries/index.html.erb
-          <p>
-            <%= link_to 'New', action: 'new' %>
-          </p>
+            When I go to the list of itineraries
+            Then I should see a link to create a new itinerary
+            But I don't see any
 
+        #### Solution: Create a link to create a new itinerary
 
-
-      ### Result
-          When I go to the list of itineraries
-          Then I should see a link to create a new itinerary
-          When I click the link to create a new itinerary
-          Then I should see a form for creating an itinerary
-          But instead I see
-            Unknown action
-            The action 'new' could not be found for ItinerariesController
-
-
-
-  %section
-    :markdown
-      ## Step 2: Add new action to ItinerariesController
-
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def new
-            end
-          end
-
-      ### Result
-
-          browser =>
-            Template is missing: Missing template itineraries/new, application/new with
-            { :locale=>[:en],
-              :formats=>[:html],
-              :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
-            Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
-
-  %section
-    :markdown
-      ## Step 3: Add itineraries/new template
-
-          # app/views/itineraries/new.html.erb
-          <h1>New Itinerary</h1>
-          <%= form_for(Itinerary.new) do |f| %>
+            # app/views/itineraries/index.html.erb
             <p>
-              <%= f.label :location %>
-              <%= f.text_field :location %>
+              <%= link_to 'New', action: 'new' %>
             </p>
 
-            <p>
-              <%= f.label :travel_on %>
-              <%= f.date_select :travel_on %>
-            </p>
 
-            <p>
-              <%= f.submit %>
-            </p>
-          <% end %>
+    %section.step
+      :markdown
+        ### Issue 2: No new action
 
+            When I go to the list of itineraries
+            Then I should see a link to create a new itinerary
+            When I click the link to create a new itinerary
+            Then I should see a form for creating an itinerary
+            But instead I see
+              Unknown action
+              The action 'new' could not be found for ItinerariesController
 
-      ### Result
+        #### Solution: Add new action to ItinerariesController
 
-          When I enter the itinerary in the form and submit it
-          Then I should see the itinerary I created
-          But instead I see
-            Unknown action: The action 'create' could not be found for
-            ItinerariesController
-
-  %section
-    :markdown
-      ## Step 4: Add Create action
-
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def create
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def new
+              end
             end
-          end
 
-      ### Result
+    %section.step
+      :markdown
+        ### Issue 3: Missing New template
 
-          browser =>
-            Template is missing: Missing template itineraries/create, application/create with
-            { :locale=>[:en],
-              :formats=>[:html],
-              :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
-            Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
+            When I go to the list of itineraries
+            Then I should see a link to create a new itinerary
+            When I click the link to create a new itinerary
+            Then I should see a form for creating an itinerary
+            But instead I see
+              Template is missing: Missing template itineraries/new, application/new with
+              { :locale=>[:en],
+                :formats=>[:html],
+                :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
+              Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
 
-  %section
-    :markdown
-      ## Step 5: Render the show page
+        #### Solution: Add itineraries/new template
 
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def create
-              render :show
+            # app/views/itineraries/new.html.erb
+            <h1>New Itinerary</h1>
+            <%= form_for(Itinerary.new) do |f| %>
+              <p>
+                <%= f.label :location %>
+                <%= f.text_field :location %>
+              </p>
+
+              <p>
+                <%= f.label :travel_on %>
+                <%= f.date_select :travel_on %>
+              </p>
+
+              <p>
+                <%= f.submit %>
+              </p>
+            <% end %>
+
+    %section.step
+      :markdown
+        ### Issue 4: Missing create action
+
+            Given I am in the New Itinerary page
+            When I enter the itinerary in the form and submit it
+            Then I should see a form for creating an itinerary
+            But instead I see
+              Unknown action: The action 'create' could not be found for
+              ItinerariesController
+
+        ### Solution: Add Create action
+
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def create
+              end
             end
-          end
 
+    %section.step
+      :markdown
+        ### Issue 5: Missing create template
 
-    :markdown
-      ## Result
+            Given I am in the New Itinerary page
+            When I enter the itinerary in the form and submit it
+            Then I should see a form for creating an itinerary
+            But instead I see
+              Template is missing: Missing template itineraries/create, application/create with
+              { :locale=>[:en],
+                :formats=>[:html],
+                :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
+              Searched in: * "C:/Users/George Mendoza/trips-app/app/views"
 
-          browser =>
-            NoMethodError in Itineraries#create
-            Showing C:/Users/George Mendoza/trips-app/app/views/itineraries/show.html.erb
-            where line #1 raised:
-            undefined method `id' for nil:NilClass
-            Line 1: <h1>Itinerary <%= @itinerary.id %></h1>
+        #### Solution: Make the create action render the show page
 
+              # app/controllers/itineraries_controller.rb
+              class ItinerariesController < ApplicationController
+                def create
+                  render :show
+                end
+              end
 
-  %section
-    :markdown
-      ## Step 6: Create an itinerary, save it, then show it
+    %section.step
+      :markdown
+        ### Issue 6: Nil @itinerary
 
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def create
-              @itinerary = Itinerary.new
-              @itinerary.save
-              render :show
+            Given I am in the New Itinerary page
+            When I enter the itinerary in the form and submit it
+            Then I should see a form for creating an itinerary
+            But instead I see
+              NoMethodError in Itineraries#create
+              Showing C:/Users/George Mendoza/trips-app/app/views/itineraries/show.html.erb
+              where line #1 raised:
+              undefined method `id' for nil:NilClass
+              Line 1: <h1>Itinerary <%= @itinerary.id %></h1>
+
+        #### Solution: Create an itinerary, save it, then show it
+
+              # app/controllers/itineraries_controller.rb
+              class ItinerariesController < ApplicationController
+                def create
+                  @itinerary = Itinerary.new
+                  @itinerary.save
+                  render :show
+                end
+              end
+
+    %section.step
+      :markdown
+        ### Issue 7: Nil @itinerary
+
+            Given I am in the New Itinerary page
+            When I enter the itinerary in the form and submit it
+            Then I should see the itinerary I created
+            But instead I see an itinerary with blank location and travel date
+
+        #### Solution: Set the itinerary from the params
+
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def create
+                @itinerary = Itinerary.new
+                @itinerary.location = params[:itinerary][:location]
+                @itinerary.travel_on = params[:itinerary][:travel_on]
+                @itinerary.save
+                render :show
+              end
             end
-          end
+
+    %section.step
+      :markdown
+        ### Issue 8: refreshing the itinerary page creates a new itinerary
+
+            Given I have just created an itinerary
+            And I am now viewing the created itinerary
+            When I refresh the page
+            Then I should see the same itinerary
+            But instead a new itinerary is created!
 
 
-    :markdown
-      ## Result
+        #### Solution: Redirect instead of render
 
-          When I enter the itinerary in the form and submit it
-          Then I should see the itinerary I created
-          But instead I see an itinerary with blank location and travel date
-
-  %section
-    :markdown
-      ## Step 7: Set the itinerary from the params
-
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def create
-              @itinerary = Itinerary.new
-              @itinerary.location = params[:itinerary][:location]
-              @itinerary.travel_on = params[:itinerary][:travel_on]
-              @itinerary.save
-              render :show
+            # app/controllers/itineraries_controller.rb
+            class ItinerariesController < ApplicationController
+              def create
+                @itinerary = Itinerary.new
+                @itinerary.location = params[:itinerary][:location]
+                @itinerary.travel_on = params[:itinerary][:travel_on]
+                @itinerary.save
+                redirect_to action: 'show', id: @itinerary.id
+              end
             end
-          end
 
-  %section
-    :markdown
-      ## Exercise 2: Fix bug: refreshing the itinerary page creates a new itinerary
+    %section.exercise
+      :markdown
+        ## Exercise 2: Refactor params in create action
 
-          Given I have just created an itinerary
-          And I am now viewing the created itinerary
-          When I refresh the page
-          Then I should see the same itinerary
-          But instead a new itinerary is created!
+      %pre.goal
+        :preserve
+          As a developer
+          I don't want to assign one attribute at a time
+          Because I'm lazy
 
-  %section
-    :markdown
-      ## Step 8: Redirect instead of render
 
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def create
-              @itinerary = Itinerary.new
-              @itinerary.location = params[:itinerary][:location]
-              @itinerary.travel_on = params[:itinerary][:travel_on]
-              @itinerary.save
-              redirect_to action: 'show', id: @itinerary.id
-            end
-          end
+      %section.step
+        :markdown
+          ### Attempt: Use attributes method
 
-  %section
-    :markdown
-      ## Exercise 3: Refactor params in create action
+              # app/controllers/itineraries_controller.rb
+              class ItinerariesController < ApplicationController
+                def create
+                  @itinerary = Itinerary.new
+                  @itinerary.attributes = params[:itinerary]
+                  @itinerary.save
+                  redirect_to action: 'show', id: @itinerary.id
+                end
+              end
 
-  %section
-    :markdown
-      ## Step 9: Refactor params in create action
+      %section.step
+        :markdown
+          ### Issue: ActiveModel::ForbiddenAttributesError
 
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def create
-              @itinerary = Itinerary.new
-              @itinerary.attributes = params[:itinerary]
-              @itinerary.save
-              redirect_to action: 'show', id: @itinerary.id
-            end
-          end
+              Given I am in the New Itinerary page
+              When I enter the itinerary in the form and submit it
+              Then I should see the itinerary I created
+                ActiveModel::ForbiddenAttributesError
+                Extracted source (around line #15):
+                Line 15: @itinerary.attributes = params[:itinerary]
 
-      ### Result
+          #### Solution: Specify allowed itinerary params
 
-          ActiveModel::ForbiddenAttributesError
-          Extracted source (around line #15):
-          Line 15: @itinerary.attributes = params[:itinerary]
-
-  %section
-    :markdown
-      ## Step 10: Specify allowed itinerary params
-
-          # app/controllers/itineraries_controller.rb
-          class ItinerariesController < ApplicationController
-            def create
-              @itinerary = Itinerary.new
-              @itinerary.attributes = params[:itinerary].permit(:location, :travel_on)
-              @itinerary.save
-              redirect_to action: 'show', id: @itinerary.id
-            end
-          end
+              # app/controllers/itineraries_controller.rb
+              class ItinerariesController < ApplicationController
+                def create
+                  @itinerary = Itinerary.new
+                  @itinerary.attributes = params[:itinerary].permit(:location, :travel_on)
+                  @itinerary.save
+                  redirect_to action: 'show', id: @itinerary.id
+                end
+              end

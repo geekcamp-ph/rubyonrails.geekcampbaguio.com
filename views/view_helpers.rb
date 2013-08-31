@@ -16,7 +16,7 @@ module ViewHelpers
     end
 
     def self.published
-      DATA[0 .. 3]
+      DATA[0 .. 4]
     end
   end
 
