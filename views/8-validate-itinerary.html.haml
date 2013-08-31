@@ -1,127 +1,139 @@
-%article
-  %section
-    :markdown
-      # #{Lesson.find(:validate_itinerary).title}
+- lesson = Lesson.find(8)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
 
-  %section
+  %section.exercise
     :markdown
       ## Exercise 1: Validate an Itinerary
 
-          Given I am creating an itinerary
-          And the itinerary's location is blank
-          When I try to save the itinerary
-          Then I should see that the itinerary isn't saved
-          And I should see an error saying the itinerary's location can't be blank
+    %pre.goal
+      :preserve
+        Given I am creating an itinerary
+        And the itinerary's location is blank
+        When I try to save the itinerary
+        Then I should see that the itinerary isn't saved
+        And I should see an error saying the itinerary's location can't be blank
 
-      ### Result
+    %section.step
+      :markdown
+        ### Issue 1: Itinerary location is not validated
 
-          irb > itinerary = Itinerary.new
-          => => #<Itinerary id: nil, location: nil, travel_on: nil>
+            Given I am creating an itinerary
+            And the itinerary's location is blank
+            When I try to save the itinerary
+            Then I should see that the itinerary isn't saved
+            But instead it saves just fine
 
-          irb > itinerary.save
-          => true
+        #### Solution: Validate presence of location
 
-  %section
-    :markdown
-      ## Step 1: Validate presence of location
+            # app/models/itinerary.rb
+            class Itinerary < ActiveRecord::Base
+              validates :location, presence: true
+            end
 
-          # app/models/itinerary.rb
-          class Itinerary < ActiveRecord::Base
-            validates :location, presence: true
-          end
+        #### Result
 
-      ### Result
+            Given I am creating an itinerary
+            And the itinerary's location is blank
 
-          !!! Need to exit rails console to reload !!!
+              itinerary = Itinerary.new
+              => #< Itinerary id: nil, location: nil, travel_on: nil >
 
-          irb > itinerary = Itinerary.new
-          => => #<Itinerary id: nil, location: nil, travel_on: nil>
+            When I try to save the itinerary
+            Then I should see that the itinerary isn't saved
 
-          irb > itinerary.save
-          => false
+              itinerary.save
+              => false
 
-          irb > itinerary.errors
-          => #<ActiveModel::Errors:0x41ba8c8
-            @base=#<Itinerary id: nil, location: nil, travel_on: nil>,
-            @messages={:location=>["can't be blank"]}>
+            And I should see an error saying the itinerary's location can't be blank
 
-          irb > itinerary.location = 'Baguio'
-          irb > itinerary.save
-          => true
+              itinerary.errors
+              => #<ActiveModel::Errors:0x41ba8c8
+                @base=#<Itinerary id: nil, location: nil, travel_on: nil>,
+                @messages={:location=>["can't be blank"]}>
 
-  %section
+  %section.exercise
     :markdown
       ## Exercise 2: Validate new itineraries
 
+    %pre.goal
+      :preserve
           Given I am creating an itinerary
           When I try to save an invalid itinerary
           Then I should see an error saying the itinerary's location can't be blank
-          But instead I see
-            ActionController::UrlGenerationError in ItinerariesController#create
-            No route matches {:action=>"show", :id=>nil, :controller=>"itineraries"}
-            Extracted source (around line #18):
-            redirect_to action: 'show', id: @itinerary.id
 
-  %section
-    :markdown
+    %section.step
+      :markdown
+        ### Issue 2: No route matches show action with nil id
 
-      ## Step 2: create action should render the new page if invalid
-
-          # app/controllers/itineraries_controller.rb
-          def create
-            @itinerary = Itinerary.new
-            @itinerary.attributes = params[:itinerary].permit(:location, :travel_on)
-            if @itinerary.save
+            Given I am creating an itinerary
+            When I try to save an invalid itinerary
+            Then I should see an error saying the itinerary's location can't be blank
+            But instead I see
+              ActionController::UrlGenerationError in ItinerariesController#create
+              No route matches {:action=>"show", :id=>nil, :controller=>"itineraries"}
+              Extracted source (around line #18):
               redirect_to action: 'show', id: @itinerary.id
-            else
-              render action: 'new'
+
+        #### Solution: create action should render the new page if invalid
+
+            # app/controllers/itineraries_controller.rb
+            def create
+              @itinerary = Itinerary.new
+              @itinerary.attributes = params[:itinerary].permit(:location, :travel_on)
+              if @itinerary.save
+                redirect_to action: 'show', id: @itinerary.id
+              else
+                render action: 'new'
+              end
             end
-          end
 
-      ### Result
+    %section.step
+      :markdown
+        ### Issue 3: No error messages in form
 
-          Given I am creating an itinerary
-          When I try to save an invalid itinerary
-          Then I should see an error saying the itinerary's location can't be blank
-          But I don't see any error
+            Given I am creating an itinerary
+            When I try to save an invalid itinerary
+            Then I should see an error saying the itinerary's location can't be blank
+            But I don't see any error
 
-  %section
-    :markdown
+        #### Solution: add error messages to form
 
-      ## Step 3: add error messages to form
+            # app/views/itineraries/_form.html.erb
+            <ul>
+            <% @itinerary.errors.full_messages.each do |full_message| %>
+              <li><%= full_message %></li>
+            <% end %>
+            </ul>
 
-          # app/views/itineraries/_form.html.erb
-          <ul>
-          <% @itinerary.errors.full_messages.each do |full_message| %>
-            <li><%= full_message %></li>
-          <% end %>
-          </ul>
-
-  %section
+  %section.exercise
     :markdown
       ## Exercise 3: Validate existing itineraries
 
+    %pre.goal
+      :preserve
           Given I am editing an itinerary
           When I try to save an invalid itinerary
           Then I should see an error saying the itinerary's location can't be blank
-          But instead I see the Show Page of the itinerary
 
-  %section
-    :markdown
+    %section.step
+      :markdown
+        ### Issue 4: No error if itinerary is invalid
 
-      ## Step 4: update action should render the edit page if invalid
+            Given I am editing an itinerary
+            When I try to save an invalid itinerary
+            Then I should see an error saying the itinerary's location can't be blank
+            But instead I see the Show Page of the itinerary
 
-          # app/controllers/itineraries_controller.rb
-          def update
-            @itinerary = Itinerary.find(params[:id])
-            @itinerary.attributes = params[:itinerary].permit(:location, :travel_on)
-            if @itinerary.save
-              redirect_to action: 'show', id: @itinerary.id
-            else
-              render action: 'edit'
+        #### Solution: update action should render the edit page if invalid
+
+            # app/controllers/itineraries_controller.rb
+            def update
+              @itinerary = Itinerary.find(params[:id])
+              @itinerary.attributes = params[:itinerary].permit(:location, :travel_on)
+              if @itinerary.save
+                redirect_to action: 'show', id: @itinerary.id
+              else
+                render action: 'edit'
+              end
             end
-          end
-
-      ### Result
-
-          Success!!!
