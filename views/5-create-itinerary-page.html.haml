@@ -203,16 +203,15 @@
       :markdown
         ## Exercise 2: Refactor params in create action
 
-      %pre.goal
-        :preserve
-          As a developer
-          I don't want to assign one attribute at a time
-          Because I'm lazy
-
-
       %section.step
         :markdown
-          ### Attempt: Use attributes method
+          ### Issue: Assignment of attributes
+
+              As a developer
+              I don't want to assign one attribute at a time
+              Because I'm lazy
+
+          ### Solution: Use attributes method
 
               # app/controllers/itineraries_controller.rb
               class ItinerariesController < ApplicationController

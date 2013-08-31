@@ -93,15 +93,15 @@
     :markdown
       ## Exercise 2: Clean up: do not interact with database directly in views
 
-    %pre.goal
-      :preserve
-        As a developer
-        I want to set up the itinerary in the index action instead of the index view
-        Primarily because writing Ruby code in views is a pain
-
     %section.step
       :markdown
-        ### Attempt: Initialize itinerary in index action
+        ### Issue: setting up variables in view
+
+            As a developer
+            I want to set up the itinerary in the index action instead of the index view
+            Primarily because writing Ruby code in views is a pain
+
+        ### Solution: Initialize itinerary in index action
 
             # app/views/itineraries/index.html.erb
             <h1>Itineraries</h1>
@@ -161,45 +161,47 @@
     :markdown
       ## Exercise 3: Link itineraries to their Show pages
 
-    %pre.goal
-      :preserve
-        Given I have an itinerary
-        When I go to http://localhost:3000/itineraries
-        Then I should see the itinerary
-        And I should see a link to the itinerary's page
+    %section.step
+      :markdown
+        ### Issue: No link back to Index page
 
-    :markdown
-      ### Solution
+            Given I have an itinerary
+            When I go to http://localhost:3000/itineraries
+            Then I should see the itinerary
+            And I should see a link to the itinerary's page
 
-          # app/views/itineraries/index.html.erb
-          <h1>Itineraries</h1>
+        #### Solution: Add Show link to each itinerary
 
-          <table>
-            <tr>
-              <th>Location</th>
-              <th>Travel Date</th>
-            </tr>
-          <% @itineraries.each do |itinerary| %>
-            <tr>
-              <td><%= @itinerary.location %></td>
-              <td><%= @itinerary.travel_on %></td>
-              <td><%= link_to 'Show', action: 'show', id: itinerary.id %></td>
-            <tr>
-          <% end %>
-          </table>
+            # app/views/itineraries/index.html.erb
+            <h1>Itineraries</h1>
+
+            <table>
+              <tr>
+                <th>Location</th>
+                <th>Travel Date</th>
+              </tr>
+            <% @itineraries.each do |itinerary| %>
+              <tr>
+                <td><%= @itinerary.location %></td>
+                <td><%= @itinerary.travel_on %></td>
+                <td><%= link_to 'Show', action: 'show', id: itinerary.id %></td>
+              <tr>
+            <% end %>
+            </table>
 
   %section.exercise
     :markdown
       ## Exercise 4: Link itinerary back to Itineraries Index page
 
-    %pre.goal
-      :preserve
-        Given I am viewing the page of an itinerary
-        When I click the Back link
-        Then I should see the list of itineraries
+    %section.step
+      :markdown
+        ### Issue: No link back to Index page
 
-    :markdown
-      ### Solution
+            Given I am viewing the page of an itinerary
+            When I click the Back link
+            Then I should see the list of itineraries
 
-          # app/views/itineraries/show.html.erb
-          <p><%= link_to 'Back', action: 'index' %></p>
+        #### Solution: Add Back link to each itinerary
+
+            # app/views/itineraries/show.html.erb
+            <p><%= link_to 'Back', action: 'index' %></p>
