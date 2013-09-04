@@ -1,3 +1,18 @@
+@import 'mixins';
+@include font-face(prussian_brew_solidregular, '/images/prbrs___-webfont', normal);
+@include font-face(fontello, '/images/fontello', normal);
+@import 'fontello';
+
+$header-font-family: "prussian_brew_solidregular", Arial, sans-serif;
+$default-text-shadow-color: rgba(black, 0.6);
+$default-text-shadow-blur: 3px;
+$default-text-shadow-v-offset: 1px;
+$link_color: #c00000;
+$default-transition-property : all;
+$default-transition-duration : 0.3s;
+$default-transition-function : ease-out;
+$default-transition-delay    : false;
+
 html,
 button,
 input,
@@ -13,16 +28,6 @@ html, body {
 body {
   font-size: 1em;
   line-height: 1.4;
-}
-
-::-moz-selection {
-  background: #b3d4fc;
-  text-shadow: none;
-}
-
-::selection {
-  background: #b3d4fc;
-  text-shadow: none;
 }
 
 hr {
@@ -48,14 +53,6 @@ textarea {
   resize: vertical;
 }
 
-.chromeframe {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
-}
-
-
 body {
   font: 16px/26px Helvetica, Helvetica Neue, Arial;
 }
@@ -65,9 +62,13 @@ body {
   margin: 0 5%;
 }
 
+h1 {
+  font-family: $header-font-family;
+}
 
-.header-container {
-  border-bottom: 20px solid #333;
+.header-container h1 {
+  margin: 0;
+  padding: 0;
 }
 
 .footer-container,
@@ -85,38 +86,8 @@ body {
   color: white;
 }
 
-// MOBILE: Menu
 
-nav ul {
-  margin: 0;
-  padding: 0;
-}
-
-nav a {
-  display: block;
-  margin-bottom: 10px;
-  padding: 15px 0;
-
-  text-align: center;
-  text-decoration: none;
-  font-weight: bold;
-
-  color: white;
-  background: #e44d26;
-}
-
-nav a:hover,
-nav a:visited {
-  color: white;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-/* ==============
-MOBILE: Main
-============== */
+// MOBILE: Main
 
 .main {
   padding: 30px 0;
@@ -136,43 +107,96 @@ MOBILE: Main
   padding: 20px 0;
 }
 
-// ALL: IE Fixes
+// Links
 
-.ie7 .title {
-  padding-top: 20px;
+a {
+  color: #cc0033;
+  font-weight: bold;
+  text-decoration: none;
 }
 
+a:hover {
+  color: #cc0000;
+}
+
+// Headings
+h1.guide-title {
+  padding: 10px 0px;
+}
+
+h1.guide-title a{
+  color: #FFF;
+  font-weight: lighter;
+  font-size: 160%;
+  line-height: 1em;
+  text-decoration: none;
+}
+
+h1.guide-title a span {
+  display: block;
+  font-size: 60% !important;
+  font-weight: lighter;
+}
+
+h1.guide-title a:hover {
+  @include single-text-shadow;
+}
+
+// Lists
+
+
+ol{
+  counter-reset: li;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 4em;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ol ol{
+  margin: 0 0 0 2em;
+}
+
+
+ol span{
+  position: relative;
+  display: block;
+  padding: .4em .4em .4em 2em;
+  margin: 10px 0px 0px 20px;
+  background: #ddd;
+  color: #FFF;
+  text-decoration: none;
+  @include border-radius(.3em, .3em);
+  @include transition;
+}
+
+ol span:hover{
+  background: #eee;
+}
+
+ol span:hover:before{
+  @include rotate(360deg);
+}
+
+ol span:before{
+  content: counter(li);
+  counter-increment: li;
+  position: absolute;
+  left: -1.3em;
+  top: 50%;
+  margin-top: -1.3em;
+  background: #4286a5;
+  height: 2em;
+  width: 2em;
+  line-height: 2em;
+  border: .3em solid #fff;
+  text-align: center;
+  font-weight: bold;
+  @include border-radius(2em, 2em);
+  @include transition;
+}
 
 // Media Queries
-
-@media only screen and (min-width: 480px) {
-
-  nav a {
-    float: left;
-    width: 27%;
-    margin: 0 1.7%;
-    padding: 25px 2%;
-    margin-bottom: 0;
-  }
-
-  nav li:first-child a {
-    margin-left: 0;
-  }
-
-  nav li:last-child a {
-    margin-right: 0;
-  }
-
-  // INTERMEDIATE: IE Fixes
-
-  nav ul li {
-    display: inline;
-  }
-
-  .oldie nav a {
-    margin: 0 0.7%;
-  }
-}
 
 @media only screen and (min-width: 768px) {
 
@@ -187,18 +211,9 @@ MOBILE: Main
 
   // WIDE: Menu
 
-  .title {
+  .guide-title {
     float: left;
   }
-
-  nav {
-    float: right;
-    width: 38%;
-  }
-
-  /* ============
-  WIDE: Main
-  ============ */
 
 .main article {
   float: left;
@@ -225,14 +240,8 @@ MOBILE: Main
   background-color: transparent;
   border: 0;
   overflow: hidden;
-  *text-indent: -9999px;
-}
-
-.ir:before {
-  content: "";
+  text-indent: -9999px;
   display: block;
-  width: 0;
-  height: 150%;
 }
 
 .hidden {
@@ -278,71 +287,3 @@ MOBILE: Main
 .clearfix {
   *zoom: 1;
 }
-
-// Print styles
-
-@media print {
-  * {
-    background: transparent !important;
-    color: #000 !important; /* Black prints faster: h5bp.com/s */
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-
-  a,
-  a:visited {
-    text-decoration: underline;
-  }
-
-  a[href]:after {
-    content: " (" attr(href) ")";
-  }
-
-  abbr[title]:after {
-    content: " (" attr(title) ")";
-  }
-
-  // Don't show links for images, or javascript/internal links
-
-  .ir a:after,
-  a[href^="javascript:"]:after,
-  a[href^="#"]:after {
-    content: "";
-  }
-
-  pre,
-  blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-  }
-
-  thead {
-    display: table-header-group; /* h5bp.com/t */
-  }
-
-  tr,
-  img {
-    page-break-inside: avoid;
-  }
-
-  img {
-    max-width: 100% !important;
-  }
-
-  @page {
-    margin: 0.5cm;
-  }
-
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
-  }
-
-  h2,
-  h3 {
-    page-break-after: avoid;
-  }
-}
-

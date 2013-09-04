@@ -1,7 +1,7 @@
 // This should be applied to the body of the document:
-// 
+//
 //     body { @include base-font; }
-// 
+//
 @mixin base-font {
   color: $text-color;
   font-family: $base-font-family;
@@ -10,13 +10,13 @@
 }
 
 // Typically this should be applied to content portion of the document:
-// 
+//
 //     .content { @include basic-typography; }
-// 
+//
 // Pass true if you would like to use indented instead of block level paragraphs:
-// 
+//
 //     .content { @include basic-typography(true); }
-// 
+//
 @mixin basic-typography($indented: $indented-paragraphs) {
   @include inline-elements;
   @include headings;
