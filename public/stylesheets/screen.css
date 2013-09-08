@@ -2,8 +2,8 @@
 Syntax error: File to import not found or unreadable: partials/base.
               Load paths:
                 Compass::SpriteImporter
-                /Users/katz/work/mygithub/rubyonrails.geekcampbaguio.com/public/stylesheets/sass
-                /Users/katz/work/mygithub/rubyonrails.geekcampbaguio.com/stylesheets
+                /Volumes/KATZMACPC/work/mygithub/rubyonrails.geekcampbaguio.com/public/stylesheets/sass
+                /Volumes/KATZMACPC/work/mygithub/rubyonrails.geekcampbaguio.com/stylesheets
                 /Users/katz/.rvm/gems/ruby-2.0.0-p247@guide/gems/compass-0.12.2/frameworks/blueprint/stylesheets
                 /Users/katz/.rvm/gems/ruby-2.0.0-p247@guide/gems/compass-0.12.2/frameworks/compass/stylesheets
         on line 5 of ./stylesheets/screen.scss
@@ -73,4 +73,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Syntax error: File to import not found or unreadable: partials/base.\A               Load paths:\A                 Compass::SpriteImporter\A                 /Users/katz/work/mygithub/rubyonrails.geekcampbaguio.com/public/stylesheets/sass\A                 /Users/katz/work/mygithub/rubyonrails.geekcampbaguio.com/stylesheets\A                 /Users/katz/.rvm/gems/ruby-2.0.0-p247@guide/gems/compass-0.12.2/frameworks/blueprint/stylesheets\A                 /Users/katz/.rvm/gems/ruby-2.0.0-p247@guide/gems/compass-0.12.2/frameworks/compass/stylesheets\A         on line 5 of ./stylesheets/screen.scss\A \A 1: //\A 2: // Application Stylesheet\A 3: //\A 4: \A 5: @import \"partials/base\";\A 6: @import \"partials/content\";\A 7: @import \"partials/layout\";"; }
+  content: "Syntax error: File to import not found or unreadable: partials/base.\A               Load paths:\A                 Compass::SpriteImporter\A                 /Volumes/KATZMACPC/work/mygithub/rubyonrails.geekcampbaguio.com/public/stylesheets/sass\A                 /Volumes/KATZMACPC/work/mygithub/rubyonrails.geekcampbaguio.com/stylesheets\A                 /Users/katz/.rvm/gems/ruby-2.0.0-p247@guide/gems/compass-0.12.2/frameworks/blueprint/stylesheets\A                 /Users/katz/.rvm/gems/ruby-2.0.0-p247@guide/gems/compass-0.12.2/frameworks/compass/stylesheets\A         on line 5 of ./stylesheets/screen.scss\A \A 1: //\A 2: // Application Stylesheet\A 3: //\A 4: \A 5: @import \"partials/base\";\A 6: @import \"partials/content\";\A 7: @import \"partials/layout\";"; }
