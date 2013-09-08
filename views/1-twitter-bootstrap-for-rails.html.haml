@@ -4,7 +4,7 @@
 
   %section.exercise
     :markdown
-      ## Assignment 1: Using Twitter Bootstrap for Rails
+      ## Assignment 1: Use Twitter Bootstrap for Ruby on Rails
 
     %pre.goal
       :preserve
@@ -14,8 +14,8 @@
         And I download the Bootstrap font files to <strong>app/assets/images</strong>
         And I download Bootstrap CSS file on <strong>app/assets/stylesheets</strong>
         And I download the Bootstrap JavaScript files on <strong>app/assets/javascripts</strong>
-        Add I update the asset files.
-        Add I update the layout file to include the assets.
+        Add I update the asset files
+        Add I update the layout file to include the assets
         Then I should see my application uses Twitter Bootstrap styles
 
     %section.step
@@ -171,13 +171,15 @@
 
     %section.step
       :markdown
-        ### Step 7: Update the layout file to make sure the Javascript is below the closing body tag rather than the head tag.
+        ### Step 7: Update the layout file
+
+        Make sure the Javascript is below the closing *body* tag rather than within the *head* tag.
 
         It is important to load Javascript files when the page is loaded. While there's a workaround for that, it is still sluggish and not a very a clean way of doing things.
 
         We need to follow the <a href="http://stevesouders.com/hpws/rules.php" target="_blank">rules for faster-loading websites</a>.
 
-        Replace **app/views/layout/application.html.erb**.
+        We're also going to use Twitter Bootstrap recommended layout. Replace **app/views/layout/application.html.erb**.
 
         Because we are are lazy to copy paste. We will run a command that will do that.
 
