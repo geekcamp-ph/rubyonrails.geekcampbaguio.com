@@ -1,4 +1,5 @@
 %article
+  %h1 Lessons
   %ol
     - Lesson.published.each do |lesson|
       %li
@@ -7,6 +8,19 @@
           %a{ href: lesson.basename, target: "_blank", class: "icon-popup", title: 'Open lesson in new window'}
             &nbsp;
 
+  %ol
+    %h1 Assignments
+    - Assignment.published.each do |assignment|
+      %li
+        %span
+          = link_to assignment.title, "##{assignment.basename}"
+          %a{ href: assignment.basename, target: "_blank", class: "icon-popup", title: 'Open lesson in new window'}
+            &nbsp;
+
 %article
   - Lesson.published.each do |lesson|
     = render_template lesson.basename
+
+%article
+  - Assignment.published.each do |assignment|
+    = render_template assignment.basename

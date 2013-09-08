@@ -1,0 +1,194 @@
+- assignment = Assignment.find(1)
+%article{id: assignment.basename }
+  = render 'lesson_header', locals: { lesson: assignment }
+
+  %section.exercise
+    :markdown
+      ## Assignment 1: Using Twitter Bootstrap for Rails
+
+    %pre.goal
+      :preserve
+        Given I am done with the first four lessons
+        And I want to make the application pretty
+        When I open the command prompt and change directory to trips-app root
+        And I download the Bootstrap font files to <strong>app/assets/images</strong>
+        And I download Bootstrap CSS file on <strong>app/assets/stylesheets</strong>
+        And I download the Bootstrap JavaScript files on <strong>app/assets/javascripts</strong>
+        Add I update the asset files.
+        Add I update the layout file to include the assets.
+        Then I should see my application uses Twitter Bootstrap styles
+
+    %section.step
+      :markdown
+        ### Step 1: Download Twitter Bootstrap font files to *app/assets/images*
+
+        Twitter Bootstrap is one of the several <a href="http://usablica.github.io/front-end-frameworks/compare.html" target="_blank">CSS frameworks</a> you can use and customize for your application's interface.
+
+        We will start by downloading the font icons. Open the command prompt and make sure you are on the trips-app app directory.
+
+            curl -o app/assets/images/glyphicons-halflings-regular.eot https://raw.github.com/jlong/sass-bootstrap/master/dist/fonts/glyphicons-halflings-regular.eot
+            curl -o app/assets/images/glyphicons-halflings-regular.svg https://raw.github.com/jlong/sass-bootstrap/master/dist/fonts/glyphicons-halflings-regular.svg
+            curl -o app/assets/images/glyphicons-halflings-regular.ttf https://raw.github.com/jlong/sass-bootstrap/master/dist/fonts/glyphicons-halflings-regular.ttf
+            curl -o app/assets/images/glyphicons-halflings-regular.woff https://raw.github.com/jlong/sass-bootstrap/master/dist/fonts/glyphicons-halflings-regular.woff
+
+        To confirm that you have the assets downloaded correctly. You should see them on app/assets/images.
+
+            ls app/assets/images
+
+    %section.step
+      :markdown
+        ### Step 2: Download *bootstrap.css* to *trips-app/app/assets/stylesheets*
+
+        The following command with download **bootstrap.css** to **trips-app/app/assets/stylesheets** and make it an SCSS file.
+
+        Renaming the files suggest that you will use <a href="http://sass-lang.com/tutorial.html" target="_blank">SCSS</a> which is an abstraction to CSS. The powerful thing about SCSS is the fact that it encourages DRY (Don't repeat yourself) and you can create mixins that you can later reuse for your styles.
+
+            curl -o app/assets/stylesheets/bootstrap.scss https://raw.github.com/jlong/sass-bootstrap/master/dist/css/bootstrap.css
+
+        To confirm that you have the SCSS file. Try the following command which will print the content of the bootstrap file:
+
+            cat app/assets/stylesheets/bootstrap.scss
+
+        All stylesheets files are now part of the <a href="http://guides.rubyonrails.org/asset_pipeline.html" target="_blank">Asset Pipeline</a> and can later be accessed through *http://locahost:3000/assets/bootstrap.css*
+
+        SASS and Asset pipeline does the magic of compiling and serving your SCSS file as a CSS file.
+
+    %section.step
+      :markdown
+        ### Step 3: Download *bootstrap.js* to *trips-app/app/assets/javascripts*
+
+            curl -o app/assets/javascripts/bootstrap.js https://raw.github.com/jlong/sass-bootstrap/master/dist/js/bootstrap.js
+
+        Again, to confirm if the file has been downloaded, try:
+
+            cat app/assets/javascripts/bootstrap.js
+
+    %section.step
+      :markdown
+        ### Step 4: Update the *application.scss* file to include Twitter Bootstrap CSS and the Off-site theme tweaks.
+
+        While it is not necessary to do so, we recommend using SCSS and the *import rules* rather than the *require* directives offered by the asset pipeline.
+
+        It is much cleaner and more sensible.
+
+        Your **application.scss** file should look like this:
+
+            @import 'bootstrap';
+
+            // Style tweaks
+
+            body {
+              padding-top: 70px;
+             }
+            footer {
+              padding-left: 15px;
+              padding-right: 15px;
+            }
+
+            // Off Canvas Theme
+            @media screen and (max-width: 768px) {
+              .row-offcanvas {
+                position: relative;
+                -webkit-transition: all 0.25s ease-out;
+                -moz-transition: all 0.25s ease-out;
+                transition: all 0.25s ease-out;
+              }
+
+              .row-offcanvas-right
+                .sidebar-offcanvas {
+                   right: -50%;
+              }
+
+              .row-offcanvas-left
+              .sidebar-offcanvas {
+                left: -50%;
+              }
+
+              .row-offcanvas-right.active {
+                right: 50%;
+              }
+
+              .row-offcanvas-left.active {
+                left: 50%;
+              }
+
+              .sidebar-offcanvas {
+                position: absolute;
+                top: 0;
+                width: 50%;
+              }
+            }
+
+
+    %section.step
+      :markdown
+        ### Step 5: Update the *bootstrap.css* file to use the path correct path to font icons.
+
+        SCSS has a helper for including images that works very well for Ruby on Rails and the Asset Pipeline.
+
+        We will update the **app/assets/stylesheets/bootstrap.css** file to use the correct path.
+
+        On line 2308, you will find the @font-face declaraction. Replace that code with this:
+
+            @font-face {
+              font-family: 'Glyphicons Halflings';
+              src: image-url("glyphicons-halflings-regular.eot");
+              src: image-url("glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"),
+                   image-url("glyphicons-halflings-regular.woff") format("woff"),
+                   image-url("glyphicons-halflings-regular.ttf") format("truetype"),
+                   image-url("glyphicons-halflings-regular.svg#glyphicons-halflingsregular") format("svg");
+              }
+
+
+
+    %section.step
+      :markdown
+        ### Step 6: Update the *application.js* file to include Twitter Bootstrap Javascript.
+
+        For this file we are going to remove some code, particulaly:
+
+            require_tree .
+
+        That code suggests that you want to include all Javascript files on app/assets/javascripts and somehow we don't need or want that magic.
+
+        We include bootstrap.js using the *require* directive of Sprockets.
+
+            //= require bootstrap
+
+        Your **application.js** file should look like this:
+
+            //= require jquery
+            //= require jquery_ujs
+            //= require turbolinks
+            //= require bootstrap
+
+        At this point, you may want to understand why <a href="http://jquery.com/" target="_blank">jQuery</a>, jQuery UJS and <a href="http://railscasts.com/episodes/390-turbolinks" target="_blank">Turbolinks</a> are included.
+
+        jQuery and jQuery UJS are absolutely required because they are needed to help us later extend the Trips Application and make it more "user-friendly."
+
+        <a href="http://railscasts.com/episodes/390-turbolinks" target="_blank">Turbolinks</a> is a way to create Single-page applications or applications that do not require the browser to reload to get from page to page.
+
+
+    %section.step
+      :markdown
+        ### Step 7: Update the layout file to make sure the Javascript is below the closing body tag rather than the head tag.
+
+        It is important to load Javascript files when the page is loaded. While there's a workaround for that, it is still sluggish and not a very a clean way of doing things.
+
+        We need to follow the <a href="http://stevesouders.com/hpws/rules.php" target="_blank">rules for faster-loading websites</a>.
+
+        Replace **app/views/layout/application.html.erb**.
+
+        Because we are are lazy to copy paste. We will run a command that will do that.
+
+            rm app/views/layout/application.html.erb && curl -o app/views/layouts/application.html.erb https://raw.github.com/geekcamp-ph/trips-app/master/app/views/layouts/application.html.erb
+
+
+    %section.step
+      :markdown
+        ### Final Result
+            Given the Twitter bootstrap files are on app/assets directory
+            And I have all of the assets and layout updated
+            When I run the rails app
+            And I go to http://localhost:3000/itineraries
+            Then I should see my rails app is using Twitter Bootstrap

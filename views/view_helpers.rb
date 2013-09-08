@@ -20,6 +20,20 @@ module ViewHelpers
     end
   end
 
+  class Assignment < Struct.new(:id, :category, :title, :basename)
+    DATA = [
+      new(1, 'assignment', 'Using Twitter Booststrap for Rails', '1-twitter-bootstrap-for-rails'),
+    ]
+
+    def self.find(id)
+      DATA.detect{|p| p.id == id}
+    end
+
+    def self.published
+      DATA
+    end
+  end
+
   # Calculate the years for a copyright
   def copyright_years(start_year)
     end_year = Date.today.year
