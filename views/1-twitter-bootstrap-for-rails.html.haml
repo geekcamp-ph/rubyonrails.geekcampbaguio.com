@@ -71,7 +71,7 @@
 
         It is much cleaner and more sensible.
 
-        Your **application.scss** file should look like this:
+        Your **app/assets/stylesheets/application.scss** file should look like this:
 
             @import 'bootstrap';
 
@@ -145,7 +145,7 @@
       :markdown
         ### Step 6: Update the *application.js* file to include Twitter Bootstrap Javascript.
 
-        For this file we are going to remove some code, particulaly:
+        For this file we are going to remove some code, particularly:
 
             require_tree .
 
@@ -173,9 +173,9 @@
       :markdown
         ### Step 7: Update the layout file
 
-        Make sure the Javascript is below the closing *body* tag rather than within the *head* tag.
+        Make sure the JavaScript is below the closing *body* tag rather than within the *head* tag.
 
-        It is important to load Javascript files when the page is loaded. While there's a workaround for that, it is still sluggish and not a very a clean way of doing things.
+        It is important to load JavaScript files when the page is loaded. While there's a workaround for that, it is still sluggish and not a very a clean way of doing things.
 
         We need to follow the <a href="http://stevesouders.com/hpws/rules.php" target="_blank">rules for faster-loading websites</a>.
 
