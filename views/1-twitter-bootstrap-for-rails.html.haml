@@ -22,7 +22,7 @@
       :markdown
         ### Step 1: Download Twitter Bootstrap font files to *app/assets/images*
 
-        For those having a problem with `curl` on Windows, make sure to install Git for Windows and open "Git Bash."
+        For those having a problem with `curl` on Windows, make sure to install <a href="http://msysgit.github.io/" target="_blank">Git for Windows</a> which should already be installed if you have RailsInstaller. Open "Git Bash" instead of the "Command Prompt with Rails."
 
         Similar to the "Command Prompt with Rails," you can run any command there. We recommend using Git Bash if `curl` is not working for you.
 
@@ -39,6 +39,8 @@
 
             ls app/assets/images
 
+        If it does not work, simply download the files and use the "save as" feature of your browser to save the file to the correct directory.
+
     %section.step
       :markdown
         ### Step 2: Download *bootstrap.css* to *trips-app/app/assets/stylesheets*
@@ -53,6 +55,8 @@
 
             cat app/assets/stylesheets/bootstrap.scss
 
+        If `curl` command does not work, simply <a href="https://raw.github.com/jlong/sass-bootstrap/master/dist/css/bootstrap.css" target="_blank">download</a> the file and save it as *bootstrap.scss* 
+
         All stylesheets files are now part of the <a href="http://guides.rubyonrails.org/asset_pipeline.html" target="_blank">Asset Pipeline</a> and can later be accessed through *http://locahost:3000/assets/bootstrap.css*
 
         SASS and Asset pipeline does the magic of compiling and serving your SCSS file as a CSS file.
@@ -66,6 +70,9 @@
         Again, to confirm if the file has been downloaded, try:
 
             cat app/assets/javascripts/bootstrap.js
+
+        If `curl` command does not work, simply <a href="https://raw.github.com/jlong/sass-bootstrap/master/dist/js/bootstrap.js" target="_blank">download</a> the file and save it as *bootstrap.js* on app/assets/javascripts.
+
 
     %section.step
       :markdown
@@ -147,13 +154,13 @@
 
     %section.step
       :markdown
-        ### Step 6: Update the *application.js* file to include Twitter Bootstrap Javascript.
+        ### Step 6: Update the *application.js* file to include Twitter Bootstrap JavaScript.
 
         For this file we are going to remove some code, particularly:
 
             require_tree .
 
-        That code suggests that you want to include all Javascript files on app/assets/javascripts and somehow we don't need or want that magic.
+        That code suggests that you want to include all JavaScript files on app/assets/javascripts and somehow we don't need or want that magic.
 
         We include bootstrap.js using the *require* directive of Sprockets.
 
