@@ -78,7 +78,7 @@
 
               <p>
                 <%= f.label :travel_on %>
-                <%= f.date_select :travel_on %>
+                <%= f.date_field :travel_on %>
               </p>
 
               <p>
@@ -92,7 +92,7 @@
 
             Given I am in the New Itinerary page
             When I enter the itinerary in the form and submit it
-            Then I should see a form for creating an itinerary
+            Then I should see the itinerary I created
             But instead I see
               Unknown action: The action 'create' could not be found for
               ItinerariesController
@@ -111,7 +111,7 @@
 
             Given I am in the New Itinerary page
             When I enter the itinerary in the form and submit it
-            Then I should see a form for creating an itinerary
+            Then I should see the itinerary I created
             But instead I see
               Template is missing: Missing template itineraries/create, application/create with
               { :locale=>[:en],
@@ -134,7 +134,7 @@
 
             Given I am in the New Itinerary page
             When I enter the itinerary in the form and submit it
-            Then I should see a form for creating an itinerary
+            Then I should see the itinerary I created
             But instead I see
               NoMethodError in Itineraries#create
               Showing C:/Users/George Mendoza/trips-app/app/views/itineraries/show.html.erb
