@@ -7,8 +7,8 @@ module ViewHelpers
       new(4, 'lesson', 'List Itineraries Page', '4-list-itineraries-page'),
       new(5, 'lesson', 'Create Itinerary Page', '5-create-itinerary-page'),
       new(6, 'lesson', 'Update Itinerary Page', '6-update-itinerary-page'),
-      new(7, 'lesson', 'Delete Itinerary Page', '7-delete-itinerary-page'),
-      new(8, 'lesson', 'Validate Itinerary', '8-validate-itinerary'),
+      new(7, 'lesson', 'Validate Itinerary', '7-validate-itinerary'),
+      new(8, 'lesson', 'Delete Itinerary Page', '8-delete-itinerary-page'),
     ]
 
     def self.find(id)
