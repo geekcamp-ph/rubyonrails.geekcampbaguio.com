@@ -31,7 +31,7 @@
 
     %section.step
       :markdown
-        ### Issue 2: Unknown destroy action
+        ### Issue 2: Unknown `destroy` action
 
             When I click the delete button
             Then I should be informed that the itinerary has been deleted
@@ -139,7 +139,7 @@
             Then I should see a notice that my itinerary was deleted
 
 
-        #### Solution: Add the delete link on app/views/itineraries/index.html.erb 
+        #### Solution: Add the delete link on app/views/itineraries/index.html.erb
             # app/views/itineraries/index.html.erb
              <td>
                <%= link_to 'Show', { action: 'show', id: itinerary.id }, class: 'btn btn-default' %>
