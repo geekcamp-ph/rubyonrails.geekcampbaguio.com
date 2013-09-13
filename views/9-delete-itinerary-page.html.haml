@@ -127,3 +127,22 @@
               flash[:notice] = "You have successfully deleted a itinerary"
               redirect_to action: 'index'
             end
+
+
+    %section.step
+      :markdown
+        ### Issue 6: Cannot delete itineraries from index page
+
+            When I view itineraries
+            Then I should see delete option on the page
+            And when I click on the delete link
+            Then I should see a notice that my itinerary was deleted
+
+
+        #### Solution: Add the delete link on app/views/itineraries/index.html.erb 
+            # app/views/itineraries/index.html.erb
+             <td>
+               <%= link_to 'Show', { action: 'show', id: itinerary.id }, class: 'btn btn-default' %>
+               <%= link_to 'Edit', { action: 'edit', id: itinerary.id }, class: 'btn btn-default' %>
+               <%= link_to 'Delete', { action: 'show', id: itinerary.id }, method: 'delete', confirm: "Are you sure you want to delete this?", class: 'btn btn-default' %>
+             </td>

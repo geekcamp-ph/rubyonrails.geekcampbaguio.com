@@ -4,7 +4,7 @@
 
   %section.exercise
     :markdown
-      ## Exercise 1: Set a Default Budget on Itinerary model
+      ## Exercise 1: Show the remaining budget on itineraries index page
 
     %pre.goal
       :preserve
@@ -206,3 +206,43 @@
                 render action: 'edit'
               end
             end
+
+  %section.exercise
+    :markdown
+      ## Exercise 2: Add warning and error colors if the trip is too expensive
+
+    %pre.goal
+      :preserve
+        Given I want to easily see which trips are expensive
+        Then I should see a different background color if the trips exceed monthly budget
+
+    %section.step
+      :markdown
+        ### Issue 1: Cannot easily see which trip is expensive
+
+            When I view the itineraries page
+            Then I should see a red background color if the itinerary estimated cost is greater than monthly budget
+            But I don't see that
+
+        #### Solution: Add the "danger" class or the table row that contains expensive itinerary
+
+            # app/views/itineraries/index.html.erb
+            <tr class="<%= 'danger' if itinerary.estimated_cost > Itinerary.monthly_budget %>">
+
+    %section.step
+      :markdown
+        ### Issue 2: It works! But the code is ugly.
+
+            When I view the itineraries page
+            Then I should see a red background color if the itinerary estimated cost is greater than monthly budget
+            And I see that but the code is ugly
+
+        #### Solution: Create a helper called itinerary_row_class and use that helper on the view file
+
+            # app/helpers/application_helper.rb
+            def itinerary_row_class(itinerary)
+              'danger' if itinerary.estimated_cost > Itinerary.monthly_budget
+            end
+
+            # app/views/itineraries/index.html.erb
+            <tr class="<%= itinerary_row_class(itinerary) %>">
