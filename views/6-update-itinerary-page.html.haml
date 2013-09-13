@@ -27,8 +27,8 @@
 
             # app/views/itineraries/index.html.erb
             <td>
-              <%= link_to 'Show', action: 'show', id: itinerary.id %>
-              <%= link_to 'Edit', action: 'edit', id: itinerary.id %>
+              <%= link_to 'Show', { action: 'show', id: itinerary.id }, class: 'btn btn-default' %>
+              <%= link_to 'Edit', { action: 'edit', id: itinerary.id }, class: 'btn btn-default' %>
             </td>
 
     %section.step
@@ -66,20 +66,20 @@
 
             # app/views/itineraries/edit.html.erb
             <h1>Edit Itinerary</h1>
-            <%= form_for(Itinerary.find(params[:id])) do |f| %>
-              <p>
-                <%= f.label :location %>
-                <%= f.text_field :location %>
-              </p>
+            <%= form_for(Itinerary.find(params[:id]), html: { role: 'form' }) do |f| %>
+              <div class="form-group">
+                <%= f.label :location, class: 'control-label' %>
+                <%= f.text_field :location, class: 'form-control'  %>
+              </div>
 
-              <p>
-                <%= f.label :travel_on %>
-                <%= f.date_field :travel_on %>
-              </p>
+              <div class="form-group">
+                <%= f.label :travel_on, class: 'control-label' %>
+                <%= f.date_field :travel_on, class: 'form-control' %>
+              </div>
 
-              <p>
-                <%= f.submit %>
-              </p>
+              <div class="form-group">
+                <%= f.submit class: "btn btn-lg btn-primary" %>
+              </div>
             <% end %>
 
     %section.step
@@ -140,7 +140,7 @@
         #### Solution: Change Itinerary.find(params[:id]) to a @itinerary
 
             # app/views/itineraries/edit.html.erb
-            <%= form_for(@itinerary) do |f| %>
+            <%= form_for(@itinerary, html: { role: 'form' }) do |f| %>
 
     %section.step
       :markdown
@@ -172,7 +172,7 @@
         #### Solution: Move Itinerary.new to itineraries/new
 
             # app/views/itineraries/new.html.erb
-            <%= form_for(@itinerary) do |f| %>
+            <%= form_for(@itinerary, html: { role: 'form' }) do |f| %>
 
             # app/controllers/itineraries_controller.rb
             def new
@@ -212,20 +212,20 @@
         #### Solution: Add form partial
 
             # app/views/itineraries/_form.html.erb
-            <%= form_for(@itinerary) do |f| %>
-              <p>
-                <%= f.label :location %>
-                <%= f.text_field :location %>
-              </p>
+            <%= form_for(@itinerary, html: { role: 'form' }) do |f| %>
+              <div class="form-group">
+                <%= f.label :location, class: 'control-label' %>
+                <%= f.text_field :location, class: 'form-control' %>
+              </div>
 
-              <p>
-                <%= f.label :travel_on %>
-                <%= f.date_field :travel_on %>
-              </p>
+              <div class="form-group">
+                <%= f.label :travel_on, class: 'control-label' %>
+                <%= f.date_field :travel_on, class: 'form-control' %>
+              </div>
 
-              <p>
-                <%= f.submit %>
-              </p>
+              <div class="form-group">
+                <%= f.submit class: "btn btn-lg btn-primary" %>
+              </div>
             <% end %>
 
     %section.step

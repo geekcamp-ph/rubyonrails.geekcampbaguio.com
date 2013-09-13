@@ -1,0 +1,208 @@
+- lesson = Lesson.find(8)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
+
+  %section.exercise
+    :markdown
+      ## Exercise 1: Set a Default Budget on Itinerary model
+
+    %pre.goal
+      :preserve
+        Given I want to do basic budget planning
+        And I have a fixed monthly budget which does not change for the whole year
+        And I want to know if a trip is within the monthly budget
+        When I view the itineraries page
+        Then I should see the estimated cost of planned trips per month
+        And I should see the remaining budget
+
+    %section.step
+      :markdown
+        ### Issue 1: No budget defined
+
+            When I view the itineraries page
+            Then I should see my remaining budget
+            But I see none
+
+        #### Solution: Add a class method called monthly_budget to Itinerary class
+
+            # app/models/itinerary.rb
+            class Itinerary < ActiveRecord::Base
+
+              class << self
+                def monthly_budget
+                  20000
+                end
+              end
+
+            end
+
+    %section.step
+      :markdown
+        ### Issue 2: The remaining budget is not shown
+
+            When I view the itineraries page
+            Then I should see the remaining budget
+            But I see none
+
+        #### Solution 1: Show remaining budget on app/views/itineraries/index.html.erb
+
+            # app/views/itineraries/index.html.erb
+            <h2>Remaining budget: <em><%= number_to_currency(@remaining_budget, unit: "PHP") %></em></h2
+
+        #### Solution 2: Add a class variable called "@remaining_budget" on the index method of itineraries_controller.rb
+
+            # app/controllers/itineraries_controller.rb
+            def index
+              @itineraries = Itinerary.all
+              @remaining_budget = Itinerary.remaining_budget
+            end
+
+    %section.step
+      :markdown
+        ### Issue 3: undefined method `remaining_budget' for Itinerary(id: integer, location: string, travel_on: date):Class
+
+            When I view the itineraries page
+            Then I should see the remaining budget
+            But I see NoMethodError in ItinerariesController#index
+
+        #### Solution: Add a class method called "remaining_budget" on app/models/itinerary.rb, just below the monthly_budget
+
+            # app/models/itinerary.rb
+            class << self
+              def monthly_budget
+                20000
+              end
+
+              def remaining_budget
+
+              end
+            end
+
+
+    %section.step
+      :markdown
+        ### Issue 4: I still do not see my remaining budget
+
+            When I go to itineraries page
+            Then I should see my estimated remaining budget
+            But I have no way of knowing without making an estimate per trip
+
+        #### Solution 1: Add estimated_cost to itineraries table
+
+            rails g migration AddEstimatedCostToItineraries estimated_cost:decimal
+
+        #### Solution 2: Update the migration file to make sure the default value of estimated cost is 0.00
+
+        Note: The precision is the number of significant digits, while the scale is the number of digits that can be stored following the decimal point.
+
+            class AddEstimatedCostToItineraries < ActiveRecord::Migration
+              def change
+                add_column :itineraries, :estimated_cost, :decimal, precision: 5, scale: 2, default: 0
+              end
+            end
+
+        #### Solution 3: Run command for migrating database to development environment
+
+            rake db:migrate
+
+        #### Solution 4: Add the total_estimated_cost and update the remaining_budget class method on app/models/itinerary.rb
+
+            # app/models/itinerary.rb
+            class << self
+              def monthly_budget
+                20000
+              end
+
+              def total_estimated_cost(month=Time.now.strftime('%m'))
+                self.where("strftime('%m', travel_on) = ?", month).map(&:estimated_cost).reduce(:+)
+              end
+
+              def remaining_budget
+                monthly_budget-total_estimated_cost
+              end
+            end
+
+    %section.step
+      :markdown
+        ### Issue 5: Cannot update estimated cost
+
+            When I click on edit for an itinerary
+            Then I should be able to update the estimated cost
+            But I do not see the field on the form
+
+        #### Solution 1: Add the estimated_cost text field on app/views/itineraries/_form.html.erb
+
+            # app/views/itineraries/_form.html.erb
+            <div class="form-group">
+              <%= f.label :estimated_cost, class: 'control-label' %>
+              <%= f.text_field :estimated_cost, class: 'form-control', :value => (number_with_precision(f.object.estimated_cost, :precision => 2) || 0) %>
+            </div>
+
+        #### Solution 2: Add the estimated_cost on index and show
+
+            # app/views/itineraries/show.html.erb
+            <ul class="list-unstyled">
+              <li>Location: <%= @itinerary.location %></li>
+              <li>Travel Date: <%= @itinerary.travel_on %></li>
+              <li>Estimated Cost: <%= number_to_currency(@itinerary.estimated_cost, unit: "PHP") %></li>
+            </ul>
+
+            # app/views/itineraries/index.html.erb
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Location</th>
+                    <th>Travel Date</th>
+                    <th>Estimated Cost</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                <% @itineraries.each do |itinerary| %>
+                  <tr>
+                    <td><%= itinerary.location %></td>
+                    <td><%= itinerary.travel_on %></td>
+                    <td><%= number_to_currency(itinerary.estimated_cost, unit: "PHP") %></td>
+                    <td>
+                      <%= link_to 'Show', { action: 'show', id: itinerary.id }, class: 'btn btn-default' %>
+                      <%= link_to 'Edit', { action: 'edit', id: itinerary.id }, class: 'btn btn-default' %>
+                    </td>
+                    <tr>
+                 <% end %>
+                </tbody>
+              </table>
+
+
+    %section.step
+      :markdown
+        ### Issue 6: Still cannot see the update estimated cost. WTF, right?
+
+            When I click on edit for an itinerary
+            Then I should be able to update the estimated cost
+            But I still do not see the values updated
+
+        #### Solution: Update app/controllers/itineraries_controller.rb and add estimated_cost on the accepted attributes
+
+          Worth reading: <a href="https://github.com/rails/strong_parameters" target="_blank">Strong Parameters</a>
+
+            # app/controllers/itineraries_controller.rb
+
+            def create
+              @itinerary = Itinerary.new
+              @itinerary.attributes = params[:itinerary].permit(:location, :travel_on, :estimated_cost)
+              if @itinerary.save
+                redirect_to action: 'show', id: @itinerary.id
+              else
+                render action: 'new'
+              end
+            end
+
+            def update
+              @itinerary = Itinerary.find(params[:id])
+              @itinerary.attributes = params[:itinerary].permit(:location, :travel_on, :estimated_cost)
+              if @itinerary.save
+                redirect_to action: 'show', id: @itinerary.id
+              else
+                render action: 'edit'
+              end
+            end

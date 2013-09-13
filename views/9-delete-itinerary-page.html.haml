@@ -1,4 +1,4 @@
-- lesson = Lesson.find(8)
+- lesson = Lesson.find(9)
 %article{id: lesson.basename }
   = render 'lesson_header', locals: { lesson: lesson }
 
@@ -21,13 +21,12 @@
             Then I should see a button to delete the itinerary
             But I see none
 
-        #### Solution: Add form to delete the itinerary
+        #### Solution: Add a form to delete the itinerary
 
             # app/views/itineraries/show.html.erb
-            <%= form_for(@itinerary, method: :delete) do |f| %>
-              <p>
-                <%= f.submit 'Delete Itinerary' %>
-              </p>
+            <%= form_for(@itinerary, method: :delete, html: { role: 'form' }) do |f| %>
+              <%= f.submit 'Delete Itinerary', class: 'btn btn-primary' %>
+              <%= link_to 'Back', { action: 'index' }, class: 'btn btn-default' %>
             <% end %>
 
     %section.step
@@ -86,39 +85,41 @@
 
     %section.step
       :markdown
-        ## Issue 4: I'm not informed if the itinerary is delete
+        ## Issue 4: I am not informed if the itinerary is deleted
 
             When I click the delete button
             Then I should see that the itinerary has been deleted
             And I should be informed that it has been deleted
-            But I am not
+            But I do not see any notice
 
-        #### Solution: Try adding a notice to the index page
+        #### Solution: We create a view partial for alert messages
 
-            # app/views/itineraries/index.html.erb
-            <strong>Notice: <%= @notice %></strong>
+            # app/views/shared/_flash_message.html.erb
+            <% flash.each do |name, msg| %>
+                <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+                  <a class="close" data-dismiss="alert">&#215;</a>
+                  <%= content_tag :div, msg %>
+                </div>
+            <% end %>
 
-            # app/controllers/itineraries_controller.rb
-            def destroy
-              @itinerary = Itinerary.find(params[:id])
-              @itinerary.destroy
-              @notice = "You have successfully deleted a itinerary"
-              redirect_to action: 'index'
-            end
+
+        #### Solution: We update the layout to include the partial
+
+        We add this just above yield where all content shows up.
+
+            # app/views/layout/application.html.erb
+            <%= render 'shared/flash_message' %>
+            <%= yield %>
 
     %section.step
       :markdown
-        ### Issue: Nope, still not informed
+        ### Issue 5: Nope, still not informed
 
             When I click the delete button
             And I should be informed that it has been deleted
             But instead I am STILL not informed that it has been deleted
 
         #### Solution: Change the notice to a flash message
-
-            # app/views/itineraries/index.html.erb
-            <strong>Notice: <%= flash[:notice] %></strong>
-
             # app/controllers/itineraries_controller.rb
             def destroy
               @itinerary = Itinerary.find(params[:id])

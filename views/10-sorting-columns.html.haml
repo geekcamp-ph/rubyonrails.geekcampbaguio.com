@@ -1,0 +1,93 @@
+- lesson = Lesson.find(10)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
+
+  %section.exercise
+    :markdown
+      ## Exercise 1: Sorting Itinerary Table Columns
+
+    %pre.goal
+      :preserve
+        When I view the itineraries page
+        Then I should be able to sort the columns
+        When I click the table heading such as "Estimated Cost"
+
+    %section.step
+      :markdown
+        ### Issue 1: The headings are not links that can be clicked on
+
+            When I view itineraries page
+            Then I should see the table headings are links I can click on
+            But I don't see that
+
+        #### Solution: Change the table headings on the itineraries page
+
+            # app/views/itineraries/index.html.erb
+            <thead>
+              <tr>
+                <th><%= sortable 'location' %></th>
+                <th><%= sortable 'travel_on', 'Travel Date' %></th>
+                <th><%= sortable 'estimated_cost' %></th>
+                <th></th>
+              </tr>
+            </thead>
+
+    %section.step
+      :markdown
+        ### Issue 2: undefined method `sortable'
+
+            When I view itineraries page
+            Then I should see the table headings are links I can click on
+            But I see an error: undefined method `sortable'
+
+        #### Solution: Create the helper method on app/helpers/application_helper.rb
+
+            # app/helpers/application_helper.rb
+            module ApplicationHelper
+
+              def sortable(column, title = nil)
+                title ||= column.titleize
+                css_class = column == sort_column ? "current "+sort_direction : nil
+                direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
+                link_to title, {:sort => column, :direction => direction}, {:class => css_class}
+              end
+
+            end
+
+
+    %section.step
+      :markdown
+        ### Issue 3: undefined local variable or method `sort_column'
+
+            When I view itineraries page
+            Then I should see the table headings are links I can click on for sorting
+            But I see an error: undefined local variable or method `sort_column'
+
+        #### Solution: Create the helper methods on itineraries_controller.rb and change <strong>Itinerary.all</strong> to use the <strong>order</strong> method
+
+
+        Private methods are usually defined below all non-private methods so add that after the last method
+
+            # app/controllers/itineraries_controller.rb
+             private
+
+             def sort_column
+               Itinerary.column_names.include?(params[:sort]) ? params[:sort] : "location"
+             end
+
+             def sort_direction
+               %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+             end
+
+        Before the first defined method on itineraries_controller.rb, add this code which declares the private methods as helper methods:
+
+             helper_method :sort_column, :sort_direction
+
+        Finally, we want to use these methods to sort the columns and it is currently not doing that with <strong>Itinerary.all</strong>.
+
+        Let's update the index method to look like this:
+
+            def index
+              @itineraries = Itinerary.order(sort_column + " " + sort_direction)
+              @remaining_budget = Itinerary.remaining_budget
+            end

@@ -101,9 +101,9 @@
 
             # app/views/itineraries/_form.html.erb
             <ul>
-            <% @itinerary.errors.full_messages.each do |full_message| %>
-              <li><%= full_message %></li>
-            <% end %>
+              <% @itinerary.errors.full_messages.each do |full_message| %>
+                <li><%= full_message %></li>
+              <% end %>
             </ul>
 
   %section.exercise

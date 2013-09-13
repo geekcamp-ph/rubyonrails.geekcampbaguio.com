@@ -8,7 +8,9 @@ module ViewHelpers
       new(5, 'lesson', 'Create Itinerary Page', '5-create-itinerary-page'),
       new(6, 'lesson', 'Update Itinerary Page', '6-update-itinerary-page'),
       new(7, 'lesson', 'Validate Itinerary', '7-validate-itinerary'),
-      new(8, 'lesson', 'Delete Itinerary Page', '8-delete-itinerary-page'),
+      new(8, 'lesson', 'Show Remaining Budget', '8-show-remaining-budget'),
+      new(9, 'lesson', 'Delete Itinerary', '9-delete-itinerary-page'),
+      new(10, 'lesson', 'Sorting columns', '10-sorting-columns')
     ]
 
     def self.find(id)

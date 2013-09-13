@@ -26,8 +26,10 @@
         #### Solution: Create a link to create a new itinerary
 
             # app/views/itineraries/index.html.erb
+
+            Add this code above the table.
             <p>
-              <%= link_to 'New', action: 'new' %>
+              <%= link_to 'New', { action: 'new' }, class: 'btn btn-default' %>
             </p>
 
 
@@ -70,20 +72,20 @@
 
             # app/views/itineraries/new.html.erb
             <h1>New Itinerary</h1>
-            <%= form_for(Itinerary.new) do |f| %>
-              <p>
-                <%= f.label :location %>
-                <%= f.text_field :location %>
-              </p>
+            <%= form_for(Itinerary.new, html: { role: 'form' }) do |f| %>
+              <div class="form-group">
+                <%= f.label :location, class: 'control-label' %>
+                <%= f.text_field :location, class: 'form-control' %>
+              </div>
 
-              <p>
-                <%= f.label :travel_on %>
-                <%= f.date_field :travel_on %>
-              </p>
+              <div class="form-group">
+                <%= f.label :travel_on, class: 'control-label' %>
+                <%= f.date_field :travel_on, class: 'form-control' %>
+              </div>
 
-              <p>
-                <%= f.submit %>
-              </p>
+              <div class="form-group">
+                <%= f.submit class: "btn btn-lg btn-primary" %>
+              </div>
             <% end %>
 
     %section.step
