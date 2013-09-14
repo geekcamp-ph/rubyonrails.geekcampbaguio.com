@@ -47,9 +47,9 @@
         #### Solution 1: Show remaining budget on app/views/itineraries/index.html.erb
 
             # app/views/itineraries/index.html.erb
-            <h2>Remaining budget: <em><%= number_to_currency(@remaining_budget, unit: "PHP") %></em></h2
+            <h2>Remaining budget: <em><%= number_to_currency(@remaining_budget, unit: "PHP") %></em></h2>
 
-        #### Solution 2: Add a class variable called `@remaining_budget` on the index method of itineraries_controller.rb
+        #### Solution 2: Add a variable called `@remaining_budget` on the index method of itineraries_controller.rb
 
             # app/controllers/itineraries_controller.rb
             def index
