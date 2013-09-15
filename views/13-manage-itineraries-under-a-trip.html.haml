@@ -1,0 +1,256 @@
+- lesson = Lesson.find(13)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
+
+  %section.exercise
+    :markdown
+      ## Exercise 1: Group itineraries by trip
+
+    %pre.goal
+      :preserve
+        When I go to a Show page of a trip
+        Then I should see a link to view the itineraries of the trip
+        When I follow the itineraries link
+        Then I should see only the itineraries of the trip
+
+    %section.step
+      :markdown
+        ### Issue 1: No itineraries link
+
+            When I go to a Show page of a trip
+            Then I should see a link to view the itineraries of the trip
+            But I don't see any
+
+
+        #### Solution: Add an itineraries link
+
+            # app/views/trips/show.html.erb
+
+            <%= link_to 'View Itineraries', trip_itineraries_path(@trip), class: 'btn btn-primary' %>
+
+    %section.step
+      :markdown
+        ### Issue 2: NoMethodError in Trips#show
+
+            When I go to a Show page of a trip
+            Then I should see a link to view the itineraries of the trip
+            But instead I see the following error
+              undefined method `trip_itineraries_path'
+              <%= link_to 'View Itineraries', trip_itineraries_path(@trip), class: 'btn btn-primary' %>
+
+        #### Solution: Replace the trips and itineraries routes with a nested route
+
+            # config/routes.rb
+            TripsApp::Application.routes.draw do
+              resources :trips do
+                resources :itineraries
+              end
+            end
+
+    %section.step
+      :markdown
+        ### Issue 3: NameError in Trips#show
+
+            When I go to a Show page of a trip
+            Then I should see a link to view the itineraries of the trip
+            But instead I see the following error
+              undefined local variable or method `itineraries_path'
+              25: <li class="active"><%= link_to "Home", itineraries_path %></li>
+
+        #### Solution: change Itinerary links in layout to point to trip links
+
+            # app/views/layouts/application.html.erb
+            25: <li class="active"><%= link_to "Home", trips_path %></li>
+            51: <li><%= link_to "Trips", trips_path %></li>
+            52: <li><%= link_to 'New Trip', new_trip_path %></li>
+
+    %section.step
+      :markdown
+        ### Issue 4: Itineraries are not filtered by trip
+            When I follow the itineraries link of a trip
+            Then I should see only the itineraries of the trip
+            But instead I see all the itineraries
+
+        #### Solution: filter itineraries by params[:trip_id]
+
+            # app/controllers/itineraries_controller.rb
+            def index
+              @trip = Trip.find(params[:trip_id])
+              @itineraries = @trip.itineraries.order(sort_column + " " + sort_direction)
+              @remaining_budget = Itinerary.remaining_budget
+            end
+
+  %section.exercise
+    :markdown
+      ## Exercise 2: Creating an itinerary under a trip
+
+    %pre.goal
+      :preserve
+        Given I am viewing the itineraries of a trip
+        When I click the New Itinerary link
+        Then I should see that the trip field matches the trip id in the url
+        When I save the itinerary
+        Then I should see the itinerary has been created
+
+    %section.step
+      :markdown
+        ### Issue 5: Undefined method `itineraries_path'
+
+            Given I am viewing the itineraries of a trip
+            When I click the New Itinerary link
+            Then I should see that the trip field matches the trip id in the url
+            But instead I see the following error:
+              undefined method `itineraries_path'
+              7: <%= form_for(@itinerary, html: { role: 'form' }) do |f| %>
+
+        #### Solution: set @trip in new action and pass @trip to form helper
+
+            # app/controllers/itineraries_controller.rb
+            def new
+              @trip = Trip.find(params[:id])
+              @itinerary = Itinerary.new
+            end
+
+            # app/views/itineraries/_form.html.erb
+            <%= form_for([@trip, @itinerary], html: { role: 'form' }) do |f| %>
+
+    %section.step
+      :markdown
+        ### Issue 6: Trip field doesn't match the trip id in the url
+
+            Given I am viewing the itineraries of a trip
+            When I click the New Itinerary link
+            Then I should see that the trip field matches the trip id in the url
+            But it does not if the trip id is not the first value of the trip field
+
+        #### Solution: set the trip of the itinerary
+
+            # app/controllers/itineraries_controller.rb
+            def new
+              @trip = Trip.find(params[:trip_id])
+              @itinerary = Itinerary.new(trip: @trip)
+            end
+
+    %section.step
+      :markdown
+        ### Issue 7: Undefined method `itineraries_path'
+
+            Given I am viewing the New Itinerary page under a trip
+            When I submit a new itinerary
+            Then I should see that the trip field matches the trip id in the url
+            When I submit the itinerary
+            Then I should see the itinerary has been created
+            But instead I see the following error
+              undefined method `itineraries_path'
+              10: <%= form_for(@itinerary, method: :delete, html: { role: 'form' }) do |f| %>
+
+        #### Solution: set @trip in show action and pass @trip to Delete Itinerary form helper
+
+            # app/controllers/itineraries_controller.rb
+            def show
+              @trip = Trip.find(params[:trip_id])
+              @itinerary = Itinerary.find(params[:id])
+            end
+
+            # app/views/itineraries/show.html.erb
+            <%= form_for([@trip, @itinerary], method: :delete, html: { role: 'form' }) do |f| %>
+
+
+  %section.exercise
+    :markdown
+      ## Exercise 3: Editing an itinerary under a trip
+
+    %pre.goal
+      :preserve
+        Given I am viewing the itineraries of a trip
+        When I click the Edit link of an itinerary
+        Then I should see the page for editing the itinerary
+        When I submit the itinerary
+        Then I should see the itinerary has been updated
+
+    %section.step
+      :markdown
+        ### Issue 8: NoMethodError in Itineraries#edit
+
+            Given I am viewing the itineraries of a trip
+            When I click the Edit link of an itinerary
+            Then I should see the page for editing the itinerary
+            But instead I see the following error
+              undefined method `itineraries_path'
+              7: <%= form_for([@trip, @itinerary], html: { role: 'form' }) do |f| %>
+
+        #### Solution: set the @trip in the edit action
+
+            # app/controllers/itineraries_controller.rb
+            def edit
+              @trip = Trip.find(params[:trip_id])
+              @itinerary = Itinerary.find(params[:id])
+            end
+
+    %section.exercise
+      :markdown
+        ## Exercise 4: Deleting an itinerary under a trip
+
+      %pre.goal
+        :preserve
+          When I go to the show page of an itinerary
+          Then I should see a button to delete the itinerary
+          When I click the button
+          Then I should see that the itinerary is deleted
+
+    %section.exercise
+      :markdown
+        ## Exercise 5: Deleting an itinerary under a itinerary from the Itineraries Index page
+
+      %pre.goal
+        :preserve
+          When I go to the itineraries index page
+          Then I should see that each itinerary has a delete link
+          When I click the delete link of a itinerary
+          Then I should see that it is deleted
+
+    %section.exercise
+      :markdown
+        ## Exercise 6: Refactor Trip.find calls in controller
+
+      %pre.goal
+        :preserve
+          As a developer
+          I want to call Trip.find(params[:trip_id])
+          In order to optimize code reuse
+
+
+    %section.step
+      :markdown
+        ### Solution: Find the trip in a before_filter callback
+
+            # app/controllers/itineraries_controller.rb
+
+            before_filter do
+              @trip = Trip.find(params[:trip_id])
+            end
+
+            # Remove the @trip = Trip.find(params[:trip_id]) call in show, index, new, and edit actions.
+
+    %section.exercise
+      :markdown
+        ## Exercise 7: Back link from a itinerary with a changed trip
+
+      %pre.goal
+        :preserve
+          When I change the trip of the itinerary
+          Then I should see the Show page of the itinerary
+          When I click the Back link
+          Then I should see the new trip of the itinerary
+          But instead I see the old trip
+
+    %section.step
+      :markdown
+        ### Solution: Specify the trip of itinerary in the Back link and in the Delete Itinerary form
+
+            <%= form_for([@itinerary.trip, @itinerary], method: :delete, html: { role: 'form' }) do |f| %>
+              <%= f.submit 'Delete Itinerary', class: 'btn btn-primary' %>
+              <%= link_to 'Back', { action: 'index', trip_id: @itinerary.trip }, class: 'btn btn-default' %>
+            <% end %>
+
+

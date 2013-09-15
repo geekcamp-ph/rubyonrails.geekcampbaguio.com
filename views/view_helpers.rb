@@ -13,7 +13,7 @@ module ViewHelpers
       new(10, 'lesson', 'Sorting Columns', '10-sorting-columns'),
       new(11, 'lesson', 'Trips CRUD', '11-trips-crud'),
       new(12, 'lesson', 'Link Itineraries to Trips', '12-link-itineraries-to-trips'),
-
+      new(13, 'lesson', 'Manage Itineraries Under a Trip', '13-manage-itineraries-under-a-trip')
     ]
 
     def self.find(id)
