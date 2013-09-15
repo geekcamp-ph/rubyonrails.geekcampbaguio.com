@@ -17,6 +17,23 @@
           %a{ href: assignment.basename, target: "_blank", class: "icon-popup", title: 'Open lesson in new window'}
             &nbsp;
 
+  %ol
+    %h1 Resources
+    - Resource.published.each do |resource|
+      %li
+        %span
+          = link_to resource.title, "##{resource.basename}"
+          %a{ href: resource.basename, target: "_blank", class: "icon-popup", title: 'Open lesson in new window'}
+            &nbsp;
+  %ol
+    %h1 Challenges
+    - Challenge.published.each do |challenge|
+      %li
+        %span
+          = link_to challenge.title, "##{challenge.basename}"
+          %a{ href: challenge.basename, target: "_blank", class: "icon-popup", title: 'Open lesson in new window'}
+            &nbsp;
+
 %article
   - Lesson.published.each do |lesson|
     = render_template lesson.basename

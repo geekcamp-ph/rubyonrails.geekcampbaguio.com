@@ -49,7 +49,7 @@
             # app/views/itineraries/index.html.erb
             <h2>Remaining budget: <em><%= number_to_currency(@remaining_budget, unit: "PHP") %></em></h2>
 
-        #### Solution 2: Add a variable called `@remaining_budget` on the index method of itineraries_controller.rb
+        #### Solution 2: Add an instance variable called `@remaining_budget` on the index method of itineraries_controller.rb
 
             # app/controllers/itineraries_controller.rb
             def index

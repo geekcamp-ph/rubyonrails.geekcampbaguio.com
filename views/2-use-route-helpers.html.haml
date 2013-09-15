@@ -1,0 +1,27 @@
+- assignment = Assignment.find(2)
+%article{id: assignment.basename }
+  = render 'lesson_header', locals: { lesson: assignment }
+
+  %section.exercise
+    :markdown
+      ### Update all the views on `app/views/itineraries` to use the route helpers
+
+    %pre.goal
+      :preserve
+        Given I don't want to type the controller and action on views
+        Then I should use the route helpers provided by Rails through `resources` on routes.rb
+        But I do not know what route helpers to use and how to update the views
+
+    %section.step
+      :markdown
+        ### Use `rake routes` to determine the route helpers
+
+        *We regret to tell you that you have been copying bad code all along. This is why COPY PASTE is not recommended. There is a smart way of being lazy and a dumb way of being lazy. We prefer the latter. Laziness is still programmer's virtue.*
+
+        Although it works, it is not recommended to have `link_to 'Show', { action: 'show', id: itinerary.id }`. You should use the route helpers.
+
+        The following command with tell you the route helper name, the URI pattern, controller and action for itineraries.
+
+        `rake routes`
+
+        For the show view, it is called `itinerary_path(itinerary.id)` but you may have to replace `itinerary.id` based on the variable name.

@@ -52,11 +52,11 @@ module ViewHelpers
     end
 
     def self.published
-      DATA
+      []
     end
   end
 
-  class Resources < Struct.new(:id, :category, :title, :basename)
+  class Resource < Struct.new(:id, :category, :title, :basename)
     DATA = [
       new(1, 'resource', 'Web Development Resources', '1-resources-web-development'),
       new(2, 'resource', 'Ruby Resources', '2-resources-ruby'),
