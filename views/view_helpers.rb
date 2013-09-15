@@ -11,7 +11,9 @@ module ViewHelpers
       new(8, 'lesson', 'Show Remaining Budget', '8-show-remaining-budget'),
       new(9, 'lesson', 'Delete Itinerary', '9-delete-itinerary-page'),
       new(10, 'lesson', 'Sorting Columns', '10-sorting-columns'),
-      new(11, 'lesson', 'Trips CRUD', '11-trips-crud')
+      new(11, 'lesson', 'Trips CRUD', '11-trips-crud'),
+      new(12, 'lesson', 'Link Itineraries to Trips', '12-link-itineraries-to-trips'),
+
     ]
 
     def self.find(id)

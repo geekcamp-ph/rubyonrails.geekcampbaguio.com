@@ -1,0 +1,213 @@
+- lesson = Lesson.find(12)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
+
+  %section.exercise
+    :markdown
+      ## Exercise 1: I should be able to add itineraries to a trip
+
+    %pre.goal
+      :preserve
+        Given I have a trip and an itinerary
+          trip = Trip.new(name: 'Cordillera Adventure')
+          itinerary = Itinerary.new(location: 'Baguio', travel_on: Date.today)
+
+        When I add an itinerary to the trip
+          trip.itineraries << itinerary
+          trip.save
+
+        Then I should see that the trip has one itinerary
+          puts trip.itineraries
+
+        And I should see that the itinerary belongs to the trip
+          puts itinerary.trip
+
+
+    %section.step
+      :markdown
+        ### Issue 1: NoMethodError: undefined method `itineraries' for Trip
+            Given I have a trip and an itinerary
+            When I add an itinerary to the trip
+            Then I should see that the trip has one itinerary
+            But instead I see the following error:
+                NoMethodError: undefined method `itineraries' for Trip
+
+        #### Solution: specify that a trip can have many itineraries
+
+            # app/models/trip.rb
+
+            has_many :itineraries
+
+        You may need to restart the rails console.
+
+    %section.step
+      :markdown
+        ### Issue 2: NoMethodError: undefined method `itineraries' for Trip
+            Given I have a trip and an itinerary
+            When I add an itinerary to the trip
+            Then I should see that the trip has one itinerary
+            But instead I see the following error:
+                ActiveModel::MissingAttributeError: can't write unknown attribute `trip_id'
+
+        #### Solution: add trip_id foreign key to itineraries table
+
+            # trips app directory
+
+            rails generate migration add_trip_id_to_itineraries trip_id:integer
+
+            # db/migrate/<timestamp>_add_trip_id_to_itineraries.rb
+
+            class AddTripIdToItineraries < ActiveRecord::Migration
+              def change
+                add_column :itineraries, :trip_id, :integer
+              end
+            end
+
+            # trips app directory
+
+            rake db:migrate
+
+            has_many :itineraries
+
+        You may need to restart the rails console
+
+    %section.step
+      :markdown
+        ### Issue 3: NoMethodError: undefined method `trip' for Itinerary
+            Given I have a trip and an itinerary
+            When I add an itinerary to the trip
+            Then I should see that the trip has one itinerary
+            And I should see that the itinerary belongs to the trip
+            But instead I see the following error
+
+        #### Solution: specify that itineraries belong to trips
+
+            # app/models/itinerary.rb
+
+            belongs_to :trip
+
+        You may need to restart the rails console.
+
+  %section.exercise
+    :markdown
+      ## Exercise 2: I should be able to set the trip of an itinerary in the website
+
+    %pre.goal
+      :preserve
+        When I go to the Edit Itinerary page
+        Then I should see a field for selecting the trip of the itinerary
+        When I select the trip of the itinerary and submit the form
+        Then I should see the trip of the itinerary in the Show Itinerary page
+        When I go to the Itineraries Index page
+        Then I should also see the trips of the itineraries
+
+    %section.step
+      :markdown
+        ### Issue 4: No trip field
+            When I go to the Edit Itinerary page
+            Then I should see a field to select the trip of the itinerary
+            But I don't see any
+
+        #### Solution: add a select field for trip_id
+
+            # app/views/itineraries/_form.html.erb
+            <%= form_for(@itinerary, html: { role: 'form' }) do |f| %>
+              <div class="form-group">
+                <%= f.label :trip_id, class: 'control-label' %>
+                <%= f.collection_select :trip_id, Trip.all.order(:name), :id, :name, class: 'form-control' %>
+              </div>
+
+              <!-- other form fields... -->
+
+            <% end %>
+
+    %section.step
+      :markdown
+        ### Issue 5: No trip in Show Itinerary and Itineraries Index pages
+            When I select the trip of the itinerary and submit the form
+            Then I should see that the trip of the itinerary in the Show Itinerary page
+            But I don't see any
+
+        #### Solution: Add trip to Show Itinerary page
+
+            # app/views/itineraries/show.html.erb
+            <li>Trip: <%= @itinerary.trip.name %></li>
+
+    %section.step
+      :markdown
+        ### Issue 6: NoMethodError in Itineraries#show
+
+            When I select the trip of the itinerary and submit the form
+            Then I should see that the trip of the itinerary in the Show Itinerary page
+            But instead I see the following error:
+              undefined method `name' for nil:NilClass
+              line 4: <li>Trip: <%= @itinerary.trip.name %></li>
+
+
+        #### Solution: permit params[:trip_id]
+
+            def create
+              # ...
+              @itinerary.attributes = params[:itinerary]
+                .permit(:location, :travel_on, :estimated_cost, :trip_id)
+              # ...
+            end
+
+            def update
+              # ...
+              @itinerary.attributes = params[:itinerary]
+                .permit(:location, :travel_on, :estimated_cost, :trip_id)
+              # ...
+            end
+
+    %section.step
+      :markdown
+        ### Issue 7: NoMethodError in Itineraries#show
+            When I go to the Itineraries Index page
+            Then I should also see the trips of the itineraries
+            But I don't see any
+
+        #### Solution: add trip column to itineraries table
+
+            # app/views/itineraries/index.html.erb
+
+            <thead>
+              <tr>
+                <th><%= sortable 'trip_id', 'Trip' %></th>
+                ...
+              </tr>
+            </thead>
+            <tbody>
+            <% @itineraries.each do |itinerary| %>
+              <tr class="<%= itinerary_row_class(itinerary) %>">
+                <td><%= itinerary.trip.name %></td>
+              </tr>
+            <% end %>
+
+    %section.step
+      :markdown
+        ### Issue 8: NoMethodError in Itineraries#index
+
+            When I go to the Itineraries Index page
+            Then I should also see the trips of the itineraries
+            But instead I see the following error:
+              undefined method `name' for nil:NilClass
+              line 22: <td><%= itinerary.trip.name %></td>
+
+        #### Solution: handle itineraries without trips
+
+            # app/models/itinerary.rb
+
+            def to_s
+              name
+            end
+
+            # app/views/itineraries/show.html.erb
+            <li>Trip: <%= @itinerary.trip %></li>
+
+            # app/views/itineraries/index.html.erb
+            <% @itineraries.each do |itinerary| %>
+              <tr class="<%= itinerary_row_class(itinerary) %>">
+                <td><%= itinerary.trip %></td>
+              </tr>
+            <% end %>
