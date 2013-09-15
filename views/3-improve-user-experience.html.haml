@@ -1,0 +1,28 @@
+- challenge = Challenge.find(3)
+
+%article{id: challenge.basename }
+  = render 'lesson_header', locals: { lesson: challenge }
+
+  %section.exercise
+    :markdown
+      ## Challenge 3: Improve User Experience
+
+    %pre.goal
+      :preserve
+        Given I am a user
+        I want to easily add trips and itineraries
+        Or at least easily find trips and itineraries
+        When I visit the website
+        Then I should have a good experience and not encounter any issues
+
+    %section.step
+      :markdown
+        ### Here, we make you think and do what you like. Remember that it's better to have "less" features than "more" features that do not work well for the user. Keep essential features. If you want to add new features, make sure you are not breaking old functionality.
+
+    %section.step
+      :markdown
+        ### Requirements
+
+        1. Improve and enhance without breaking any functionality.
+        2. Improve on the design.
+        3. Do what you like to do with the application.

@@ -1,0 +1,29 @@
+- challenge = Challenge.find(2)
+
+%article{id: challenge.basename }
+  = render 'lesson_header', locals: { lesson: challenge }
+
+  %section.exercise
+    :markdown
+      ## Challenge 2: Allow Filtering Trips Based on Month and Year
+
+    %pre.goal
+      :preserve
+        Given I am a user
+        And I can plan a trip for the next 12 months
+        Then I should be able filter itineraries by month and year
+
+    %section.step
+      :markdown
+        ### Tip 1: You should be able to create a `DateTime` range converted to an array. We learned this on Day 2.
+        ### Tip 2: Use the `Enumerable` method `group_by`
+        ### Tip 3: Don't think of any complex code. It may just be a few lines of code.
+
+    %section.step
+      :markdown
+        ### Requirements
+
+        1. Enhance the layout by creating a partial for the sidebar to be placed on `app/views/shared`
+        2. Do NOT update the `itineraries` controller. There is no need for that.
+        3. Use the correct `Enumerable` methods for grouping.
+        4. Use the `link_to` helper.

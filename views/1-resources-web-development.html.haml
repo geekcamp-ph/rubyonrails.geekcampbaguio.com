@@ -1,0 +1,7 @@
+- resource = Resource.find(1)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: resource }
+
+  %section.resources
+    %h2 Free Resources on Learning Web Development and Software Development
+

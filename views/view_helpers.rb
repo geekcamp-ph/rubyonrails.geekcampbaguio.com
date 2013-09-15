@@ -44,7 +44,7 @@ module ViewHelpers
     DATA = [
       new(1, 'challenge', 'Enhancement 2: Allow Multiple Users to Plan Their Trips', '1-allow-multiple-users-to-plan-their-trips'),
       new(2, 'challenge', 'Enhancement 3: Allow Filtering Trips Based on Month and Year', '2-allow-filtering-trips-based-on-month-and-year'),
-      new(3, 'challenge', 'Enhancement 4: Improve User Experience', '4-improve-user-experience')
+      new(3, 'challenge', 'Enhancement 4: Improve User Experience', '3-improve-user-experience')
     ]
 
     def self.find(id)
@@ -52,7 +52,7 @@ module ViewHelpers
     end
 
     def self.published
-      []
+      DATA
     end
   end
 
