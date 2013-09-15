@@ -28,6 +28,41 @@ module ViewHelpers
   class Assignment < Struct.new(:id, :category, :title, :basename)
     DATA = [
       new(1, 'assignment', 'Using Twitter Booststrap for Rails', '1-twitter-bootstrap-for-rails'),
+      new(2, 'assignment', 'Enhancement 1: Use Route Helpers', '2-use-route-helpers')
+    ]
+
+    def self.find(id)
+      DATA.detect{|p| p.id == id}
+    end
+
+    def self.published
+      DATA
+    end
+  end
+
+  class Challenge < Struct.new(:id, :category, :title, :basename)
+    DATA = [
+      new(1, 'challenge', 'Enhancement 2: Allow Multiple Users to Plan Their Trips', '1-allow-multiple-users-to-plan-their-trips'),
+      new(2, 'challenge', 'Enhancement 3: Allow Filtering Trips Based on Month and Year', '2-allow-filtering-trips-based-on-month-and-year'),
+      new(3, 'challenge', 'Enhancement 4: Improve User Experience', '4-improve-user-experience')
+    ]
+
+    def self.find(id)
+      DATA.detect{|p| p.id == id}
+    end
+
+    def self.published
+      DATA
+    end
+  end
+
+  class Resources < Struct.new(:id, :category, :title, :basename)
+    DATA = [
+      new(1, 'resource', 'Web Development Resources', '1-resources-web-development'),
+      new(2, 'resource', 'Ruby Resources', '2-resources-ruby'),
+      new(3, 'resource', 'Ruby on Rails Resources', '3-resources-ruby-on-rails'),
+      new(4, 'resource', 'Git Resources', '4-resources-git'),
+      new(5, 'resource', 'Free Unix Resources', '5-resources-unix')
     ]
 
     def self.find(id)
