@@ -9,7 +9,7 @@
     %pre.goal
       :preserve
         When I go to http://localhost:3000/trips
-        Then I should a trips table with the following columns:
+        Then I should see a trips table with the following columns:
           | name        | string  |
 
 
@@ -18,7 +18,7 @@
         ### Issue 1: No route matches [GET] "/trips"
 
             When I go to http://localhost:3000/trips
-            Then I should a trips table
+            Then I should see a trips table
             But instead I see a routing error:
               No route matches [GET] "/trips"
 
@@ -31,7 +31,7 @@
         ### Issue 2: uninitialized constant TripsController
 
             When I go to http://localhost:3000/trips
-            Then I should a trips table
+            Then I should see a trips table
             But instead I see the following error:
               uninitialized constant TripsController
 
@@ -44,7 +44,7 @@
         ### Issue 3: Unable to autoload constant TripsController
 
             When I go to http://localhost:3000/trips
-            Then I should a trips table
+            Then I should see a trips table
             But instead I see the following error:
               Unable to autoload constant TripsController,
               expected trips-app/app/controllers/trips_controller.rb to define it
@@ -63,7 +63,7 @@
         ### Issue 4: uninitialized constant TripsController::Trip
 
             When I go to http://localhost:3000/trips
-            Then I should a trips table
+            Then I should see a trips table
             But instead I see the following error:
               uninitialized constant TripsController::Trip
 
@@ -81,7 +81,7 @@
         ### Issue 5: Could not find table 'trips'
 
             When I go to http://localhost:3000/trips
-            Then I should a trips table
+            Then I should see a trips table
             But instead I see the following error:
               Could not find table 'trips'
 
@@ -109,7 +109,7 @@
         ### Issue 6: SQLException: no such column: travel_on
 
             When I go to http://localhost:3000/trips
-            Then I should a trips table
+            Then I should see a trips table
             But instead I see the following error:
               SQLite3::SQLException:
               no such column: travel_on:
@@ -126,7 +126,7 @@
         ### Issue 7: Missing template trips/index
 
             When I go to http://localhost:3000/trips
-            Then I should a trips table
+            Then I should see a trips table
             But instead I see the following error:
               Missing template trips/index, application/index with
               { :locale=>[:en], :formats=>[:html],
@@ -142,7 +142,7 @@
         ### Issue 8: undefined method `each' for nil:NilClass
 
             When I go to http://localhost:3000/trips
-            Then I should a trips table
+            Then I should see a trips table
             But instead I see the following error:
               undefined method `each' for nil:NilClass
               19:  <% @itineraries.each do |itinerary| %>
@@ -164,7 +164,7 @@
         ### Issue 9: no such column: location
 
             When I go to http://localhost:3000/trips
-            Then I should a trips table
+            Then I should see a trips table
             But instead I see the following error:
               SQLite3::SQLException:
               no such column: location:
