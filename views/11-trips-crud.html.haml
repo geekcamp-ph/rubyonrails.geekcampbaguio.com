@@ -1,0 +1,319 @@
+- lesson = Lesson.find(11)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
+
+  %section.exercise
+    :markdown
+      ## Exercise 1: Trips index page
+
+    %pre.goal
+      :preserve
+        When I go to http://localhost:3000/trips
+        Then I should a trips table with the following columns:
+          | name        | string  |
+
+
+    %section.step
+      :markdown
+        ### Issue 1: No route matches [GET] "/trips"
+
+            When I go to http://localhost:3000/trips
+            Then I should a trips table
+            But instead I see a routing error:
+              No route matches [GET] "/trips"
+
+        #### Solution
+
+        In `config/routes.rb`, copy route of trips resource from itineraries
+
+    %section.step
+      :markdown
+        ### Issue 2: uninitialized constant TripsController
+
+            When I go to http://localhost:3000/trips
+            Then I should a trips table
+            But instead I see the following error:
+              uninitialized constant TripsController
+
+        ### Solution
+
+        Copy trips controller from itineraries controller.
+
+    %section.step
+      :markdown
+        ### Issue 3: Unable to autoload constant TripsController
+
+            When I go to http://localhost:3000/trips
+            Then I should a trips table
+            But instead I see the following error:
+              Unable to autoload constant TripsController,
+              expected trips-app/app/controllers/trips_controller.rb to define it
+
+        ### Solution
+
+        In `app/controllers/trips_controller.rb`, search and replace:
+
+        * Itinerary: Trip
+        * itinerary: trip
+        * Itineraries: Trips
+        * itineraries: trips
+
+    %section.step
+      :markdown
+        ### Issue 4: uninitialized constant TripsController::Trip
+
+            When I go to http://localhost:3000/trips
+            Then I should a trips table
+            But instead I see the following error:
+              uninitialized constant TripsController::Trip
+
+        ### Solution
+
+        Copy trip model from itinerary model. Search and replace:
+
+        * Itinerary: Trip
+        * itinerary: trip
+        * Itineraries: Trips
+        * itineraries: trips
+
+    %section.step
+      :markdown
+        ### Issue 5: Could not find table 'trips'
+
+            When I go to http://localhost:3000/trips
+            Then I should a trips table
+            But instead I see the following error:
+              Could not find table 'trips'
+
+        ### Solution: Generate and run migration to create trips table
+
+            # trips-app directory
+
+            rails generate migration create_trips name:string
+
+            # db/migrate/<timestamp>_create_trips.rb
+            class CreateTrips < ActiveRecord::Migration
+              def change
+                create_table :trips do |t|
+                  t.string :name
+                end
+              end
+            end
+
+            # trips-app directory
+
+            rake db:migrate
+
+    %section.step
+      :markdown
+        ### Issue 6: SQLException: no such column: travel_on
+
+            When I go to http://localhost:3000/trips
+            Then I should a trips table
+            But instead I see the following error:
+              SQLite3::SQLException:
+              no such column: travel_on:
+              SELECT "trips".* FROM "trips" WHERE (strftime('%m', travel_on) = '09')
+
+        ### Solution
+
+        In the trips index page, remove
+
+            @remaining_budget = Trip.remaining_budget
+
+    %section.step
+      :markdown
+        ### Issue 7: Missing template trips/index
+
+            When I go to http://localhost:3000/trips
+            Then I should a trips table
+            But instead I see the following error:
+              Missing template trips/index, application/index with
+              { :locale=>[:en], :formats=>[:html],
+                :handlers=>[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.
+              Searched in: * "/home/gsmendoza/workspace/geekcamp-ph/trips-app/app/views"
+
+        ### Solution
+
+        Copy trips views directory from itineraries directory.
+
+    %section.step
+      :markdown
+        ### Issue 8: undefined method `each' for nil:NilClass
+
+            When I go to http://localhost:3000/trips
+            Then I should a trips table
+            But instead I see the following error:
+              undefined method `each' for nil:NilClass
+              19:  <% @itineraries.each do |itinerary| %>
+
+        ### Solution
+
+        In the trips index page, replace:
+
+        * itinerary: trip
+        * location: name
+
+        Remove:
+
+        * `travel_on`
+        * `estimated_cost`
+
+    %section.step
+      :markdown
+        ### Issue 9: no such column: location
+
+            When I go to http://localhost:3000/trips
+            Then I should a trips table
+            But instead I see the following error:
+              SQLite3::SQLException:
+              no such column: location:
+              SELECT "trips".* FROM "trips"   ORDER BY location asc
+              15: <% @trips.each do |trip| %>
+
+        In the trips index page, replace:
+
+        * location: name
+
+        Remove
+
+        * `travel_on`
+        * `estimated_cost`
+
+  %section.exercise
+    :markdown
+      ## Exercise 2: New trip page
+
+    %pre.goal
+      :preserve
+        When I go to the trips index page
+        Then I should see a link to create a new trip
+        When I click the link for creating a new trip
+        Then I should see a form for creating a new trip
+        When I enter a trip in the form and submit it
+        Then I should see the trip I created
+
+    %section.step
+      :markdown
+        ### Issue 10: undefined method `errors' for nil:NilClass
+
+            When I go to the trips index page
+            Then I should see a link to create a new trip
+            When I click the link for creating a new trip
+            Then I should see a form for creating a new trip
+            But instead I see the following error:
+              undefined method `errors' for nil:NilClass
+              2:  <% @itinerary.errors.full_messages.each do |full_message| %>
+
+
+        #### Solution
+
+        Update the trip form partial. Replace:
+
+        * itinerary: trip
+        * location: name
+
+        Remove:
+
+        * `travel_on`
+        * `estimated_cost`
+
+
+    %section.step
+      :markdown
+        ### Issue 11: undefined method `location' for Trip
+
+            Give I am in the new trip page
+            When I enter a trip in the form and submit it
+            Then I should see the trip I created
+            But instead I see the following error:
+              undefined method `location' for Trip
+              trips_controller.rb:20: if @trip.save
+              activemodel (4.0.0.rc2) lib/active_model/attribute_methods.rb:436:in `method_missing'
+
+        #### Solution
+
+        Update trip model. Replace
+
+        * location: name
+
+        Remove:
+
+        * `travel_on`
+        * `estimated_cost`
+
+    %section.step
+      :markdown
+        ### Issue 12: NoMethodError in Trips#show
+
+            Give I am in the new trip page
+            When I enter a trip in the form and submit it
+            Then I should see the trip I created
+            But instead I see the following error:
+              undefined method `id' for nil:NilClass
+
+              show.html.erb.rb:1: <h1>Itinerary <%= @itinerary.id %></h1>
+
+        #### Solution
+
+        Update show trip page. Replace
+
+        * itinerary: trip
+        * location: name
+
+        Remove:
+
+        * `travel_on`
+        * `estimated_cost`
+
+  %section.exercise
+    :markdown
+      ## Exercise 3: Edit trip page
+
+    %pre.goal
+      :preserve
+        When I go to the trips index page
+        Then I should see a link to edit a trip
+        When I click the link for editing a trip
+        Then I should see a form for updating the trip
+        When I edit the trip and submit the form
+        Then I should see that the trip has been updated
+
+    %section.step
+      :markdown
+        ### Issue 13: NoMethodError in Trips#index
+
+            When I go to the trips index page
+            Then I should see a link to edit a trip
+            But instead I see the following error:
+              undefined method `trip_row_class' for #<#<Class:0xb5f85f38>:0x9394398>
+              line 16: <tr class="<%= trip_row_class(trip) %>">
+
+        #### Solution
+
+        Remove `class="<%= trip_row_class(trip) %>"` code from index page.
+
+  %section.exercise
+    :markdown
+      ## Exercise 4: Deleting an itinerary from the show trip page
+
+    %pre.goal
+      :preserve
+        When I go to the show page of an trip
+        Then I should see a button to delete the trip
+        When I click the button
+        Then I should see that the trip is deleted
+
+  %section.exercise
+    :markdown
+      ## Exercise 5: Deleting an itinerary from the trips index page
+
+    %pre.goal
+      :preserve
+        When I go to the trips index page
+        Then I should see that each trip has a delete link
+        When I click the delete link of a trip
+        Then I should see that it is deleted
+
+
+
