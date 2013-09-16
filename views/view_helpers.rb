@@ -58,11 +58,8 @@ module ViewHelpers
 
   class Resource < Struct.new(:id, :category, :title, :basename)
     DATA = [
-      new(1, 'resource', 'Web Development Resources', '1-resources-web-development'),
-      new(2, 'resource', 'Ruby Resources', '2-resources-ruby'),
-      new(3, 'resource', 'Ruby on Rails Resources', '3-resources-ruby-on-rails'),
-      new(4, 'resource', 'Git Resources', '4-resources-git'),
-      new(5, 'resource', 'Free Unix Resources', '5-resources-unix')
+      new(1, 'resource', 'Event Presentations and Review', '1-event-presentations-and-review'),
+      new(2, 'resource', 'Software Development Resources', '2-software-development-resources')
     ]
 
     def self.find(id)
