@@ -25,6 +25,24 @@
 
     .main-container
       .main.wrapper.clearfix= yield
+    .footer-container
+      %footer.wrapper.clearfix
+        %script{:src => "//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-52367e9e22d04cc4", :type => "text/javascript"}
+        :javascript
+          addthis.layers({
+            'theme' : 'transparent',
+            'share' : {
+              'position' : 'right',
+              'numPreferredServices' : 7
+            },
+            'follow' : {
+              'services' : [
+                {'service': 'facebook', 'id': 'GeekcampBaguio'},
+                {'service': 'twitter', 'id': 'geekcampbaguio'}
+              ]
+            }
+          });
+
     %script{ src: "//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"}
     :javascript
       window.jQuery || document.write('<script src="vendor/initializr/jsvendor/jquery-1.10.1.min.js"><\/script>')

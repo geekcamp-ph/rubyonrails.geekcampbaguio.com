@@ -34,6 +34,15 @@
           %a{ href: challenge.basename, target: "_blank", class: "icon-popup", title: 'Open challenge in new window'}
             &nbsp;
 
+  %ol.nice
+    %h1 Speakers
+    - Speaker.all.each do |speaker|
+      %li
+        %span
+          = link_to speaker.name, "#{speaker.link}", target: "_blank"
+          %a{ href: speaker.link, target: "_blank", class: "icon-popup", title: speaker.name }
+            &nbsp;
+
 %article
   - Lesson.published.each do |lesson|
     = render_template lesson.basename
