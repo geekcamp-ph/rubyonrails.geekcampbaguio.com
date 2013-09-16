@@ -28,7 +28,8 @@ module ViewHelpers
   class Assignment < Struct.new(:id, :category, :title, :basename)
     DATA = [
       new(1, 'assignment', 'Using Twitter Booststrap for Rails', '1-twitter-bootstrap-for-rails'),
-      new(2, 'assignment', 'Enhancement 1: Use Route Helpers', '2-use-route-helpers')
+      new(2, 'assignment', 'Enhancement 1: Use Route Helpers', '2-use-route-helpers'),
+      new(3, 'assignment', 'Set Up Git and Heroku', '3-git-and-heroku')
     ]
 
     def self.find(id)

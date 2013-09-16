@@ -1,0 +1,332 @@
+- assignment = Assignment.find(3)
+
+%article{id: assignment.basename }
+  = render 'lesson_header', locals: { lesson: assignment }
+
+  %section.exercise
+    :markdown
+      ## Assignment 3: Git and Heroku Setup
+
+    %pre.goal
+      :preserve
+        Given I have a working application
+        And I want to access it from anywhere or let others use the app
+        Then I should be able to access the web application deployed
+        But I do not know how to deploy
+
+    %section.step
+      :markdown
+        ### Set Up Git
+
+        Git is a version control system, a simple command line tool for keeping a history on the state of your source code projects.
+
+        #### Installation
+        -------------------------
+
+        For Ubuntu/ Debian users:
+
+        `sudo apt-get install git-core`
+
+        For Mac OS X users who use homebrew:
+
+        `brew install git`
+
+        For Windows users, download and install <a href="http://railsinstaller.org/" target="_blank">Rails Installer</a> which comes with mysisgit
+
+        ### Configuration
+        -------------------------
+
+        You need to set up git by creating a Git user. Please use your real email address and name:
+
+            git config --global user.email "your@email.com"
+            git config --global user.name "Your Name"
+
+        ### Recommended Guides for Git Beginners
+        -------------------------
+
+        ### <a href ="http://rogerdudler.github.com/git-guide/" target="_blank"> git - the simple guide (no deep shit) </a>
+
+        ### <a href ="http://gitimmersion.com/" target="_blank"> Git immersion </a>
+
+
+        ### Defining a Gitignore
+        -------------------------
+
+        The .gitignore file contains files or folders you want to ignore for a project. These will not be included on the list of files and folders to be tracked for changes and will not be commited. Developers usually ignore temporary files created or probably configuration files.
+
+
+        ### Defining a Global Gitignore
+        -------------------------------
+
+        The .global_gitgnore resides on your home directory. If you use Linux or OS X, the file is ~/.global_gitignore
+
+        #### Common files and folders to ignore for a Ruby on Rails project
+
+            *.rbc
+            *.sassc
+            .sass-cache
+            capybara-*.html
+            .rspec
+            /.bundle
+            /vendor/bundle
+            /log/*
+            /tmp/*
+            /db/*.sqlite3
+            /public/system/*
+            /coverage/
+            /spec/tmp/*
+            **.orig
+            rerun.txt
+            pickle-email-*.html
+
+        For OS X users, we ignore the following files:
+
+            .DS_Store
+            .AppleDouble
+            .LSOverride
+            Icon
+
+
+            # Thumbnails
+            ._*
+
+            # Files that might appear on external disk
+            .Spotlight-V100
+            .Trashes
+
+        Fore more files to ignore, check the <a href="https://github.com/github/gitignore/tree/master/Global" target="_blank">gitignore</a> list updated by several developers worldwide.
+
+        ### Creating a new git repository
+        -------------------------------
+
+            mkdir something
+            cd something
+            git init
+
+
+        Before anything else, you have to sign up for 3 services.
+
+        ### Git Hosting
+        -------------------------------
+
+        ### <a href ="http://assembla.com/git" target="_blank"> Assembla </a>
+
+        ### <a href ="https://github.com/" target="_blank"> Github </a>
+
+
+        ### Ruby on Rails Hosting
+        -------------------------------
+
+        ### <a href ="https://heroku.com/" target="_blank"> Heroku </a>
+
+
+        ### Setup Git on a Shared Hosting Server
+        -------------------------------
+
+        You need an SSH user or a user who can log in to your account via a terminal.
+
+            ssh user@host
+
+            mkdir project
+            cd project
+            git --bare init
+
+        Your git repository link would look like:
+
+            user@host:~/project
+
+        ### Connect repository to a remote server
+        -------------------------------
+
+            git remote add origin path/to/remote/repo.git
+
+        ### Checking for changes
+        -------------------------------
+
+            git status
+
+        ### Make sure you can edit commit messages with your editor
+        -------------------------------
+
+        If you are using MacVim:
+
+            git config --global core.editor "mvim"
+
+        If you are using Sublime Text 2 on a Mac:
+
+            Install <a href="http://www.sublimetext.com/docs/2/osx_command_line.html" target="_blank">subl</a>
+            git config --global core.editor "subl -n -w"
+
+        ### Determine the current branch
+        -------------------------------
+
+            git branch
+
+        ### Checkout a branch
+        -------------------------------
+
+            git checkout branch-name
+
+        If you just to want to add a specific file:
+
+            git add filename
+
+
+        ### Adding up changes
+        -------------------------------
+
+        If you want to add modified files, new files and remove deleted files:
+
+            git add -A
+
+        If you just to want to add a specific file:
+
+            git add filename
+
+
+        ### Commit message
+        -------------------------------
+            git commit -m "message"
+
+
+        or
+
+        ### Open up an editor and enter your commit message
+            git commit -a
+
+
+        ### Create an Assembla account and add a git repository on your space
+        -------------------------------
+
+           Assembla hosts Git repositories for free. It comes with other tools that are hepful for project management. <a href="https://www.assembla.com/git/" target="_blank">Click here</a> to get started.
+
+
+        ### Create a Github account add create a new repository
+        -------------------------------
+
+          Github hosts public repositories for free. For this tutorial, we recommend that you create a Github and an Assembla repository.
+
+        ### Add assembla remote
+
+            git remote add assembla git@git.assembla.com:[your-repo-name].git
+
+        ### Add Github Remote
+
+            git remote add all git@github.com:[your-username]/[your-repo-name].git
+
+        ### Update the git config (.git/config) if you want to push changes to all remotes (Github and Assembla)
+            [remote “all”]
+               url = git@github.com:[your-username]/[your-repo-name].git
+               url = git@git.assembla.com:[your-repo-name].git
+
+        Now you have three remotes, namely `github`, `assembla` and `all` which you can verify through `git remote`.
+
+        ### Updating the remote repository
+        -------------------------------
+
+            git push remote-name master
+
+
+        ### Retrieving changes from the remote repository
+        -------------------------------
+
+            git fetch remote-name
+            git pull --rebase remote-name master
+
+
+        ## Other Resources
+
+        ### <a href ="http://git-scm.com/book" target="_blank"> Pro Git: A free definitive book written by Scott Chacon</a>
+        ### <a href ="https://github.com/progit/progit" target="_blank"> Pro Git contents updated the community</a>
+        ### <a href ="http://railscasts.com/episodes/96-git-on-rails" target="_blank"> Git on Rails </a>
+
+
+    %pre.goal
+      :preserve
+        Given I have Git knowledge
+        And I want to deploy my application
+        Then I should be able to deploy it on Heroku
+        But I do not have Heroku set up yet
+
+    %section.step
+      :markdown
+        ### Create a Heroku Account and Install Heroku Toolbelt
+
+        Heroku provides the most simple way of deploying a Rails app. All you have to learn is Git and Unix.
+
+        You can download <a href="https://toolbelt.heroku.com/" target="_blank"> Heroku Toolbelt</a>. Install it and make sure the `heroku` command works on Git Bash after installing it.
+
+        ### Add PostgreSQL database add-on (free)
+
+        PostgreSQL is fairly easy to manage and maintain and like relational database management systems, you will have to use some command for <a href="http://www.postgresql.org/docs/9.1/static/backup.html" target="_blank">backing up the database and restoring it</a>.
+        You may have to do that a bit differently with Heroku however.
+
+        #### Update the Gemfile
+
+        We'll use sqlite3 for development and pg for production.
+
+        Change
+
+            gem 'sqlite3'
+
+        To
+
+            group :development do
+              gem 'sqlite3'
+            end
+
+            group :production do
+              gem 'pg'
+            end
+
+        Install the gems using `bundle`.
+
+        #### Sign in if you haven't yet.
+
+        `heroku login`
+
+        #### Create A Heroku App
+
+        There are two ways of creating a new heroku app. One way is to use this command:
+
+        `heroku create`
+
+        The most simple way is to sign in and create the app. That way you can name it appropriately. The name also has to be unique. We suggest appending your name on it like `george-trips`.
+
+
+        #### Add the heroku remote
+
+        `git remote add heroku`
+
+        At this stage, you have 4 remotes. There is no need to update the `all` remote because you probably don't want to do that. When you push changes to heroku, you are actually deploying the application.
+
+
+        #### Adding config vars on Heroku
+
+        We recommend this instead of simply adding password and sensitive information on your `config/database.yml` file.
+
+        Sign in on heroku to view the credentials for your PostgreSQL database.
+
+            heroku config:add GEEKCAMP_HOST host
+            heroku config:add GEEKCAMP_DATABASE database
+            heroku config:add GEEKCAMP_USER user
+            heroku config:add GEEKCAMP_PASSWORD password
+            heroku config:add GEEKCAMP_PORT port
+
+        Update the app config/database.yml
+
+            production:
+              adapter: postgresql
+              encoding: unicode
+              host: ENV['GEEKCAMP_HOST']
+              database: ENV['GEEKCAMP_DATABASE']
+              pool: 5
+              username:	ENV['GEEKCAMP_USER']
+              password: ENV['GEEKCAMP_PASSWORD']
+              port: ENV['GEEKCAMP_PORT']
+
+        #### Deploy the application
+            git push heroku master
+
+        #### Migrations
+            heroku run rake db:migrate
