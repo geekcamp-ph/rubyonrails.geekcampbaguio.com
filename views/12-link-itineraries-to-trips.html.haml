@@ -42,7 +42,7 @@
 
     %section.step
       :markdown
-        ### Issue 2: NoMethodError: undefined method `itineraries' for Trip
+        ### Issue 2: can't write unknown attribute `trip_id'
             Given I have a trip and an itinerary
             When I add an itinerary to the trip
             Then I should see that the trip has one itinerary
@@ -67,8 +67,6 @@
 
             rake db:migrate
 
-            has_many :itineraries
-
         You may need to restart the rails console
 
     %section.step
@@ -78,7 +76,8 @@
             When I add an itinerary to the trip
             Then I should see that the trip has one itinerary
             And I should see that the itinerary belongs to the trip
-            But instead I see the following error
+            But instead I see the following error:
+              NoMethodError: undefined method `trip' for Itinerary
 
         #### Solution: specify that itineraries belong to trips
 
@@ -108,7 +107,7 @@
             Then I should see a field to select the trip of the itinerary
             But I don't see any
 
-        #### Solution: add a select field for trip_id
+        #### Solution: add a collection select field for trip_id
 
             # app/views/itineraries/_form.html.erb
             <%= form_for(@itinerary, html: { role: 'form' }) do |f| %>
@@ -162,7 +161,7 @@
 
     %section.step
       :markdown
-        ### Issue 7: NoMethodError in Itineraries#show
+        ### Issue 7: Missing trip column in Itineraries Index page
             When I go to the Itineraries Index page
             Then I should also see the trips of the itineraries
             But I don't see any
