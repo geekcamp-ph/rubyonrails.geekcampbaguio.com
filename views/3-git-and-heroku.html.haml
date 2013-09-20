@@ -152,7 +152,10 @@
 
         If you are using Sublime Text 2 on a Mac:
 
-            Install <a href="http://www.sublimetext.com/docs/2/osx_command_line.html" target="_blank">subl</a>
+        Install <a href="http://www.sublimetext.com/docs/2/osx_command_line.html" target="_blank">subl</a>
+
+        Use sublime as the default git commit message editor.
+
             git config --global core.editor "subl -n -w"
 
         ### Determine the current branch
@@ -311,7 +314,7 @@
             heroku config:add GEEKCAMP_PASSWORD password
             heroku config:add GEEKCAMP_PORT port
 
-        #### Note: You may change `GEEKCAMP_` prefix to something else that's unique. 
+        #### Note: You may change `GEEKCAMP_` prefix to something else that's unique.
 
         Update the app config/database.yml
 
@@ -330,7 +333,7 @@
 
         #### Migrations
             heroku run rake db:migrate
- 
+
         #### Check your deployed app!
             heroku open
 
