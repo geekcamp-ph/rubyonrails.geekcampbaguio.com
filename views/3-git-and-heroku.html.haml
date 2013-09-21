@@ -280,7 +280,7 @@
               gem 'pg'
             end
 
-        Install the gems using `bundle`.
+        Install the gems using `bundle install --no-deployment`.
 
         #### Sign in if you haven't yet.
 
@@ -297,7 +297,7 @@
 
         #### Add the heroku remote
 
-        `git remote add heroku`
+        `git remote add heroku git-url`
 
         At this stage, you have 4 remotes. There is no need to update the `all` remote because you probably don't want to do that. When you push changes to heroku, you are actually deploying the application.
 
