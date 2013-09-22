@@ -96,7 +96,7 @@
 
             # app/views/shared/_flash_message.html.erb
             <% flash.each do |name, msg| %>
-                <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+                <div class="alert alert-<%= name == :notice ? "success" : "danger" %>">
                   <a class="close" data-dismiss="alert">&#215;</a>
                   <%= content_tag :div, msg %>
                 </div>
