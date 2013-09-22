@@ -226,7 +226,13 @@
 
             # app/controllers/itineraries_controller.rb
 
-            before_filter do
+            Add a `before_filter` which should be found below `helper_method :sort_column, :sort_direction`
+
+            before_filter :find_trip
+
+            The find_trip method should be a `private` method so add it below `private` declaration
+
+            def find_trip
               @trip = Trip.find(params[:trip_id])
             end
 

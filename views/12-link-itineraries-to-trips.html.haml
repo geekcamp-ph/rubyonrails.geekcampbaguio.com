@@ -113,12 +113,32 @@
             <%= form_for(@itinerary, html: { role: 'form' }) do |f| %>
               <div class="form-group">
                 <%= f.label :trip_id, class: 'control-label' %>
-                <%= f.collection_select :trip_id, Trip.all.order(:name), :id, :name, class: 'form-control' %>
+                <%= f.collection_select :trip_id, Trip.ordered_by_name, :id, :name, class: 'form-control' %>
               </div>
 
               <!-- other form fields... -->
 
             <% end %>
+
+            # app/models/trip.rb
+
+            Add the class method ordered_by_name on the model
+
+            class Trip < ActiveRecord::Base
+              has_many :itineraries
+              validates :name, presence: true
+
+              class << self
+                def ordered_by_name
+                  self.all.order(:name)
+                end
+              end
+
+              def to_s
+                name
+              end
+            end
+
 
     %section.step
       :markdown
