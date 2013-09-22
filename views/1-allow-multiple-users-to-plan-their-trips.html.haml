@@ -5,32 +5,11 @@
 
   %section.exercise
     :markdown
-      ## Challenge 1: Allow Multiple Users to Plan Their Trips
+      ## Challenge 1: Allow A User to Change Their Monthly Budget
 
     %pre.goal
       :preserve
-        Given I am an anonymous user
-        And I can access the website
-        Then I should be able to enter by name
-        And I should be able to enter a budget before I can create trips and itineraries
+        Given I want to update my budget for different months
+        Then I should be able to do so when I visit the site
 
     %section.step
-      :markdown
-        ### Option 1: Create the `users` table with `name` and `budget`
-
-        You may store the `budget` on `users` table
-
-        ### Option 2: Create a `users` table with `name` field and a new `budgets` table with another field called `month`
-
-        But we suggest keeping it simple and going with the first option.
-
-    %section.step
-      :markdown
-        ### Requirements
-
-        1. You should create a partial for the form for users and have it on an appropriate directory `app/views/users`
-        2. You should update the root path of your website to probably use 'users#new'. You can add `root to: 'users#new'` on routes.rb
-        3. You will need to create an association between users and trips. This means that you have add index field `user_id` on `trips` table and update model files.
-        4. Don't forget to update views and controllers for trips.
-        5. Good user experience is essential so use clear words rather than "Submit" for your form.
-

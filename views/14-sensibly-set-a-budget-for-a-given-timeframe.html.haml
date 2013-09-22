@@ -1,0 +1,401 @@
+- lesson = Lesson.find(14)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
+
+  %section.exercise
+    :markdown
+      ## Exercise 14: Sensibly Set a Budget For a Given Timeframe
+
+    %pre.goal
+      :preserve
+        Given I do not have a fixed monthly or yearly budget
+        But I have a decent budget for traveling for a given timeframe
+        And I want to add and update my budget based on that timeframe
+        Then I should be able to do that
+
+    %section.step
+      :markdown
+        ### Step 1: Create a `budgets` table
+
+        We will have three fields for this table. A `budget` field with a decimal type is obviously needed.
+        We would need `date_from` and `date_to` datetime fields for the timeframe.
+
+            rails g migration create_budgets budget:decimal date_from:datetime date_to:datetime
+
+        One of the five common mistakes of a Rails beginner is not setting schema specifics so we still have to update the migration file.
+
+            # db/migrate/<timestamp>_create_budgets.rb
+
+            class CreateBudgets < ActiveRecord::Migration
+              def change
+                create_table :budgets do |t|
+                  t.decimal :budget, :decimal, precision: 10, scale: 2, default: 0.00
+                  t.datetime :date_from, null: false
+                  t.datetime :date_to, null: false
+                end
+              end
+            end
+
+        Now that it looks right, you can the command for migration:
+
+           rake db:migrate
+
+
+    %section.step
+      :markdown
+        ### Step 2: Create a `Budget` model
+
+        You will have to create a new model file and make sure that some validation is done.
+
+        Execute the command to create an empty model file:
+
+            `touch app/models/budget.rb`
+
+        The `budget` model file should look like this.
+
+            # app/models/budget.rb
+
+            class Budget < ActiveRecord::Base
+
+              validates :budget, presence: true
+              validates :date_from, presence: true
+              validates :date_to, presence: true
+
+            end
+
+
+    %section.step
+      :markdown
+        ### Step 3: Create a `BudgetsController`
+
+            `touch app/controllers/budgets_controller.rb`
+
+        The `app/controllers/budgets_controller.rb` file should look like this.
+
+          class BudgetsController < ApplicationController
+
+            def create
+              @budget = Budget.new
+              @budget.attributes = params[:budget].permit(:budget, :date_from, :date_to)
+              if @budget.save
+                flash[:notice] = "Successfully added your budget"
+              else
+                flash[:error] = @budget.errors.full_messages.join("<br />")
+              end
+              redirect_to trips_path
+            end
+
+            def update
+              @budget = Budget.find(params[:id])
+              @budget.attributes = params[:budget].permit(:budget, :date_from, :date_to)
+              if @budget.save
+                flash[:notice] = "Successfully updated your budget"
+              else
+                flash[:error] = @budget.errors.full_messages.join("<br />")
+              end
+              redirect_to trips_path
+            end
+
+            def destroy
+              @budget = Budget.find(params[:id])
+              @budget.destroy
+              flash[:notice] = "You have successfully deleted a budget"
+              redirect_to trips_path
+            end
+
+          end
+
+    %section.exercise
+      :markdown
+        ## Issue: We cannot see the form for creating and updating budget
+
+    %pre.goal
+      :preserve
+         Given I am on the trips page
+         Then I should see the link to set my budget
+         And I should see the form for setting my budget
+         But I do not see that
+
+    %section.step
+      :markdown
+        ### Step 4: Create the form and list budgets created on trips
+
+        Create the directory for budgets view
+            mkdir app/views/budgets
+
+        Create a file called `app/views/budgets/_form.html.erb`
+
+           touch app/views/budgets/_form.html.erb
+
+        Edit that file to contain the form:
+
+            <% @budget = budget %>
+            <%= form_for(@budget, html: { role: 'form' }) do |f| %>
+              <div class="form-group">
+                <%= f.label :budget, class: 'control-label' %>
+                <%= f.text_field :budget, class: 'form-control' %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :date_from, class: 'control-label' %>
+                <%= f.date_select :date_from, class: 'form-control' %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :date_to, class: 'control-label' %>
+                <%= f.date_select :date_to, class: 'form-control' %>
+              </div>
+
+              <div class="form-group">
+                <%= f.submit name, class: "btn btn-small btn-primary" %>
+
+                <% if @budget.try(:id) %>
+                  <%= link_to 'Delete', budget_path(@budget.id), method: 'delete', confirm: "Are you sure you want to delete this?", class: 'btn btn-primary' %>
+                <% end %>
+              </div>
+            <% end %>
+
+        We will need to list the budgets created and display the form to update them if they exist.
+
+        Create the file for listing the budget and display the create budget form.
+
+            touch app/views/budgets/_list.html.erb
+
+        Update the file and add this code:
+
+            <section class="budget">
+              <h1><a href="#" class="title">Set your budget</a></h1>
+              <section class="budgets" style="display: none;">
+                <%= render partial: 'budgets/form', locals: { budget: @budget, name: "Create" } %>
+                <% @budgets.each do |budget| %>
+                  <%= render partial: 'budgets/form', locals: { budget: budget, name: 'Update' } %>
+                <% end %>
+              </section>
+            </section>
+
+        Finally, we add display the list on the trips index page.
+
+        On `app/views/trips/index.html.erb`, add code for rendering the list partial.
+
+            <h1>Trips</h1>
+
+            <%= render 'budgets/list' %>
+
+        Finally we need a new method for displaying the budget list and creating the `@budget` variable.
+
+        To do this, simply update `app/controllers/trips_controller.rb`
+
+        Add the a new `private` method called list budget.
+
+        Use `before_filer` and make sure it is only displayed on the `index` page.
+
+        Your file should should look like this:
+
+            class TripsController < ApplicationController
+
+              helper_method :sort_column, :sort_direction
+
+              before_filter :find_trip, except: [:index, :new, :create]
+              before_filter :list_budget, only: [:index]
+
+              def show
+              end
+
+              def index
+                @trips = Trip.order(sort_column + " " + sort_direction)
+              end
+
+              def new
+                @trip = Trip.new
+              end
+
+              def create
+                @trip = Trip.new
+                @trip.attributes = params[:trip].permit(:name)
+                if @trip.save
+                  redirect_to action: 'show', id: @trip.id
+                else
+                  render action: 'new'
+                end
+              end
+
+              def edit
+              end
+
+              def update
+                @trip.attributes = params[:trip].permit(:name)
+                if @trip.save
+                  redirect_to action: 'show', id: @trip.id
+                else
+                  render action: 'edit'
+                end
+              end
+
+              def destroy
+                @trip.destroy
+                flash[:notice] = "You have successfully deleted a trip"
+                redirect_to action: 'index'
+              end
+
+             private
+
+             def find_trip
+               id = params[:trip_id] ? params[:trip_id] : params[:id]
+               @trip = Trip.find(id)
+             end
+
+             def list_budget
+               @budgets = Budget.order('date_from desc')
+               @budget = Budget.new
+             end
+
+             def sort_column
+               Trip.column_names.include?(params[:sort]) ? params[:sort] : "name"
+             end
+
+             def sort_direction
+               %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+             end
+
+            end
+
+    %section.exercise
+      :markdown
+        ## Issue: We cannot see the correct remaining budget
+
+    %pre.goal
+      :preserve
+         Given I am on the trips index page or itineraries index page
+         Then I should see the remaining budget
+         But I do not see that
+
+    %section.step
+      :markdown
+        ### Step 5: Update the `Itinerary` model file to get the correct yearly estimated cost
+
+        Open `app/models/itinerary.rb`
+
+        Add and update existing class methods necessary for getting the yearly estimated cost
+
+            class << self
+              def for_year(date=Time.zone.now)
+                self.where("travel_on > ? and travel_on < ?", date.beginning_of_year, date.end_of_year)
+              end
+
+              def total_yearly_estimated_cost(date=Time.zone.now)
+                self.for_year(date).map(&:estimated_cost).reduce(:+) || 0.00
+              end
+            end
+
+        ### Step 6: Update the `Budget` model file to get the correct yearly budget
+
+        Open `app/models/budget.rb`
+
+        Add and update existing class methods necessary for getting the yearly estimated cost
+
+            class << self
+              def for_year(date=Time.zone.now)
+                self.where("date_from >= ? and date_from <= ?", date.beginning_of_year, date.end_of_year)
+              end
+
+              def yearly_budget(date=Time.zone.now)
+                self.for_year(date).map(&:budget).reduce(:+) || 0.00
+              end
+
+              def remaining_yearly_budget
+                self.yearly_budget-Itinerary.total_yearly_estimated_cost
+              end
+            end
+
+        ### Step 7: Remove `@remaining_budget` from `itineraries_controller.rb` and create a new helper to be rendered on both trips index page and itineraries index page
+
+        Remove the following code from `app/controllers/itineraries_controller.rb`
+
+            @remaining_budget = Itinerary.remaining_budget
+
+        Create the helper for displaying remaining budget and update `itinerary_row_class` helper.
+        Update `app/helpers/application_helper.rb`
+
+            def itinerary_row_class(itinerary)
+              "danger" if  Itinerary.total_yearly_estimated_cost > Budget.yearly_budget
+            end
+
+            def show_remaining_budget
+               yearly_budget_remaining = number_to_currency(Budget.remaining_yearly_budget, unit: "PHP")
+               content_tag :h2, "Remaining Yearly Budget: "+ yearly_budget_remaining
+            end
+
+
+        You can now update the index pages for trips and itineraries.
+
+        On `app/views/trips/index.html.erb`, add the helper:
+
+              <h1>Trips</h1>
+
+              <%= render 'budgets/list' %>
+
+              <%= show_remaining_budget %>
+
+        On `app/views/itineraries/index.html.erb`, add the helper:
+
+            <h1>Itineraries</h1>
+
+            <p>
+              <%= link_to 'New', { action: 'new' }, class: 'btn btn-default' %>
+            </p>
+
+            <%= show_remaining_budget %>
+
+    %section.exercise
+      :markdown
+        ## Issue: The trips index page look cluttered because the forms are always displayed
+
+    %pre.goal
+      :preserve
+         Given I am on the trips index page
+         Then I should only see the link to set the budget
+         But I see the forms displayed
+
+    %section.step
+      :markdown
+        ### Step 8: Add some JavaScript to hide or show the forms.
+
+        Open `app/assets/javascripts/application.js`
+
+        Add some JavaScript! Because we can! And all browsers support it.
+
+            $('.budget a.title').on('click', function(e) {
+              e.preventDefault();
+              $('.budgets').toggle('hide');
+            });
+
+    %section.exercise
+      :markdown
+        ## Issue: Adding a budget for the same month several time works! That should not be possible.
+
+    %pre.goal
+      :preserve
+         Given I add a budget for current month
+         And I try to add a new budget for curren month
+         Then I should see an error
+         But it works
+
+    %section.step
+      :markdown
+        ### Step 9: Add a custom validation for `Budget` model.
+
+        Open `app/models/budget.rb`
+
+        Add a new private method:
+
+            private
+
+            def time_uniqueness
+              if Budget.where(['date_from >= ? OR date_to >= ?', date_from, date_to]).size > 0
+                errors[:base] << "Please choose different dates. It seems like you have already set a budget for those dates."
+              end
+            end
+
+        Use `validate` to make sure you cannot create the a record that is within an existing range.
+
+            validate :time_uniqueness, on: :create
