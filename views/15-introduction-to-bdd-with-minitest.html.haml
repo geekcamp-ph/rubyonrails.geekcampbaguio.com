@@ -1,0 +1,176 @@
+- lesson = Lesson.find(15)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
+
+  %section.exercise
+    :markdown
+      ## Exercise 15: A light introduction to BDD (Behavior-driven Development)
+
+    %pre.goal
+      :preserve
+        Given my app does not look right because of the absence of tests
+        And I have a difficulty of testing all features
+        And I want a better workflow
+        Then I should learn automated testing and test-driven development
+
+    %section.step
+      :markdown
+        ### Step 1: Understand the TDD process
+
+        #### What is the point of TDD or writing test code first before the feature's code is written?
+
+        It is the process that supports **change**. When you write a lot of code, you will see the need to have tests written for nearly everything to ensure that your features still work as intended.
+
+        The TDD process in a nutshell:
+
+        ![TDD process](https://www.evernote.com/shard/s46/sh/72a4db60-00cc-4890-8c2e-3f83957dff9b/410fabf46e8f0ae72fa25c2992c09625/deep/0/GrowingObjectOrientedSoftwareGuidedbyTests.pdf%20(page%2036%20of%20390)
+
+        1. Write the test first.
+        2. Make the test pass by the writing the code.
+        3. Refactor.
+        4. Repeat the 3 steps until you get it right.
+
+
+    %section.step
+      :markdown
+        ### Step 2: Read about Minitest Framework
+
+        **Minitest** is the first test framework you should learn because it is the default framework included when you install Ruby.
+
+        It is something you can use even if you wish to learn another Ruby framework like <a href="http://sinatrarb.com" target="_blank">Sinatra</a>.
+
+        You can read the home page of the <a href="http://docs.seattlerb.org/minitest/" target="_blank">documentation</a>. It will give you a basic intro to the framework.
+
+
+    %section.step
+      :markdown
+        ### Step 3: Install the <a href="http://blowmage.com/minitest-rails/" target="_blank">minitest-rails</a> gem
+
+        Your first step would be to delete the `test` folder created every time to create a new rails app.
+
+            rm -rf test
+
+        Many Ruby on Rails developers do not use `test-unit` and choose RSpec or Minitest so you are probably in a better state by not learning some Rails defaults.
+
+        At this stage, you are familiar within grouping gems by the environment.
+        We should have the `minitest-rails` gem on `group :test` block.
+
+        Update your `Gemfile`:
+
+            group :test do
+              gem 'minitest-rails'
+              gem 'minitest-rails-capybara'
+            end
+
+        Use the `bundle` command to install these gems.
+
+        In case you get an error related to `i18n`, please add this to your `Gemfile`:
+
+             gem 'i18n', '>=0.6.5'
+
+        Use the `generate` command that has an alias `g` to create the configuration files and test folder.
+
+            rails g mini_test:install
+
+        Update `config/application.rb` and the settings to make sure fixtures are not created by the generator.
+        We do not usually need the helper and assets test files to be generated.
+
+            class Application < Rails::Application
+              config.generators do |g|
+                g.test_framework :mini_test, spec: true, fixture: false
+                g.helper false
+                g.assets false
+              end
+            end
+
+        Another really important change for `config/application.rb` is to replace the following code:
+
+            require 'rails/all'
+
+        We do not want to require test-unit so we will have to use this instead:
+
+            require "active_record/railtie"
+            require "action_controller/railtie"
+            require 'rake/testtask'
+            require "action_mailer/railtie"
+            require "sprockets/railtie"
+            require "minitest/rails/railtie"
+
+        And finally, we will update `test/test_helper.rb` to make sure we can use Capybara which would be helpful for integration testing.
+
+            require "minitest/rails/capybara"
+
+    %section.step
+      :markdown
+        ### Step 4: Write a simple test for trips app feature that makes sure users do not get an error when they access the `root_path` or home page.
+
+            `rails g mini_test:feature Trips`
+
+        That creates `test/features/trips_test.rb` file. Let us update and write a test that would fail because the `root_path` has not been defined on `config/routes.rb`
+
+            require "test_helper"
+
+            feature "Trips" do
+              scenario "the home page should show trips" do
+                visit root_path
+                page.must_have_content "Trips"
+              end
+            end
+
+        To verify that it fails, try the command `rake minitest:all`
+
+        And it should fail if you do not have `root_path` defined.
+
+            1) Error:
+            Trips Feature Test#test_0001_the home page should show trips:
+            NameError: undefined local variable or method `root_path' for #<#<Class:0x007fd92d0a7018>:0x007fd92c5fc820>
+                test/features/trips_test.rb:5:in `block (2 levels) in <top (required)>'
+
+            1 tests, 0 assertions, 0 failures, 1 errors, 0 skips
+            Errors running minitest:features! #<RuntimeError: Command failed with status (1): [ruby -I"lib:test" -I"/Users/katz/.rvm/gems/ruby-1.9.3-p448@global/gems/rake-10.1.0/lib" "/Users/katz/.rvm/gems/ruby-1.9.3-p448@global/gems/rake-10.1.0/lib/rake/rake_test_loader.rb" "test/features/**/*_test.rb" ]>
+
+    %section.step
+      :markdown
+        ### Step 5: Make the test written pass by defining the `root_path`
+
+        Below other route definitions on `config/routes.rb`, add the following code:
+
+            root to: 'trips#index'
+
+        To verify that the test works, try the command `rake minitest:all`
+
+        And it should pass as we expect.
+
+           Finished tests in 0.336491s, 2.9718 tests/s, 2.9718 assertions/s.
+           1 tests, 1 assertions, 0 failures, 0 errors, 0 skips
+
+    %section.step
+      :markdown
+        ### Step 6: Refactor the test written to make sure we are displaying the text "Plan Your Trips" and "Set your budget".
+
+            # test/features/trips_test.rb
+            require "test_helper"
+
+            feature "Trips" do
+              scenario "the home page should show trips" do
+                visit root_path
+                page.must_have_content "Set your budget"
+                page.must_have_content "Plan Your Trips"
+              end
+            end
+
+        Similar to the first step in BDD, when we refactor something, we should have a failing test because that feature or update was not done.
+
+        The command `rake minitest:all` should give you 1 failure.
+
+    %section.step
+      :markdown
+        ### Step 7: Update `app/views/trips/index.html.erb` to make sure the text is displayed. It is sensible to just replace the headings.
+
+            <h1>Plan Your Trips</h1>
+
+        The command `rake minitest:all` should give you this output:
+
+            1 tests, 2 assertions, 0 failures, 0 errors, 0 skips
+
+        Final notes: this simple process is repeated until you come up with a refined feature that people can use and like.

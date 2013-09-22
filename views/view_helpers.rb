@@ -15,7 +15,7 @@ module ViewHelpers
       new(12, 'lesson', 'Link Itineraries to Trips', '12-link-itineraries-to-trips'),
       new(13, 'lesson', 'Manage Itineraries Under a Trip', '13-manage-itineraries-under-a-trip'),
       new(14, 'lesson', 'Sensibly Set a Budget for a Given Timeframe', '14-sensibly-set-a-budget-for-a-given-timeframe'),
-      new(15, 'lesson', 'Introduction to BDD with Cucumber', '15-introduction-to-bdd-with-cucumber'),
+      new(15, 'lesson', 'Introduction to BDD and Minitest', '15-introduction-to-bdd-with-minitest'),
       new(16, 'lesson', 'Allow Multiple Users To Plan Their Trips', '16-allow-multiple-users-to-plan-their-trips')
     ]
 
