@@ -334,15 +334,19 @@
 
         Update `config/environments/production.rb`
 
-          config.serve_static_assets = true
+             config.serve_static_assets = true
 
         Make sure that we do not compile assets in production
-          config.assets.compile = false
+             config.assets.compile = false
+
+        Now we should precompile assets locally and commit changes.
+
+             RAILS_ENV=production rake assets:precompile
 
         #### Commit all changes
 
             git add -A
-            git commit -m "Your message"
+            git commit -m "Precompiled assets"
 
         #### Deploy the application
             git push heroku master
