@@ -308,11 +308,11 @@
 
         Sign in on heroku to view the credentials for your PostgreSQL database.
 
-            heroku config:add GEEKCAMP_HOST=host
-            heroku config:add GEEKCAMP_DATABASE=database
-            heroku config:add GEEKCAMP_USER=user
-            heroku config:add GEEKCAMP_PASSWORD=password
-            heroku config:add GEEKCAMP_PORT=port
+            heroku config:add GEEKCAMP_HOST=host --app app-name
+            heroku config:add GEEKCAMP_DATABASE=database --app app-name
+            heroku config:add GEEKCAMP_USER=user --app app-name
+            heroku config:add GEEKCAMP_PASSWORD=password --app app-name
+            heroku config:add GEEKCAMP_PORT=port --app app-name
 
         #### Note: You may change `GEEKCAMP_` prefix to something else that's unique.
 
@@ -328,12 +328,46 @@
               password: ENV['GEEKCAMP_PASSWORD']
               port: ENV['GEEKCAMP_PORT']
 
+        #### Use Rails to serve static assets
+
+        This is not recommended (Nginx server usually does that job) but because we are deploying on Heroku, we will turn on this feature.
+
+        Update `config/environments/production.rb`
+
+          config.serve_static_assets = true
+
+        Make sure that we do not compile assets in production
+          config.assets.compile = false
+
+        #### Commit all changes
+
+            git add -A
+            git commit -m "Your message"
+
         #### Deploy the application
             git push heroku master
 
         #### Migrations
-            heroku run rake db:migrate
+             heroku run rake db:migrate
+
+        ### Precompile assets
 
         #### Check your deployed app!
             heroku open
+
+        ### Help: nothing is working!
+
+        ##### Option: Reset the database if you made a migration mistake and to rectify some issues
+
+        The following command will give you the variable you need for the reset command.
+
+        It looks like `HEROKU_POSTGRESQL_URL` but not exactly for all users.
+
+            heroku pg:info
+
+            heroku pg:reset HEROKU_POSTGRESQL_URL
+
+            heroku run rake db:migrate
+
+        Read more on this page: <a href="https://devcenter.heroku.com/articles/heroku-postgresql" target="_blank">Heroku Postgres</a>
 

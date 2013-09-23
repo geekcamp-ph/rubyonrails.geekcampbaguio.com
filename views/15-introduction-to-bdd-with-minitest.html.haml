@@ -15,11 +15,11 @@
 
     %section.step
       :markdown
-        ### Step 1: Understand the TDD process
+        ### Step 1: Understand the TDD and BDD process
 
         #### What is the point of TDD or writing test code first before the feature's code is written?
 
-        It is the process that supports **change**. When you write a lot of code, you will see the need to have tests written for nearly everything to ensure that your features still work as intended.
+        It is a process that supports **change**. When you write a lot of code, you will see the need to have tests written for nearly everything to ensure that your features still work as intended.
 
         The TDD process in a nutshell:
 
@@ -29,6 +29,8 @@
         2. Make the test pass by the writing the code.
         3. Refactor.
         4. Repeat the 3 steps until you get it right.
+
+        The BDD process is the same except that there is an emphasis on building from **outside-in** and the behavior desired by stakeholders. A popular BDD framework which really seems meet the needs is called <a href="http://cukes.info/" target="_blank">Cucumber</a>.
 
 
     %section.step
@@ -52,15 +54,10 @@
 
         Many Ruby on Rails developers do not use `test-unit` and choose RSpec or Minitest so you are probably in a better state by not learning some Rails defaults.
 
-        At this stage, you are familiar within grouping gems by the environment.
-        We should have the `minitest-rails` gem on `group :test` block.
+        Update your `Gemfile` to include these:
 
-        Update your `Gemfile`:
-
-            group :test do
-              gem 'minitest-rails'
-              gem 'minitest-rails-capybara'
-            end
+            gem 'minitest-rails'
+            gem 'minitest-rails-capybara'
 
         Use the `bundle` command to install these gems.
 
