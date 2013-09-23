@@ -281,7 +281,7 @@
 
     %section.step
       :markdown
-        ### Step 5: Make the tests for login pass
+        ### Step 5: Make the tests for "login" feature pass
 
         Update `app/controllers/application_controller.rb` and add `before_filter :authenticate_user!`
 
@@ -304,7 +304,7 @@
 
             end
 
-        Update the view for non-trivial design issues:
+        Update the `app/views/devise/sessions/new.html.erb` view to fix non-trivial design issues:
 
             <h2>Sign in</h2>
 
@@ -441,21 +441,21 @@
 
          Edit `app/controllers/trips_controller.rb`
 
-         On `create` and `update`, add code below the ``@trip.attributes` definition:
+         On `create` and `update`, add code below the `@trip.attributes` definition:
 
              @trip.attributes = params[:trip].permit(:name)
              @trip.user_id = current_user.id
 
          Edit `app/controllers/budgets_controller.rb`
 
-         On `create` and `update`, add code below ``@budget.attributes` definition:
+         On `create` and `update`, add code below `@budget.attributes` definition:
 
              @budget.attributes = params[:budget].permit(:budget, :date_from, :date_to)
              @budget.user_id = current_user.id
 
          Edit `app/controllers/itineraries_controller.rb`
 
-         On `create` and `update`, add code below ``@itinerary.attributes` definition:
+         On `create` and `update`, add code below `@itinerary.attributes` definition:
 
              @itinerary.user_id = current_user.id
 
