@@ -1,0 +1,474 @@
+- lesson = Lesson.find(16)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
+
+  %section.exercise
+    :markdown
+      ## Exercise 16: Allowing Multiple Users To Plan Their Trips
+
+    %pre.goal
+      :preserve
+        Given I want others to use this application
+        And I want them to sign up and log in before they can use features
+        As a confident developer with BDD and Google fu skills
+        Then I should be able to do that
+
+    %section.step
+      :markdown
+        ### Step 1: Install Devise for Authentication
+
+        #### It is not surprising that most developers don't do their authentication code. Most of us use <a href="https://github.com/hassox/warden" target="_blank">Warden</a>, <a href="https://github.com/binarylogic/authlogic" target="_blank">Authlogic</a> or <a href="https://github.com/plataformatec/devise" target="_blank">Devise</a>. In this case, we will use the latter.
+
+        Like most Ruby gems, it has a generator. All you have to do to get started is to add it up on your `Gemfile`.
+
+            gem 'devise'
+
+        Install it using `bundle`.
+
+        And execute the command that generates the configuration files:
+
+           rails g devise:install
+
+        The next command will generate the model and migration files:
+
+           rails g devise User
+
+        Edit ` db/migrate/<timestamp>_devise_create_users.rb` and add the first name and last name:
+
+            t.string :first_name, null: false, default: ""
+            t.string :last_name, null: false, default: ""
+
+        Execute `rake db:migrate` to create the users table.
+
+        The gem also has a non-trivial feature for sending emails for two specific features: signup and reset password. You will have to configure both `config/environments/development.rb` and `config/environments/production.rb`
+
+            # config/environments/development.rb
+            config.action_mailer.default_url_options = { host: 'localhost:3000' }
+
+        For production, you should use your heroku host. In my case, it is:
+
+            # config/environments/production.rb
+            config.action_mailer.default_url_options = { host: 'geekcamp-trips.herokuapp.com' }
+
+        You would want to read more about <a href="http://guides.rubyonrails.org/action_mailer_basics.html" target="_blank">ActionMailer</a> and <a href="http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration-for-gmail" target="_blank">sending email using Google account via SMTP</a>.
+
+        Because you would not want your information stored on the config file, use this command to create a variable `ENV['GEEKCAMP_EMAIL_PASSWORD']`
+
+            heroku config:add GEEKCAMP_EMAIL_PASSWORD=password --app geekcamp-trips
+
+        Simply replace `geekcamp-trips` and password. You can probably do the same for username.
+
+        Update `config/environments/production.rb` to use your credentials.
+
+            config.action_mailer.delivery_method = :smtp
+            config.action_mailer.smtp_settings = {
+              address:              'smtp.gmail.com',
+              port:                 587,
+              domain:               ENV['GEEKCAMP_EMAIL_DOMAIN'],
+              user_name:            ENV['GEEKCAMP_EMAIL_USERNAME'],
+              password:             ENV['GEEKCAMP_EMAIL_PASSWORD'],
+              authentication:       'plain',
+              enable_starttls_auto: true  }
+
+        We are almost done with basic setup. One issue is we have no way of updating views which we do not see because they have not been generated:
+
+            rails g devise:views
+
+        This will allow you to fix design issues. Just check out `app/views/devise`.
+
+        Delete the unit test for model created earlier or just simply remove the feature for now.
+
+            rm test/models/user_test.rb
+
+    %section.step
+      :markdown
+        ### Step 2: Write the tests for the signup feature
+
+        If you skipped Lesson 15, please go back and read that. It takes a few minutes to learn and several years to master.
+
+        We will generate the test for the **signup** feature:
+
+            rails g mini_test:feature Signup
+
+        Because we have something called `capybara`, we can do some fairly high-level testing like emulating user signup process.
+
+        Edit `test/features/signup_test.rb`. It should have the following tests which will initially fail when you run `rake minitest:all`
+
+            require 'test_helper'
+
+            feature 'Signup' do
+              scenario 'when user fills in required fields then user should have a new account' do
+                visit new_user_registration_path
+                page.must_have_content 'Sign up'
+                fill_in 'user[first_name]', with: 'John'
+                fill_in 'user[last_name]', with: 'Doe'
+                fill_in 'user[email]', with: 'john@testing.tld'
+                fill_in 'user[password]', with: 'testingthis'
+                fill_in 'user[password_confirmation]', with: 'testingthis'
+                click_button 'Sign up'
+                within('body') do
+                  page.must_have_content('Welcome!')
+                end
+              end
+
+              scenario 'when user fills in required fields but password is too short' do
+                visit new_user_registration_path
+                page.must_have_content 'Sign up'
+                fill_in 'user[first_name]', with: 'John'
+                fill_in 'user[last_name]', with: 'Doe'
+                fill_in 'user[email]', with: 'john@testing.tld'
+                fill_in 'user[password]', with: 'testing'
+                fill_in 'user[password_confirmation]', with: 'testing'
+                click_button 'Sign up'
+                within('body') do
+                  page.must_have_content('Password is too short')
+                end
+              end
+
+              scenario 'when user fills in required fields but email is not valid' do
+                visit new_user_registration_path
+                page.must_have_content 'Sign up'
+                fill_in 'user[first_name]', with: 'John'
+                fill_in 'user[last_name]', with: 'Doe'
+                fill_in 'user[email]', with: 'john@testing'
+                fill_in 'user[password]', with: 'testingthis'
+                fill_in 'user[password_confirmation]', with: 'testingthis'
+                click_button 'Sign up'
+                within('body') do
+                  page.must_have_content('Email is invalid')
+                end
+              end
+            end
+
+
+    %section.step
+      :markdown
+        ### Step 3: Make the tests for signup pass
+
+        The first issue is we don't have the `new_user_registration_path` which can be fixed by updating `config/routes.rb`
+
+        Above `root_path` definition, add `devise_for :users`
+
+            devise_for :users
+            root to: 'trips#index'
+
+        We will need to update the registration views because we have added two new fields earlier, namely first name and last name.
+
+        Edit `app/views/devise/registrations/new.html.erb`. Replace it with this code:
+
+            <h2>Sign up</h2>
+
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {role: 'form'}) do |f| %>
+              <%= devise_error_messages! %>
+
+              <div class="form-group">
+                <%= f.label :first_name, class: 'control-label' %>
+                <%= f.text_field :first_name, class: 'form-control', autofocus: true %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :last_name, class: 'control-label' %>
+                <%= f.text_field :last_name, class: 'form-control' %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :email, class: 'control-label' %>
+                <%= f.text_field :email, class: 'form-control' %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :password, class: 'control-label' %>
+                <%= f.password_field :password, class: 'form-control' %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :password_confirmation, class: 'control-label' %>
+                <%= f.password_field :password_confirmation, class: 'form-control' %>
+              </div>
+
+              <div class="form-group">
+                <%= f.submit "Sign up", class: "btn btn-lg btn-primary" %>
+              </div>
+            <% end %>
+
+            <%= render "devise/shared/links" %>
+
+        Add some validation for first name and last name on `app/models/user.rb`
+
+            class User < ActiveRecord::Base
+              # Include default devise modules. Others available are:
+              # :confirmable, :lockable, :timeoutable and :omniauthable
+              devise :database_authenticatable, :registerable,
+                :recoverable, :rememberable, :trackable, :validatable
+
+              validates :first_name, presence: true
+              validates :last_name, presence: true
+            end
+
+        At this point your test will still fail because the new parameters are not accepted.
+        You will have to add a filter that allows the new fields.
+        Edit `app/controllers/application_controller.rb`. Replace it with this code:
+
+            class ApplicationController < ActionController::Base
+              # Prevent CSRF attacks by raising an exception.
+              # For APIs, you may want to use :null_session instead.
+              protect_from_forgery with: :exception
+
+              before_filter :configure_permitted_parameters, if: :devise_controller?
+
+              protected
+
+              def configure_permitted_parameters
+                devise_parameter_sanitizer.for(:sign_up) << :first_name
+                devise_parameter_sanitizer.for(:sign_up) << :last_name
+              end
+
+            end
+
+
+
+    %section.step
+      :markdown
+        ### Step 4: Write tests for `login` feature
+
+        Generate the test file using `rails g mini_test:feature Login`
+
+        Edit `test/features/login_test.rb`
+
+            require "test_helper"
+
+            feature "Login" do
+
+              before do
+                User.create!(first_name: "John", last_name: "Doe", email: 'john@testing.tld', password: 'testingthis', password_confirmation: 'testingthis')
+              end
+
+              scenario 'when user is not signed and tries to sign in required fields' do
+                visit root_path
+                page.must_have_content 'Sign in'
+                fill_in 'user[email]', with: 'john@testing.tld'
+                fill_in 'user[password]', with: 'testingthis'
+                click_button 'Sign in'
+                within('body') do
+                  page.must_have_content('Signed in successfully')
+                end
+              end
+            end
+
+        We would need to update an existing test `test/features/trips_test.rb` because it now fails.
+
+              require "test_helper"
+
+              feature "Trips" do
+                before do
+                  User.create!(first_name: "John", last_name: "Doe", email: 'john@testing.tld', password: 'testingthis', password_confirmation: 'testingthis')
+                end
+
+                scenario "the home page should show trips" do
+                  visit root_path
+                  page.must_have_content 'Sign in'
+                  fill_in 'user[email]', with: 'john@testing.tld'
+                  fill_in 'user[password]', with: 'testingthis'
+                  click_button 'Sign in'
+                  page.must_have_content "Set your budget"
+                  page.must_have_content "Plan Your Trips"
+                end
+              end
+
+        We use the `before` block to create an account. This code may better if we used `fixtures` or `factories` but for now we will do it this way.
+
+        This test will naturally fail because anyone can access features without the filter for authentication.
+
+    %section.step
+      :markdown
+        ### Step 5: Make the tests for login pass
+
+        Update `app/controllers/application_controller.rb` and add `before_filter :authenticate_user!`
+
+        Your `application_controller.rb` should look like this:
+
+            class ApplicationController < ActionController::Base
+              # Prevent CSRF attacks by raising an exception.
+              # For APIs, you may want to use :null_session instead.
+              protect_from_forgery with: :exception
+
+              before_filter :configure_permitted_parameters, if: :devise_controller?
+              before_filter :authenticate_user!
+
+              protected
+
+              def configure_permitted_parameters
+                devise_parameter_sanitizer.for(:sign_up) << :first_name
+                devise_parameter_sanitizer.for(:sign_up) << :last_name
+              end
+
+            end
+
+        Update the view for non-trivial design issues:
+
+            <h2>Sign in</h2>
+
+            <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {role: 'form'}) do |f| %>
+
+              <div class="form-group">
+                <%= f.label :email, class: 'control-label' %>
+                <%= f.text_field :email, class: 'form-control' %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :password, class: 'control-label' %>
+                <%= f.password_field :password, class: 'form-control' %>
+              </div>
+
+              <% if devise_mapping.rememberable? %>
+                <div class="form-group"><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
+              <% end -%>
+
+              <div class="form-group">
+                <%= f.submit "Sign in", class: "btn btn-lg btn-primary" %>
+              </div>
+            <% end %>
+
+            <%= render "devise/shared/links" %>
+
+
+    %section.step
+      :markdown
+        ### Step 6: Associate `Budget`, `Itinerary` and `Trip` with the `User` model
+
+        We will create two migration that will add up the foreign keys needed.
+
+            rails g migration add_user_id_to_trips user_id:integer
+            rails g migration add_user_id_to_budgets user_id:integer
+            rails g migration add_user_id_to_itineraries user_id:integer
+
+        Both migration files should have `null: false`
+
+            #db/migrate/<timestamp>_add_user_id_to_<model>s.rb
+            class AddUserIdToTrips < ActiveRecord::Migration
+              def change
+                add_column :trips, :user_id, :integer, null: false
+              end
+            end
+
+        Execute `rake db:migrate` to add these new foreign keys.
+
+        If that does not work, try using `rake db:reset` and `rake db:migrate`
+
+        Update the model files.
+
+        A `user` should have many `trips` and can create many `budgets` and has many `itineraries`
+
+            # app/models/user.rb
+            has_many :budgets
+            has_many :trips
+            has_many :itineraries
+
+        A `trip` should belong to a `user`
+
+            # app/models/trip.rb
+            belong_to :user
+
+            validates :user_id, presence: true
+
+        An `itinerary` should belong to a `user`
+
+            # app/models/itinerary.rb
+            belong_to :user
+
+            validates :user_id, presence: true
+
+        A `budget` should belong to a `user`
+
+            # app/models/user.rb
+            belong_to :user
+
+            validates :user_id, presence: true
+
+        The **worst mistake** you can make now is to not update existing validation code and calculation of costs and budget. We used to validate the date range but now it would not work because probably some other user entered data for that range.
+
+            #app/models/budget.rb
+
+                class << self
+                  def for_year(user, date=Time.zone.now)
+                    self.where("date_from >= ? and date_from <= ? and user_id = ?", date.beginning_of_year, date.end_of_year, user)
+                  end
+
+                  def yearly_budget(user, date=Time.zone.now)
+                    self.for_year(user, date).map(&:budget).reduce(:+) || 0.00
+                  end
+
+                  def remaining_yearly_budget(user)
+                    self.yearly_budget(user)-Itinerary.total_yearly_estimated_cost(user)
+                  end
+                end
+
+                private
+
+                def time_uniqueness
+                  if Budget.where(['date_from >= ? OR date_to >= ? AND user_id = ?', date_from, date_to, self.user.id]).size > 0
+                    errors[:base] << "Please choose different dates. It seems like you have already set a budget for those dates."
+                  end
+                end
+
+            #app/models/itinerary.rb
+                class << self
+                  def for_user(user)
+                    self.where(user_id: user)
+                  end
+
+                  def for_year(date=Time.zone.now)
+                    self.where("itineraries.travel_on > ? and travel_on < ?", date.beginning_of_year, date.end_of_year)
+                  end
+
+                  def total_yearly_estimated_cost(user, date=Time.zone.now)
+                    self.for_user(user).for_year(date).map(&:estimated_cost).reduce(:+) || 0.00
+                  end
+                end
+
+            #app/helpers/application_helper.rb
+
+                def itinerary_row_class(itinerary)
+                  'danger' if  Itinerary.total_yearly_estimated_cost(current_user.id) > Budget.yearly_budget(current_user.id)
+                end
+
+                def show_remaining_budget
+                  yearly_budget_remaining = number_to_currency(Budget.remaining_yearly_budget(current_user.id), unit: "PHP")
+                  content_tag :h2, "Remaining Yearly Budget: "+ yearly_budget_remaining
+                end
+
+         Finally you have to update `app/controllers/itineraries_controller.rb`, `app/controllers/trips_controller.rb` and `app/controllers/budgets_controller.rb` to make sure the budget and trip is indeed associated with the current user.
+
+         Edit `app/controllers/trips_controller.rb`
+
+         On `create` and `update`, add code below the ``@trip.attributes` definition:
+
+             @trip.attributes = params[:trip].permit(:name)
+             @trip.user_id = current_user.id
+
+         Edit `app/controllers/budgets_controller.rb`
+
+         On `create` and `update`, add code below ``@budget.attributes` definition:
+
+             @budget.attributes = params[:budget].permit(:budget, :date_from, :date_to)
+             @budget.user_id = current_user.id
+
+         Edit `app/controllers/itineraries_controller.rb`
+
+         On `create` and `update`, add code below ``@itinerary.attributes` definition:
+
+             @itinerary.user_id = current_user.id
+
+    %section.step
+      :markdown
+        ### Step 7: Final notes
+
+        While it feels like you have done a lot, realize that you are only half-done.
+        By now you know that Ruby on Rails is not easy.
+        Software development is not simple. Those who say that anyone can be a software developer are wrong.
+        But **anyone who is persistent and focused can be a software developer**.
+
+        Thank you to the contributors for Geekcamp Baguio, namely <a href="http://about.me/gsmendoza" target="_blank">George Mendoza</a> who is responsible for most of the initial guide updates and workshop lessons. He believes that you should not learn Rails by using scaffolding. Most workshops are CRAP because of that. That is not true learning.
+        We would also like to thank <a href="http://twitter.com/dreinvarro" target="_blank">Andrei Navarro</a> who explained most of the Ruby fundamentals and <a href="http:/gplus.to/rcanu" target="_blank">Reymart Canuel</a> who gave relevant talks on HTML and CSS and Google technologies.
+
+        Do check out the <a href="http://geekcamp-trips.herokuapp.com" target="_blank">deployed application</a> and the <a href="https://github.com/geekcamp-ph/trips-app" target="_blank">source code</a>.
