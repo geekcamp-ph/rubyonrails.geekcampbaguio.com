@@ -198,6 +198,17 @@
           When I click the button
           Then I should see that the itinerary is deleted
 
+    %section.step
+      :markdown
+        ### Solution: Update the form for deleting the itinerary
+
+            # app/views/itineraries/_form.html.erb
+
+            <%= form_for([@itinerary.trip, @itinerary], method: :delete, html: { role: 'form' }) do |f| %>
+              <%= f.submit 'Delete Itinerary', class: 'btn btn-primary' %>
+              <%= link_to 'Back', { action: 'index', trip_id: @itinerary.trip }, class: 'btn btn-default' %>
+            <% end %>
+
     %section.exercise
       :markdown
         ## Exercise 5: Deleting an itinerary under a itinerary from the Itineraries Index page
@@ -208,6 +219,17 @@
           Then I should see that each itinerary has a delete link
           When I click the delete link of a itinerary
           Then I should see that it is deleted
+
+    %section.step
+      :markdown
+        ### Solution: Add a link to delete the itinerary using the correct route name
+
+            # app/views/itineraries/index.html.erb
+            <td>
+              <%= link_to 'Show', trip_itinerary_path(itinerary.trip, itinerary), class: 'btn btn-default' %>
+              <%= link_to 'Edit', edit_trip_itinerary_path(itinerary.trip, itinerary), class: 'btn btn-default' %>
+              <%= link_to 'Delete', trip_itinerary_path(itinerary.trip, itinerary), method: 'delete', confirm: "Are you sure you want to delete this?", class: 'btn btn-default' %>
+            </td>
 
     %section.exercise
       :markdown
