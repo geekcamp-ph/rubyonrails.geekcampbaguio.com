@@ -385,7 +385,7 @@
 
             validates :user_id, presence: true
 
-        The **worst mistake** you can make now is to not update existing validation code and calculation of costs and budget. We used to validate the date range but now it would not work because probably some other user entered data for that range.
+        The **worst mistake** you can make now is forgetting to update existing validation code and calculation of costs and the remaining budget. We used to validate the date range but now it would not work because probably some other user entered data for that range.
 
             #app/models/budget.rb
 
@@ -478,7 +478,13 @@
 
         The `test/features/logout_test.rb` has been created but before we even try to write tests, it makes sense to use a factory now that we would need to create a user for every test.
 
-        Many of use a gem for that and there a lot but we will use `factory_girl`. It is a good practice to create factories and not real ActiveRecord objects.
+        Creating a factory as opposed to creating a real ActiveRecord object should make your tests faster and sensible.
+
+        It is a good practice to create factories and not real ActiveRecord objects.
+
+        It is also a recommended practice to prefer factories over fixtures or test data stored on YML files (yuck!).
+
+        Many of us use a gem for creating factories and there a lot but we will use `factory_girl`.
 
              group :test do
               gem 'database_cleaner'
