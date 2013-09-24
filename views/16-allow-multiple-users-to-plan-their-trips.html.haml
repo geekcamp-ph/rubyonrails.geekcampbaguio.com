@@ -342,7 +342,7 @@
             rails g migration add_user_id_to_budgets user_id:integer
             rails g migration add_user_id_to_itineraries user_id:integer
 
-        Both migration files should have `null: false`
+        All migration files should have `null: false`
 
             #db/migrate/<timestamp>_add_user_id_to_<model>s.rb
             class AddUserIdToTrips < ActiveRecord::Migration
@@ -353,7 +353,7 @@
 
         Execute `rake db:migrate` to add these new foreign keys.
 
-        If that does not work, try using `rake db:reset` and `rake db:migrate`
+        If that does not work, try using `rake db:reset` before `rake db:migrate`
 
         Update the model files.
 
@@ -437,7 +437,7 @@
                   content_tag :h2, "Remaining Yearly Budget: "+ yearly_budget_remaining
                 end
 
-         Finally you have to update `app/controllers/itineraries_controller.rb`, `app/controllers/trips_controller.rb` and `app/controllers/budgets_controller.rb` to make sure the budget and trip is indeed associated with the current user.
+         Finally you have to update `app/controllers/itineraries_controller.rb`, `app/controllers/trips_controller.rb` and `app/controllers/budgets_controller.rb` to make sure the itinerary, budget and trip are indeed associated with the current user.
 
          Edit `app/controllers/trips_controller.rb`
 
@@ -469,6 +469,6 @@
         But **anyone who is persistent and focused can be a software developer**.
 
         Thank you to the contributors for Geekcamp Baguio, namely <a href="http://about.me/gsmendoza" target="_blank">George Mendoza</a> who is responsible for most of the initial guide updates and workshop lessons. He believes that you should not learn Rails by using scaffolding. Most workshops are CRAP because of that. That is not true learning.
-        We would also like to thank <a href="http://twitter.com/dreinvarro" target="_blank">Andrei Navarro</a> who explained most of the Ruby fundamentals and <a href="http:/gplus.to/rcanu" target="_blank">Reymart Canuel</a> who gave relevant talks on HTML and CSS and Google technologies.
+        We would also like to thank <a href="http://twitter.com/dreinavarro" target="_blank">Andrei Navarro</a> who explained most of the Ruby fundamentals and <a href="http:/gplus.to/rcanu" target="_blank">Reymart Canuel</a> who gave relevant talks on HTML and CSS and Google technologies.
 
         Do check out the <a href="http://geekcamp-trips.herokuapp.com" target="_blank">deployed application</a> and the <a href="https://github.com/geekcamp-ph/trips-app" target="_blank">source code</a>.
