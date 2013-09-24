@@ -82,19 +82,19 @@
 
                 rails generate migration create_itineraries
 
-        1. Edit the generated migration file
+        2. Edit the generated migration file
 
                 # /db/migrations/2013_****_create_itineraries.rb
                 class CreateItineraries < ActiveRecord::Migration
                   def change
                     create_table :itineraries do |t|
                       t.string "location", null: false
-                      t.date "travel_on", null: false
+                      t.date "travel_on"
                     end
                   end
                 end
 
-        1. In the Rails app directory, run
+        3. In the Rails app directory, run
 
                 rake db:migrate
 

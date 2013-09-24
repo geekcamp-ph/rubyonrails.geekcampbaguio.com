@@ -391,7 +391,7 @@
             private
 
             def time_uniqueness
-              if Budget.where(['date_from >= ? OR date_to >= ?', date_from, date_to]).size > 0
+              if Budget.where(['date_from <= ? OR date_to >= ?', date_from, date_to]).size > 0
                 errors[:base] << "Please choose different dates. It seems like you have already set a budget for those dates."
               end
             end
