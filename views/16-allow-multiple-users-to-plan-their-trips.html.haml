@@ -634,6 +634,20 @@
               @trips = Trip.where(user_id: current_user.id).order(sort_column + " " + sort_direction)
             end
 
+        On form for itinerary, we are calling `Trip.ordered_by_name` which currently displays all of the trips for all users.
+
+        Update `app/models/trip.rb` to make sure we're only display trips relevant to a user.
+
+            class << self
+              def ordered_by_name(user)
+                self.where(user_id: user.id).order(:name)
+              end
+            end
+
+        Update `app/views/itineraries/_form.html.erb` because of that change. We need to pass the `current_user` object.
+
+            <%= f.collection_select :trip_id, Trip.ordered_by_name(current_user), :id, :name, class: 'form-control' %>
+
         We have got interface issues too. The form just looks too wide on all browsers.
         You can add a `max-width` for all forms or perhaps come up with a better solution.
 
