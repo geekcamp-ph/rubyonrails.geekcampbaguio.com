@@ -1,0 +1,43 @@
+- lesson = Lesson.find(0)
+%article{id: lesson.basename }
+  = render 'lesson_header', locals: { lesson: lesson }
+
+  %section.exercise
+    :markdown
+      ## Getting Started
+
+    %section.step
+      :markdown
+        The Ruby on Rails workshop guides were created gradually over a few weeks for <a href="http://www.geekcampbaguio.com" title="Geekcamp Baguio" target="_blank">Geekcamp Baguio</a> (September 7, 2013 to September 21, 2013). It is a non-profit event.
+
+        **How the guide was written**:
+
+        The main speaker for the workshop lessons, <a href="http://about.me/gsmendoza" target="_blank">George Mendoza</a> decided that teaching scaffolding wil not work for beginners. He was right. The right way is to teach through error-driven development.
+        Initially create features that will fail and test them on the browser. This is somewhat similar to the TDD process which is Lesson 15 and 16.
+        Each lesson starts with a goal written in <a href="http://cukes.info/" target="_blank">Cucumber</a>-inspired English.
+
+        If you are interested in learning Ruby on Rails by following this guide, it should be possible but with the following guidelines:
+
+        1. Learn HTML and CSS or Review<a href="http://diveintohtml5.info/" target="_blank"> HTML5</a> if you haven't yet
+        2. Learn Ruby through sites like <a href="http://codeschool.zferral.com/l/98/69843" title="Code School" target="_blank">Code School</a>
+        3. Start by installing Ruby on Rails on your operating system
+        4. Complete lessons 1 to 4 and probably take a break.
+        5. Work on Assignment 1: Installing and using Twitter Boostrap.
+        6. Complete lessons 5 to 11.
+        7. Try working on Assignment 2 and 3 (Heroku setup).
+        8. Complete lessons 11 to 17.
+        9. <a href="/3-git-and-heroku" target="_blank">Deploy your application on Heroku</a>.
+
+        All participants that joined Geekcamp Baguio workshops had no background in Ruby programming or even software development but were able to complete and deploy their applications in less than 24 hours (3 days).
+        In fact, some of them were able to deploy the application before the workshop speaker (Katherine Pe) was able to do it.
+
+
+        Creating the trips application by reading through resources and the guide should take at most 18 hours.
+        Some can complete this within 2 to 8 hours depending on their understanding of Ruby on Rails.
+        Our advice is to GO SLOWLY. When you are learning something new, go slowly and digest what you just read and understand what you have done or failed to do.
+
+        And last but not least, have fun.
+
+
+
+

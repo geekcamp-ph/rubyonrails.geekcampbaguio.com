@@ -2,6 +2,7 @@
 @include font-face(prussian_brew_solidregular, '/images/prbrs___-webfont', normal);
 @include font-face(fontello, '/images/fontello', normal);
 @import 'fontello';
+@import 'grid';
 
 $header-font-family: "prussian_brew_solidregular", Arial, sans-serif;
 $default-text-shadow-color: rgba(black, 0.6);
@@ -12,6 +13,11 @@ $default-transition-property : all;
 $default-transition-duration : 0.3s;
 $default-transition-function : ease-out;
 $default-transition-delay    : false;
+
+html, body{
+  width: 100%;
+  overflow-y: hidden;
+}
 
 html,
 button,
@@ -57,9 +63,14 @@ body {
   font: 16px/26px Helvetica, Helvetica Neue, Arial;
 }
 
-.wrapper {
-  width: 90%;
-  margin: 0 5%;
+.nav-container {
+  width: 100%;
+  position: fixed;
+  z-index: 100;
+}
+
+.header-container {
+  margin-top: 45px;
 }
 
 h1 {
@@ -71,6 +82,7 @@ h1 {
   padding: 0;
 }
 
+.nav-container,
 .header-container,
 .main aside {
   background: #303E4D;
@@ -80,8 +92,9 @@ h1 {
   color: white;
 }
 
-
-// MOBILE: Main
+.nav-container  {
+  padding-top: 15px;
+}
 
 .main {
   padding: 30px 0;
@@ -89,6 +102,7 @@ h1 {
 
 .main article h1 {
   font-size: 2em;
+  margin-bottom: 7px;
 }
 
 .main aside {
@@ -96,6 +110,9 @@ h1 {
   padding: 0px 5% 10px;
 }
 
+.main-container {
+
+}
 .footer-container footer {
   color: white;
   padding: 20px 0;
@@ -126,10 +143,10 @@ h1.guide-title a{
   text-decoration: none;
 }
 
-h1.guide-title a span {
-  display: block;
-  font-size: 60% !important;
+h1.guide-title span {
+  display: inline-block;
   font-weight: lighter;
+  color: #FFF;
 }
 
 h1.guide-title a:hover {
@@ -190,94 +207,26 @@ ol.nice span:before{
   @include transition;
 }
 
-// Media Queries
-
-@media only screen and (min-width: 768px) {
-
-  //  WIDE: CSS3 Effects
-
-  .header-container,
-  .main aside {
-    -webkit-box-shadow: 0 5px 10px #aaa;
-    -moz-box-shadow: 0 5px 10px #aaa;
-    box-shadow: 0 5px 10px #aaa;
-  }
-
-  // WIDE: Menu
-
-  .guide-title {
-    float: left;
-  }
-
-.main article {
-  float: left;
-  width: 57%;
+section.step ol{
+  margin-left: 22px;
 }
 
-.main aside {
-  float: right;
-  width: 28%;
-}
+p {
+  margin-bottom: 10px;
 }
 
-@media only screen and (min-width: 1140px) {
-
-  .wrapper {
-    width: 1026px; /* 1140px - 10% for margins */
-    margin: 0 auto;
-  }
+section.tips {
+  color: #333;
 }
 
-//Helper classes
-
-.ir {
-  background-color: transparent;
-  border: 0;
-  overflow: hidden;
-  text-indent: -9999px;
-  display: block;
+pre.goal {
+  margin-bottom: 25px;
 }
 
-.hidden {
-  display: none !important;
-  visibility: hidden;
+.main h2 {
+  margin-bottom: 10px;
 }
 
-.visuallyhidden {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto;
-}
-
-.invisible {
-  visibility: hidden;
-}
-
-.clearfix:before,
-.clearfix:after {
-  content: " ";
-  display: table;
-}
-
-.clearfix:after {
-  clear: both;
-}
-
-.clearfix {
-  *zoom: 1;
+ul.unstyled li {
+  list-style-type: none;
 }

@@ -1,6 +1,7 @@
 module ViewHelpers
   class Lesson < Struct.new(:id, :category, :title, :basename)
-    DATA = [
+    @data = [
+      new(0, 'lesson', 'Getting Started', 'getting-started'),
       new(1, 'lesson', 'Installing and Running Rails', '1-installing-and-running-rails'),
       new(2, 'lesson', 'Database CRUD', '2-database-crud'),
       new(3, 'lesson', 'Show Itinerary Page', '3-show-itinerary-page'),
@@ -20,63 +21,63 @@ module ViewHelpers
     ]
 
     def self.find(id)
-      DATA.detect{|p| p.id == id}
+      @data.detect{|p| p.id == id}
     end
 
     def self.published
-      DATA
+      @data
     end
   end
 
   class Assignment < Struct.new(:id, :category, :title, :basename)
-    DATA = [
+    @data = [
       new(1, 'assignment', 'Using Twitter Booststrap for Rails', '1-twitter-bootstrap-for-rails'),
       new(2, 'assignment', 'Enhancement 1: Use Route Helpers', '2-use-route-helpers'),
       new(3, 'assignment', 'Set Up Git and Heroku', '3-git-and-heroku')
     ]
 
     def self.find(id)
-      DATA.detect{|p| p.id == id}
+      @data.detect{|p| p.id == id}
     end
 
     def self.published
-      DATA
+      @data
     end
   end
 
   class Challenge < Struct.new(:id, :category, :title, :basename)
-    DATA = [
+    @data = [
       new(1, 'challenge', 'Enhancement 2: Allow Multiple Users to Plan Their Trips', '1-allow-multiple-users-to-plan-their-trips'),
       new(2, 'challenge', 'Enhancement 3: Allow Filtering Trips Based on Month and Year', '2-allow-filtering-trips-based-on-month-and-year'),
       new(3, 'challenge', 'Enhancement 4: Improve User Experience', '3-improve-user-experience')
     ]
 
     def self.find(id)
-      DATA.detect{|p| p.id == id}
+      @data.detect{|p| p.id == id}
     end
 
     def self.published
-      DATA
+      @data
     end
   end
 
   class Resource < Struct.new(:id, :category, :title, :basename)
-    DATA = [
+    @data = [
       new(1, 'resource', 'Event Presentations and Review', '1-event-presentations-and-review'),
       new(2, 'resource', 'Software Development Resources', '2-software-development-resources')
     ]
 
     def self.find(id)
-      DATA.detect{|p| p.id == id}
+      @data.detect{|p| p.id == id}
     end
 
     def self.published
-      DATA
+      @data
     end
   end
 
-  class Speaker < Struct.new(:id, :category, :name, :link)
-    DATA = [
+  class Speaker < Struct.new(:id, :category, :name, :basename)
+    @data = [
       new(1, 'speaker', 'George Mendoza', 'http://about.me/gsmendoza'),
       new(2, 'speaker', 'Katherine Pe', 'http://blog.bridgeutopiaweb.com'),
       new(3, 'speaker', 'Andrei Navarro', 'http://twitter.com/dreinavarro'),
@@ -84,11 +85,23 @@ module ViewHelpers
     ]
 
     def self.find(id)
-      DATA.detect{|p| p.id == id}
+      @data.detect{|p| p.id == id}
     end
 
     def self.all
-      DATA
+      @data
+    end
+  end
+
+  class Navigation < Struct.new(:id, :category, :name, :basename)
+    @data = [Lesson.published, Assignment.published, Challenge.published].flatten
+
+    def self.find(id)
+      @data.detect{|p| p.id == id}
+    end
+
+    def self.all
+      @data
     end
   end
 
