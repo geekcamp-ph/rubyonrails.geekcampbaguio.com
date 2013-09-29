@@ -897,7 +897,6 @@ img {
 
 html, body {
   width: 100%;
-  overflow-y: hidden;
 }
 
 html,
@@ -951,7 +950,7 @@ body {
 }
 
 .header-container {
-  margin-top: 45px;
+  padding-top: 45px;
 }
 
 h1 {
