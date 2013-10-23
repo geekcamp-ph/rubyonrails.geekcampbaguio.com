@@ -398,4 +398,103 @@
 
         Use `validate` to make sure you cannot create the a record that is within an existing range.
 
-            validate :time_uniqueness, on: :create
+          validate :time_uniqueness, on: :create
+
+    %section.step
+      :markdown
+        ### Step 10: Extract class methods and use `ActiveSupport::Concern`.
+
+        We have written a lot of code and may be accumulating technical debt as well.
+
+        Please read about <a href="http://www.blog.bridgeutopiaweb.com/post/how-to-avoid-fat-controllers-and-fat-models" target="_blank">how to avoid fat controllers and fat models.</a>
+
+        Ruby on Rails has always had the feature called `ActiveSupport::Concern` which allows us to avoid fat models. With the release of Ruby on Rails 4, they made it very obvious for developers to know that the feature exists because of the `app/models/concerns` folder.
+
+        Now, let's use that for `Itinerary` and `Budget`.
+
+        We will remove all class methods from both models and include the modules. First thing we'll have to do is to create the files within the aforementioned folder.
+
+        On your terminal, create the file called `app/models/concerns/calculate_budget.rb` and `app/models/concerns/calculate_estimated_cost.rb`.
+
+        Extract the class methods from both model files. The final code should look like this:
+
+            # app/models/concerns/calculate_budget.rb
+            module CalculateBudget
+
+              extend ActiveSupport::Concern
+
+              module ClassMethods
+                def for_year(user, date=Time.zone.now)
+                  self.where("date_from >= ? and date_from <= ? and user_id = ?", date.beginning_of_year, date.end_of_year, user)
+                end
+
+                def yearly_budget(user, date=Time.zone.now)
+                  self.for_year(user, date).map(&:budget).reduce(:+) || 0.00
+                end
+
+                def remaining_yearly_budget(user)
+                  self.yearly_budget(user)-Itinerary.total_yearly_estimated_cost(user)
+                end
+              end
+
+            end
+
+            # app/models/concerns/calculate_estimated_cost.rb
+
+            module CalculateEstimatedCost
+
+              extend ActiveSupport::Concern
+
+              module ClassMethods
+                def for_user(user)
+                  self.where(user_id: user)
+                end
+
+                def for_year(date=Time.zone.now)
+                  self.where("travel_on > ? and travel_on < ?", date.beginning_of_year, date.end_of_year)
+                end
+
+                def total_yearly_estimated_cost(user, date=Time.zone.now)
+                  self.for_user(user).for_year(date).map(&:estimated_cost).reduce(:+) || 0.00
+                end
+              end
+
+            end
+
+
+        We will have to include the module on the respective model files. In Ruby, this is called a "mixin" which is still inheritance.
+
+            # app/models/concerns/budget.rb
+            class Budget < ActiveRecord::Base
+              belongs_to :user
+
+              validates :budget, presence: true
+              validates :date_from, presence: true
+              validates :date_to, presence: true
+              validate :time_uniqueness, on: :create
+              validates :user_id, presence: true
+
+              include CalculateBudget
+
+              private
+
+              def time_uniqueness
+                if Budget.where(['(date_from <= ? OR date_to >= ?) AND user_id = ?', date_from, date_to, self.user.id]).size > 0
+                  errors[:base] << "Please choose different dates. It seems like you have already set a budget for those dates."
+                end
+              end
+            end
+
+            # app/models/concerns/itinerary.rb
+
+            class Itinerary < ActiveRecord::Base
+              belongs_to :trip
+              belongs_to :user
+
+              validates :user_id, presence: true
+              validates :location, presence: true
+
+              include CalculateEstimatedCost
+            end
+
+
