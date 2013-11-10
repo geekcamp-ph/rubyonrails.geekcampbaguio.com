@@ -1130,6 +1130,7 @@ ul.unstyled li {
   border: thin solid #CC0000;
   padding: 1em;
   background: #FFF;
+  margin-bottom: 10px;
 }
 .main pre.goal {
   border: thick solid #ccc;
