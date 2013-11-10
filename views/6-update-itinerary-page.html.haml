@@ -118,10 +118,11 @@
             # app/controllers/itineraries_controller.rb
             class ItinerariesController < ApplicationController
               def update
-                @itinerary = Itinerary.find(params[:id])
-                @itinerary.attributes = params[:itinerary].permit(:location, :travel_on)
-                @itinerary.save
-                redirect_to action: 'show', id: @itinerary.id
+                if @itinerary.update(itinerary_params)
+                  redirect_to action: 'show', id: @itinerary.id
+                else
+                  render action: 'edit'
+                end
               end
             end
 

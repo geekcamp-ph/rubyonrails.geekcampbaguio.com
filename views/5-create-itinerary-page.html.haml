@@ -242,10 +242,22 @@
 
               # app/controllers/itineraries_controller.rb
               class ItinerariesController < ApplicationController
+
+                # add the create action
                 def create
-                  @itinerary = Itinerary.new
-                  @itinerary.attributes = params[:itinerary].permit(:location, :travel_on)
-                  @itinerary.save
-                  redirect_to action: 'show', id: @itinerary.id
+                  @itinerary = Itinerary.new(itinerary_params)
+                  if @itinerary.save
+                    redirect_to action: 'show', id: @itinerary.id
+                  else
+                    render action: 'new'
+                  end
+                end
+
+                # add a new private method for the itinerary_params
+
+                private
+
+                def itinerary_params
+                  params.require(:itinerary).permit(:location, :travel_on)
                 end
               end

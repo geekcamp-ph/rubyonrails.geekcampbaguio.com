@@ -244,13 +244,13 @@
 
     %section.step
       :markdown
-        ### Solution: Find the trip in a before_filter callback
+        ### Solution: Find the trip in a before_action callback
 
             # app/controllers/itineraries_controller.rb
 
-            Add a `before_filter` which should be found below `helper_method :sort_column, :sort_direction`
+            Add a `before_action` which should be found below `helper_method :sort_column, :sort_direction`
 
-            before_filter :find_trip
+            before_action :find_trip, only: [:index, :new, :edit, :update, :create] 
 
             The find_trip method should be a `private` method so add it below `private` declaration
 

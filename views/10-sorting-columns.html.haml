@@ -84,6 +84,6 @@
         Let's update the index method to look like this:
 
             def index
-              @itineraries = Itinerary.order(sort_column + " " + sort_direction)
+              @itineraries = Itinerary.order([sort_column, sort_direction].join(" "))
               @remaining_budget = Itinerary.remaining_budget
             end

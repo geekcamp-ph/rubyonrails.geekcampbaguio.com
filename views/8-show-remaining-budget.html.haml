@@ -65,7 +65,7 @@
             Then I should see the remaining budget
             But I see NoMethodError in ItinerariesController#index
 
-        #### Solution: Add a class method called `remaining_budget` on app/models/itinerary.rb, just below the `monthly_budget`
+        #### Solution: Add a class method called `remaining_budget` on `app/models/itinerary.rb`, just below the `monthly_budget`
 
             # app/models/itinerary.rb
             class << self
@@ -187,25 +187,11 @@
 
             # app/controllers/itineraries_controller.rb
 
-            def create
-              @itinerary = Itinerary.new
-              @itinerary.attributes = params[:itinerary].permit(:location, :travel_on, :estimated_cost)
-              if @itinerary.save
-                redirect_to action: 'show', id: @itinerary.id
-              else
-                render action: 'new'
-              end
-            end
+            private
 
-            def update
-              @itinerary = Itinerary.find(params[:id])
-              @itinerary.attributes = params[:itinerary].permit(:location, :travel_on, :estimated_cost)
-              if @itinerary.save
-                redirect_to action: 'show', id: @itinerary.id
-              else
-                render action: 'edit'
+              def itinerary_params
+                params.require(:itinerary).permit(:location, :travel_on, :estimated_cost)
               end
-            end
 
   %section.exercise
     :markdown

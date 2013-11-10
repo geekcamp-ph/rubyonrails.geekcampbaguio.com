@@ -165,18 +165,8 @@
 
         #### Solution: permit params[:trip_id]
 
-            def create
-              # ...
-              @itinerary.attributes = params[:itinerary]
-                .permit(:location, :travel_on, :estimated_cost, :trip_id)
-              # ...
-            end
-
-            def update
-              # ...
-              @itinerary.attributes = params[:itinerary]
-                .permit(:location, :travel_on, :estimated_cost, :trip_id)
-              # ...
+            def itinerary_params
+              params.require(:itinerary).permit(:location, :travel_on, :estimated_cost, :trip_id)
             end
 
     %section.step

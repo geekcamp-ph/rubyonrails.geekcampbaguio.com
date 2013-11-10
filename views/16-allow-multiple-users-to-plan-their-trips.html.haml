@@ -214,7 +214,7 @@
               # For APIs, you may want to use :null_session instead.
               protect_from_forgery with: :exception
 
-              before_filter :configure_permitted_parameters, if: :devise_controller?
+              before_action :configure_permitted_parameters, if: :devise_controller?
 
               protected
 
@@ -283,7 +283,7 @@
       :markdown
         ### Step 5: Make the tests for "login" feature pass
 
-        Update `app/controllers/application_controller.rb` and add `before_filter :authenticate_user!`
+        Update `app/controllers/application_controller.rb` and add `before_action :authenticate_user!`
 
         Your `application_controller.rb` should look like this:
 
@@ -292,8 +292,8 @@
               # For APIs, you may want to use :null_session instead.
               protect_from_forgery with: :exception
 
-              before_filter :configure_permitted_parameters, if: :devise_controller?
-              before_filter :authenticate_user!
+              before_action :configure_permitted_parameters, if: :devise_controller?
+              before_action :authenticate_user!
 
               protected
 
@@ -630,7 +630,7 @@
         We should only see the trips that we created so there is a need to update the query for trips.
 
             def index
-              @trips = Trip.where(user_id: current_user.id).order(sort_column + " " + sort_direction)
+              @trips = Trip.where(user_id: current_user.id).order([sort_column, sort_direction].join(" "))
             end
 
         On form for itinerary, we are calling `Trip.ordered_by_name` which currently displays all of the trips for all users.
