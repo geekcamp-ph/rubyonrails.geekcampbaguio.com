@@ -64,10 +64,6 @@
 
              gem 'i18n', '>= 0.6.5'
 
-        Use the `generate` command that has an alias `g` to create the configuration files and test folder.
-
-            rails g mini_test:install
-
         Update `config/application.rb` and the settings to make sure fixtures are not created by the generator.
         We do not usually need the helper and assets test files to be generated.
 
@@ -90,7 +86,19 @@
             require 'rake/testtask'
             require "action_mailer/railtie"
             require "sprockets/railtie"
+
+        We first require minitest regardless of the environment so we could use the generator for installing minitest.
+
+            require "minitest/rails/railtie"
+
+        Use the `generate` command that has an alias `g` to create the configuration files and test folder.
+
+            rails g mini_test:install
+
+        For production, this is not ideal so please add a condition to check the Rails environment.
+
             require "minitest/rails/railtie" if Rails.env.test?
+
 
         And finally, we will update `test/test_helper.rb` to make sure we can use Capybara which would be helpful for integration testing.
 
