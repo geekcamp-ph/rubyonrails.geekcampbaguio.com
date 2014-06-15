@@ -106,6 +106,17 @@
             require "minitest/rails/railtie" if Rails.env.test?
 
 
+        To be able to run the tests, we need to add `rake` tasks for minitest. Create the `lib/tasks/minitest.rake` file which should have the following:
+
+            Rails::TestTask.new("test:features" => "test:prepare") do |t|
+              t.pattern = "test/features/**/*_test.rb"
+            end
+
+            Rake::Task["test:run"].enhance ["test:features"]
+
+
+        You now have `rake test` which will look for test files within `test/features` directory. Of course, you can change this later.
+
         And finally, we will update `test/test_helper.rb` to make sure we can use Capybara which would be helpful for integration testing.
 
             require "minitest/rails/capybara"
@@ -127,7 +138,7 @@
               end
             end
 
-        To verify that it fails, try the command `rake minitest:all`
+        To verify that it fails, try the command `rake test`
 
         And it should fail if you do not have `root_path` defined.
 
@@ -147,7 +158,7 @@
 
             root to: 'trips#index'
 
-        To verify that the test works, try the command `rake minitest:all`
+        To verify that the test works, try the command `rake test`
 
         And it should pass as we expect.
 
@@ -171,7 +182,7 @@
 
         Similar to the first step in BDD, when we refactor something, we should have a failing test because that feature or update was not done.
 
-        The command `rake minitest:all` should give you 1 failure.
+        The command `rake test` should give you 1 failure.
 
     %section.step
       :markdown
@@ -179,7 +190,7 @@
 
             <h1>Plan Your Trips</h1>
 
-        The command `rake minitest:all` should give you this output:
+        The command `rake test` should give you this output:
 
             1 tests, 2 assertions, 0 failures, 0 errors, 0 skips
 
