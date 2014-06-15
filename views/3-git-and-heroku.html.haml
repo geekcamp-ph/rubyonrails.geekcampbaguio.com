@@ -308,11 +308,7 @@
 
         Sign in on heroku to view the credentials for your PostgreSQL database.
 
-            heroku config:add GEEKCAMP_HOST=host --app app-name
-            heroku config:add GEEKCAMP_DATABASE=database --app app-name
-            heroku config:add GEEKCAMP_USER=user --app app-name
-            heroku config:add GEEKCAMP_PASSWORD=password --app app-name
-            heroku config:add GEEKCAMP_PORT=port --app app-name
+            heroku config:add GEEKCAMP_PORT=port GEEKCAMP_PASSWORD=password GEEKCAMP_USER=user GEEKCAMP_DATABASE=database GEEKCAMP_HOST=host --app app-name
 
         #### Note: You may change `GEEKCAMP_` prefix to something else that's unique.
 
