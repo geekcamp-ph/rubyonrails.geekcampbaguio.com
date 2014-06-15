@@ -56,7 +56,11 @@
 
         Update your `Gemfile` to include these:
 
-            gem 'minitest-rails-capybara'
+            gem 'minitest-rails'
+
+            group :test do
+              gem 'minitest-rails-capybara'
+            end
 
         Use the `bundle` command to install these gems.
 
@@ -74,6 +78,8 @@
                 g.assets false
               end
             end
+
+        You shoud have the generators available when you installed `minitest-rails` so try `rails g | grep minitest` and it will show you what commands you will use a lot.
 
         Another really important change for `config/application.rb` is to replace the following code:
 
