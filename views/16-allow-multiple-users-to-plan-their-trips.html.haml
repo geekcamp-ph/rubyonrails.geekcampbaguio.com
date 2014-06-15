@@ -88,7 +88,7 @@
 
         We will generate the test for the **signup** feature:
 
-            rails g mini_test:feature Signup
+            rails g minitest:feature Signup
 
         Because we have something called `capybara`, we can do some fairly high-level testing like emulating user signup process.
 
@@ -231,7 +231,7 @@
       :markdown
         ### Step 4: Write tests for `login` feature
 
-        Generate the test file using `rails g mini_test:feature Login`
+        Generate the test file using `rails g minitest:feature Login`
 
         Edit `test/features/login_test.rb`
 
@@ -473,7 +473,7 @@
 
         Similar to the signup and login feature, we should use the generator to create the test file:
 
-            rails g mini_test:feature
+            rails g minitest:feature
 
         The `test/features/logout_test.rb` has been created but before we even try to write tests, it makes sense to use a factory now that we would need to create a user for every test.
 
