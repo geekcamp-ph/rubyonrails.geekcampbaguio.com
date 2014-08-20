@@ -79,7 +79,7 @@ module ViewHelpers
   class Speaker < Struct.new(:id, :category, :name, :basename)
     @data = [
       new(1, 'speaker', 'George Mendoza', 'http://about.me/gsmendoza'),
-      new(2, 'speaker', 'Katherine Pe', 'http://blog.bridgeutopiaweb.com'),
+      new(2, 'speaker', 'Katherine Pe', 'http://c.kat.pe'),
       new(3, 'speaker', 'Andrei Navarro', 'http://twitter.com/dreinavarro'),
       new(4, 'speaker', 'Reymart Canuel', 'http://gplus.to/rcanu')
     ]
