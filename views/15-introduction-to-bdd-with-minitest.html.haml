@@ -167,7 +167,7 @@
 
     %section.step
       :markdown
-        ### Step 6: Refactor the test written to make sure we are displaying the text "Plan Your Trips" and "Set your budget".
+        ### Step 6: Write the failing test. Change test written to make sure we are displaying the text "Plan Your Trips" and "Set your budget".
 
             # test/features/trips_test.rb
             require "test_helper"
@@ -180,18 +180,29 @@
               end
             end
 
-        Similar to the first step in BDD, when we refactor something, we should have a failing test because that feature or update was not done.
+        Similar to the first step in BDD, when we something, we should have a failing test because that feature or update was not done.
 
         The command `rake test` should give you 1 failure.
 
     %section.step
       :markdown
-        ### Step 7: Update `app/views/trips/index.html.erb` to make sure the text is displayed. It is sensible to just replace the headings.
+        ### Step 7: Make the test pass. Update `app/views/trips/index.html.erb` to make sure the text is displayed. It is sensible to just replace the headings.
 
             <h1>Plan Your Trips</h1>
 
         The command `rake test` should give you this output:
 
             1 tests, 2 assertions, 0 failures, 0 errors, 0 skips
+
+        Final notes: this simple process is repeated until you come up with a refined feature that people can use and like.
+
+    %section.step
+      :markdown
+        ### Step 8: Refactor.
+
+        Refactoring may involve improving both the tests written and the code implementation.
+        Supposing we have a **helper** or **decorator** for displaying text, we can aptly call it "refactoring" when we change and make improvements to that helper.
+        But this is a very light introduction to BDD.
+        Learning refactoring is easy as long as you're reading the right book. Some books like "Refactoring: Ruby Edition" aren't even that great or relevant today.
 
         Final notes: this simple process is repeated until you come up with a refined feature that people can use and like.
