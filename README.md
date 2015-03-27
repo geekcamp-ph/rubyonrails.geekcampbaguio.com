@@ -30,6 +30,6 @@ When I push master to heroku
 
     git push heroku
 
-And I go to http://www.rubyonrails.geekcampbaguio.com/
+And I go to https://ruby-geekcampbaguio.herokuapp.com/
 
 Then I should see that the website has been deployed
